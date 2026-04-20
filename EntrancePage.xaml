@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PoputkaKGAMT.EntrancePage"
+             Title="EntrancePage"
+             Shell.NavBarIsVisible="False"
+             Background="#4167AB">
+
+
+    <Grid RowDefinitions="Auto, Auto, Auto" RowSpacing="10" Padding="0,40,0,0" >
+
+        <Grid Grid.Row="0" RowDefinitions="Auto, *, *" RowSpacing="5">
+            <Image Grid.Row="0"
+                   Source="avatarentrance.png"
+                   HeightRequest="120"
+                   WidthRequest="120"
+                   Aspect="AspectFit"
+                   Margin="0,5,0,15"></Image>
+            <Label Grid.Row="1"
+                   Text="Попутчики КГАМТ"
+                   TextColor="White"
+                   FontAttributes="Bold"
+                   FontSize="30"
+                   HorizontalOptions="Center">
+            </Label>
+            
+            <Label Grid.Row="2"
+                   Text="Удобные поездки для студентов"
+                   TextColor="White"
+                   FontSize="18"
+                   HorizontalOptions="Center"></Label>
+        </Grid>
+
+        
+        <!-- Блок ввода данных -->
+        <Border Grid.Row="1"
+                Background="White"
+                Stroke="#A0B3D5"
+                StrokeThickness="4"         
+                StrokeShape="RoundRectangle 25"
+                Margin="25, 40, 25, 0"
+                Padding="25">
+            <VerticalStackLayout Spacing="10">
+                <Label Text="Логин" FontSize="22"
+                       TextColor="#214484"/>
+                <Border Stroke="#214484"
+                        StrokeThickness="1.5"
+                        StrokeShape="RoundRectangle 10"
+                        HeightRequest="50"
+                        Padding="2">
+                    <Entry Placeholder="student@gmail.com"
+                           PlaceholderColor="Gray"
+                           FontSize="20"
+                           TextColor="#214484"
+                           Text="{Binding Emailcheck}"/>
+                </Border>
+                <Label Text="Пароль" FontSize="22"
+                       TextColor="#214484"
+                       Padding="0,5,0,0"/>
+                <Border Stroke="#214484"
+                        StrokeThickness="1.5"
+                        StrokeShape="RoundRectangle 10"
+                        HeightRequest="50"
+                        Padding="1">
+                    <Entry Placeholder="••••••••"
+                           PlaceholderColor="Gray"
+                           IsPassword="True"
+                           FontSize="20"
+                           TextColor="#214484"
+                           Text="{Binding Passwordcheck}"/>
+                </Border>
+
+                <Button Text="Войти" 
+                        TextColor="White"
+                        FontSize="20"
+                        FontAttributes="Bold"
+                        BackgroundColor="#4167AB"
+                        Margin="0,5,0,0"
+                        Command="{Binding GoSearchCommand}"/>
+            </VerticalStackLayout>
+        </Border>
+
+        <!-- Кнопка регистрации -->
+        <Border Grid.Row="2"
+                Opacity="0.5"
+                Background="White"
+                Stroke="LightGray"
+                StrokeThickness="1.5"
+                StrokeShape="RoundRectangle 15"
+                HeightRequest="50"
+                Margin="35, 10, 35, 0"
+                ZIndex="1">
+            <Border.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding GoRegistrationCommand}" />
+            </Border.GestureRecognizers>
+        </Border>
+        
+        <Label Grid.Row="2"
+                Text="Зарегистрироваться"
+                TextColor="White"
+                FontSize="22"
+                FontAttributes="Bold"
+                BackgroundColor="Transparent"
+                Margin="35, 19, 35, 0"
+                HorizontalOptions="Center"
+                ZIndex="2">
+        </Label>
+        
+        
+        
+    </Grid>
+</ContentPage>

@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PoputkaKGAMT.SearchPage"
+             Background="White">
+
+    <Grid RowDefinitions="275,325,Auto" RowSpacing="7">
+        <Grid Grid.Row="0" RowDefinitions="Auto, Auto" >
+            <Image Grid.Row="0" 
+                   Source="background.png"
+                   Aspect="AspectFill"
+                   HeightRequest="275"
+                   HorizontalOptions="Fill"
+                   VerticalOptions="Center"
+                   ZIndex="0"/>
+            <Grid Grid.Row="0"      
+                  RowDefinitions="70,Auto,70" 
+                  ColumnDefinitions="1*,Auto,1*"
+                  VerticalOptions="Center">
+                
+                <Image Grid.Row="0" Grid.Column="1"
+                       Source="arrowtop.png"
+                       HeightRequest="50"
+                       WidthRequest="60"
+                       Margin="0,20,0,0"
+                       VerticalOptions="Center"/>
+                
+                <Border Grid.Row="1" Grid.Column="1"
+                    HeightRequest="100"   
+                    WidthRequest="100"
+                    Background="WhiteSmoke"
+                    Stroke="#7594C0" 
+                    StrokeThickness="3"
+                    StrokeShape="RoundRectangle 70"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center">
+                    <Image Source="kgamticon.png"
+                           HeightRequest="80"/>
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding GoSiteCommand}" />
+                    </Border.GestureRecognizers>
+                </Border>
+
+                <Image Grid.Row="2" Grid.Column="1"
+                       Source="arrowlow.png"
+                       HeightRequest="50"
+                       WidthRequest="60"
+                       Margin="0,0,0,20"
+                       VerticalOptions="Center"/>
+                
+                <Label Grid.Row="1" Grid.Column="0"
+                   FontSize="24"
+                   FontAttributes="Bold"
+                   TextColor="White"
+                   Text="ДОМ"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center"/>
+                
+                <Label Grid.Row="1" Grid.Column="2"
+                   FontSize="24"
+                   FontAttributes="Bold"
+                   TextColor="White"
+                   Text="КГАМТ"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center"/>
+            </Grid>
+
+        </Grid>
+        
+
+        <Border Grid.Row="1"
+                Background="White"
+                Stroke="#214484"
+                StrokeThickness="2"
+                StrokeShape="RoundRectangle 20"
+                HeightRequest="350"
+                Margin="20, -50,20, 5"
+                ZIndex="2">
+            <Grid RowDefinitions="*,Auto" RowSpacing="15">
+                <ScrollView Grid.Row="0">
+                    <VerticalStackLayout Spacing="10" >
+                        <!-- Откуда -->
+                        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8" Padding="20,20,0,0">
+                            <Image Grid.Column="0" 
+                                   Source="buildimage.png"
+                                   HeightRequest="30" WidthRequest="30"
+                                   VerticalOptions="Center"/>
+                            <Picker Grid.Column="1" 
+                                    FontSize="20"
+                                    TextColor="#214484"
+                                    Margin="0,0,25,0"
+                                    ItemsSource="{Binding Places}"
+                                    ItemDisplayBinding="{Binding Name}"
+                                    SelectedItem="{Binding SelectedDeparturePlace}"/>
+                           
+                        </Grid>
+
+
+                        <!-- Куда -->
+                        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8" Padding="20,10,0,0">
+                            <Image Grid.Column="0" 
+                                   Source="placeimage.png"
+                                   HeightRequest="30" WidthRequest="30"
+                                   VerticalOptions="Center"/>
+                            <Picker Grid.Column="1" 
+                                    FontSize="20"
+                                    TextColor="#214484"
+                                    Margin="0,0,25,0"
+                                    ItemsSource="{Binding Places}"
+                                    ItemDisplayBinding="{Binding Name}"
+                                    SelectedItem="{Binding SelectedArrivePlace}"/>
+                        </Grid>
+
+                        <!-- Дата -->
+                        <Grid ColumnDefinitions="Auto,350" ColumnSpacing="8" Padding="20,10,0,0">
+                            <Image Grid.Column="0" 
+                                   Source="dateimage.png"
+                                   HeightRequest="30" WidthRequest="30"
+                                   VerticalOptions="Center"/>
+                            <DatePicker Grid.Column="1"
+                                        FontSize="20"
+                                        TextColor="#214484"
+                                        Format="dd.MM.yyyy"
+                                        MinimumDate="{Binding MinDate}"
+                                        Date="{Binding SelectedDate}"
+                                        Margin="0,0,170,0"/>
+                        </Grid>
+                        
+                        
+                        <!-- Пассажиров -->
+                        <Grid ColumnDefinitions="Auto,350" ColumnSpacing="8" Padding="20,10,0,0">
+                            <Image Grid.Column="0" 
+                                   Source="quentityimage.png"
+                                   HeightRequest="35" WidthRequest="35"
+                                   VerticalOptions="Center"/>
+                            <Picker Grid.Column="1"
+                                    FontSize="20"
+                                    TextColor="#214484"
+                                    HorizontalTextAlignment="Center"
+                                    Margin="0,0,170,0"
+                                    ItemsSource="{Binding PessengerQuentity}"
+                                    SelectedItem="{Binding SelectedPessengerQuentity}"/>
+                        </Grid>
+
+                       
+
+                        
+                    </VerticalStackLayout>
+                </ScrollView>
+
+
+                    <Border Grid.Row="1" BackgroundColor="#214484"
+                            Stroke="#214484"
+                            StrokeThickness="2"
+                            StrokeShape="RoundRectangle 0,0,0,10"
+                            HorizontalOptions="Fill"
+                            VerticalOptions="Center"
+                            HeightRequest="50">
+                        <Label Text="Найти"
+                               BackgroundColor="Transparent"
+                               TextColor="White"
+                               FontSize="20"
+                               FontAttributes="Bold"
+                               HorizontalOptions="Center"                        
+                               Padding="10"/>
+                        
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding GoSearchResultFindCommand}" />
+                        </Border.GestureRecognizers>
+                    </Border>
+             
+
+            </Grid>
+        </Border>
+        
+        
+        <Border Grid.Row="2"
+                BackgroundColor="#214484"
+                Stroke="#214484"
+                StrokeThickness="2"
+                VerticalOptions="Start"
+                HeightRequest="55"  
+                StrokeShape="RoundRectangle 10"
+                Margin="25,-20,25,0"
+                Padding="20,0">
+            <Grid>
+                <HorizontalStackLayout Spacing="1" VerticalOptions="Center" HorizontalOptions="Center">
+                    <Image Source="alltrip.png" 
+                           HeightRequest="28" 
+                           WidthRequest="28"
+                           VerticalOptions="Center"/>
+
+                    <Label Text="Все поездки"
+                           BackgroundColor="Transparent"
+                           TextColor="White"
+                           FontSize="20"
+                           FontAttributes="Bold"
+                           VerticalOptions="Center"                         
+                           Padding="10"/>
+                </HorizontalStackLayout>
+            </Grid>
+            <Border.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding GoSearchResultAllCommand}" />
+            </Border.GestureRecognizers>
+        </Border>
+
+        
+
+
+
+    </Grid>
+
+</ContentPage>

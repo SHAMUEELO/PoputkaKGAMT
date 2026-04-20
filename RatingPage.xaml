@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PoputkaKGAMT.RatingPage"
+             Shell.NavBarIsVisible="False"
+             Background="White">
+
+    <Grid RowDefinitions="Auto,Auto, Auto, Auto, Auto, Auto, Auto" RowSpacing="10" Padding="0,5,0,0">
+        <Border Grid.Row="0"
+             Background="#214484"
+             HeightRequest="45"
+             Margin="10,0,10,0"
+             Stroke="#214484"
+             StrokeThickness="1"
+             StrokeShape="RoundRectangle 8"
+             VerticalOptions="Start">
+            <Grid Grid.Row="0" ColumnDefinitions="Auto, Auto" ColumnSpacing="10">
+                <Image Grid.Column="0" Source="backicon.png" 
+                    HorizontalOptions="Center">
+                </Image>
+
+                <Label Grid.Column="1"
+                    Text="Назад"
+                    TextColor="White"
+                    FontSize="20" 
+                    FontAttributes="Bold"
+                    Margin="-15,2,0,0"
+                    Padding="0,5,15,0"/>
+            </Grid>
+            <Border.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding GoBackProfileButtonCommand}" />
+            </Border.GestureRecognizers>
+        </Border>
+
+        <BoxView Grid.Row="1"
+                HeightRequest="150" 
+                Color="WhiteSmoke"
+                HorizontalOptions="Fill"/>
+        <Grid Grid.Row="1" ColumnDefinitions="*,*" ColumnSpacing="5" >
+            <Label Grid.Column="0"  Text="0,00"
+                   FontSize="75"
+                   FontAttributes="Bold"
+                   TextColor="#214484"
+                   HorizontalOptions="Start"
+                   HorizontalTextAlignment="Center"
+                   Margin="50, 30,0,0"/>
+
+            <Image Grid.Column="1" Grid.Row="0" Source="starrating.png"
+                   HeightRequest="125"
+                   WidthRequest="125"/>
+        </Grid>
+
+        <!-- Разделитель -->
+        <BoxView Grid.Row="2" 
+                 HeightRequest="2" 
+                 Color="#214484"
+                 HorizontalOptions="Fill"
+                 Margin="10,0,10,0"/>
+        <Label Grid.Row="3" 
+               Text="0 отзыва" 
+               TextColor="#214484"
+               FontSize="19"
+               Margin="10,0,0,0"
+               HorizontalOptions="Start"
+               HorizontalTextAlignment="Center"/>
+
+
+
+
+
+        <VerticalStackLayout Grid.Row="4" Padding="20,5,5,5" Spacing="12">
+            <Grid ColumnDefinitions="Auto, *" Padding="0,0,10,0">
+                <Label Grid.Column="0" 
+                       Text="Отлично" 
+                       TextColor="#214484"
+                       FontSize="21"
+                       FontAttributes="Bold"
+                       HorizontalOptions="Start"/>
+                <Label Grid.Column="1" 
+                       Text="0" 
+                       TextColor="#214484"
+                       FontSize="23"
+                       FontAttributes="Bold"
+                       HorizontalOptions="End"/>
+            </Grid>
+            
+            <Grid ColumnDefinitions="Auto, *" Padding="0,0,10,0">
+                <Label Grid.Column="0" 
+                       Text="Хорошо" 
+                       TextColor="#214484"
+                       FontSize="21"
+                       FontAttributes="Bold"
+                       HorizontalOptions="Start"/>
+                <Label Grid.Column="1" 
+                       Text="0" 
+                       TextColor="#214484"
+                       FontSize="23"
+                       FontAttributes="Bold"
+                       HorizontalOptions="End"/>
+            </Grid>
+            <Grid ColumnDefinitions="Auto, *" Padding="0,0,10,0">
+                <Label Grid.Column="0" 
+                       Text="Нормально" 
+                       TextColor="#214484"
+                       FontSize="21"
+                       FontAttributes="Bold"
+                       HorizontalOptions="Start"/>
+                <Label Grid.Column="1" 
+                       Text="0" 
+                       TextColor="#214484"
+                       FontSize="23"
+                       FontAttributes="Bold"
+                       HorizontalOptions="End"/>
+            </Grid>
+            <Grid ColumnDefinitions="Auto, *" Padding="0,0,10,0">
+                <Label Grid.Column="0" 
+                       Text="Не понравилось" 
+                       TextColor="#214484"
+                       FontSize="21"
+                       FontAttributes="Bold"
+                       HorizontalOptions="Start"/>
+                <Label Grid.Column="1" 
+                       Text="0" 
+                       TextColor="#214484"
+                       FontSize="23"
+                       FontAttributes="Bold"
+                       HorizontalOptions="End"/>
+            </Grid>
+            
+
+        </VerticalStackLayout>
+
+        <BoxView Grid.Row="5" 
+         HeightRequest="2" 
+         Color="#214484"
+         HorizontalOptions="Fill"
+         Margin="10,0,10,0"/>
+
+        
+        <ScrollView Grid.Row="6" 
+                    Grid.RowSpan="2" 
+                    Padding="10" 
+                    Margin="7">
+            <Grid RowDefinitions="Auto, Auto">
+
+                <Border Grid.Row="0"
+                        Background="WhiteSmoke"
+                        Stroke="LightGray"
+                        StrokeThickness="2"
+                        StrokeShape="RoundRectangle 10">
+                    <Grid RowDefinitions="*,Auto" RowSpacing="25" VerticalOptions="Center" Padding="20">
+                        <Image Grid.Row="0"
+                               Source="notfind.png"
+                               HeightRequest="60"
+                               WidthRequest="60"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center">
+                        </Image>
+                        <Label Grid.Row="1" 
+                               Text="Список отзывов пуст" 
+                               TextColor="#214484"
+                               FontSize="25"
+                               FontAttributes="Bold"
+                               HorizontalOptions="Center"
+                               HorizontalTextAlignment="Center"/>
+                    </Grid>
+                </Border>
+            </Grid>
+        </ScrollView>
+    </Grid>
+</ContentPage>
+    

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell x:Class="PoputkaKGAMT.AppShell"
+        xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+        xmlns:local="clr-namespace:PoputkaKGAMT"
+        Shell.TabBarBackgroundColor="#214484"
+        Shell.TabBarTitleColor="White"
+        Shell.TabBarUnselectedColor="#A0B8E0"
+        Shell.TabBarForegroundColor="White">
+
+    <ShellContent ContentTemplate="{DataTemplate local:EntrancePage}" Route="EntrancePage"/>
+    
+    <TabBar >
+        <Tab Title="Поиск" Route="SearchPage" Icon="searchicon.png">
+            <ShellContent ContentTemplate="{DataTemplate local:SearchPage}" Route="SearchPage"/>
+        </Tab>
+        <Tab Title="Создать" Route="TripCreatePage" Icon="addtravelicon.png">
+            <ShellContent ContentTemplate="{DataTemplate local:TripCreatePage}" Route="TripCreatePage"/>
+        </Tab>
+        <Tab Title="История" Route="TravelHistoryPage" Icon="travelcaricon.png">
+            <ShellContent ContentTemplate="{DataTemplate local:TravelHistoryPage}" Route="TravelHistoryPage"/>
+        </Tab>
+        <Tab Title="Профиль" Route="ProfilePage" Icon="profileicon.png">
+            <ShellContent ContentTemplate="{DataTemplate local:ProfilePage}" Route="ProfilePage"/>
+        </Tab>
+    </TabBar>
+
+    <ShellContent ContentTemplate="{DataTemplate local:MyTravelPage}" Route="MyTravelPage"/>
+    <ShellContent ContentTemplate="{DataTemplate local:RegistrationPage}" Route="RegistrationPage"/>
+    <ShellContent ContentTemplate="{DataTemplate local:SearchResultPage}" Route="SearchResultPage"/>
+    <ShellContent ContentTemplate="{DataTemplate local:RatingPage}" Route="RatingPage"/>
+    <ShellContent ContentTemplate="{DataTemplate local:SettingPage}" Route="SettingPage"/>
+    <ShellContent ContentTemplate="{DataTemplate local:TripDetailsPage}" Route="TripDetailsPage"/>
+    <ShellContent ContentTemplate="{DataTemplate local:FellowTravelerPage}" Route="FellowTravelerPage"/>
+    <ShellContent ContentTemplate="{DataTemplate local:CheckProfilePage}" Route="CheckProfilePage"/>
+
+</Shell>
+    
+    

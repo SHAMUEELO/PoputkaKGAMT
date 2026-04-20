@@ -1,0 +1,551 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PoputkaKGAMT.SearchResultPage"
+             Shell.NavBarIsVisible="False"
+             Background="White">
+
+    <AbsoluteLayout>
+       
+            <!-- Кнопки  -->
+        <Grid AbsoluteLayout.LayoutBounds="0,0,1,0.1" AbsoluteLayout.LayoutFlags="All"  ColumnDefinitions="*" ColumnSpacing="2" >
+            <Border Grid.Column="0"
+                    Background="#214484"
+                    HeightRequest="45"
+                    Margin="10,0,10,0"
+                    Stroke="#214484"
+                    StrokeThickness="1"
+                    StrokeShape="RoundRectangle 8">
+                <Grid Grid.Row="0" ColumnDefinitions="Auto, Auto" ColumnSpacing="10">
+                    <Image Grid.Column="0" Source="backicon.png" 
+                               HorizontalOptions="Center">
+                    </Image>
+
+                    <Label Grid.Column="1"
+                           Text="Назад"
+                           TextColor="White"
+                           FontSize="20" 
+                           FontAttributes="Bold"
+                           Margin="-15,2,0,0"
+                           Padding="0,5,15,0"/>
+                </Grid>
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding GoSearchCommand}" />
+                </Border.GestureRecognizers>
+            </Border>
+        </Grid>
+
+
+
+
+        <Grid AbsoluteLayout.LayoutBounds="0,0.6,1,0.88" AbsoluteLayout.LayoutFlags="All" 
+              RowDefinitions="Auto, Auto, Auto, Auto" >
+
+
+
+            <!-- Вкладки: Водитель и пассажир  -->
+            <Grid Grid.Row="1" ColumnDefinitions="*, *" ColumnSpacing="10" Padding="0,15,0,10" ZIndex="1">
+                <Grid Grid.Column="0" ColumnDefinitions="Auto,Auto" ColumnSpacing="10" Padding="12,0,0,0">
+                    <Image Grid.Column="0" x:Name="WheelImage"
+                       Source="wheeliconresult.png"
+                       HorizontalOptions="Start"
+                       HeightRequest="36"
+                       WidthRequest="36">
+                    </Image>
+                    <Label Grid.Column="1" x:Name="DriverLabel"
+                       Text="Водители"
+                       FontSize="22"
+                       FontAttributes="Bold"
+                       TextColor="#214484"
+                       HorizontalOptions="Center">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OpenDriverResult" />
+                        </Label.GestureRecognizers>
+                    </Label>
+                </Grid>
+
+
+                <Grid Grid.Column="1" ColumnDefinitions="Auto,Auto" ColumnSpacing="10" Padding="0,0,12,0">
+                    <Image Grid.Column="0" x:Name="PassengerImage"
+                       Source="graypassengericonresult.png"
+                       HorizontalOptions="Start"
+                       HeightRequest="33"
+                       WidthRequest="33">
+                    </Image>
+                    <Label Grid.Column="1" x:Name="PassengerLabel"
+                       Text="Пассажиры"
+                       FontSize="22"
+                       FontAttributes="Bold"
+                       TextColor="Black"
+                       HorizontalOptions="Center">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OpenPassengerReusult" />
+                        </Label.GestureRecognizers>
+                    </Label>
+                </Grid>
+            </Grid>
+
+
+
+
+            <!-- Полоса -->
+            <Grid Grid.Row="2" ColumnDefinitions="*, *" Padding="0,0,0,10">
+
+                <BoxView Grid.Column="0" x:Name="DriverBoxView"
+                     HeightRequest="3" 
+                     Color="#214484"
+                     HorizontalOptions="Fill" />
+
+                <BoxView Grid.Column="1" x:Name="PassengerBoxView"
+                     HeightRequest="3" 
+                     Color="Black"
+                     HorizontalOptions="Fill" />
+            </Grid>
+            
+            
+            
+            
+            <!-- Scroll Водители -->
+            <Grid Grid.Row="3" RowDefinitions="Auto, Auto, Auto, 600">
+                <ScrollView Grid.Row="0"
+                            IsVisible="{Binding ShowSearchResults}" 
+                            VerticalOptions="Fill"
+                            Padding="10" 
+                            Margin="5">
+                    <!-- По параметрам в таблице Trips есть данные -->
+                    <CollectionView ItemsSource="{Binding SearchTrips}">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Padding="0,0,0,10">
+                                    <Border Background="{Binding TripBackgroundColor}"
+                                            Stroke="{Binding BorderStroke}"
+                                            StrokeThickness="2" 
+                                            StrokeShape="RoundRectangle 10">
+                                        <Grid Padding="15,10,15,10" ColumnDefinitions="Auto, Auto, *, Auto" ColumnSpacing="10" RowDefinitions="Auto, Auto">
+                                            <Border Grid.Column="0" Grid.Row="0" HeightRequest="60"   
+                                                    WidthRequest="60"
+                                                    Stroke="{Binding BorderStroke}" 
+                                                    StrokeThickness="2"
+                                                    StrokeShape="RoundRectangle 70"
+                                                    HorizontalOptions="Start">
+                                                <Image Source="defoltavataricon.png" 
+                                                       Aspect="AspectFill"
+                                                       HeightRequest="55"     
+                                                       WidthRequest="55"
+                                                       HorizontalOptions="Center"
+                                                       VerticalOptions="Center"/>
+                                            </Border>
+                                            <VerticalStackLayout Grid.Column="0" Grid.Row="0" Padding="67,10,0,0" HorizontalOptions="Start"  >
+                                                <Label Text="{Binding UserName}" FontSize="22" FontAttributes="Bold" TextColor="{Binding BorderStroke}" Padding="5,0,0,0" WidthRequest="300" LineBreakMode="TailTruncation"></Label>
+                                                <Grid ColumnDefinitions="Auto,Auto" ColumnSpacing="5" Padding="0,0,0,10">
+                                                    <Image Grid.Column="0" Source="starrating.png" HeightRequest="25" WidthRequest="25"></Image>
+                                                    <Label Grid.Column="1" Text="{Binding UserRating}" FontSize="21" TextColor="{Binding BorderStroke}" ></Label>
+                                                </Grid>
+                                            </VerticalStackLayout>
+                                            <Label Grid.Column="3" Grid.Row="0" Text="{Binding Price}" FontSize="25" TextColor="{Binding BorderStroke}" HorizontalOptions="End" VerticalOptions="Center" Padding="0,0,32,0" Margin="0,30,0,0"></Label>
+                                            <Image Grid.Column="3" Grid.Row="0" Source="payimage.png" HeightRequest="26" WidthRequest="26" HorizontalOptions="End" VerticalOptions="Center" Margin="0,30,0,0"></Image>
+
+                                            <VerticalStackLayout Grid.Column="0" Grid.Row="1" Padding="-5,0,0,0" Spacing="7">
+                                                <Grid ColumnDefinitions="Auto,Auto" ColumnSpacing="5" Padding="0,0,0,0">
+                                                    <Image Grid.Column="0" Source="carimage.png" HeightRequest="30" WidthRequest="30"></Image>
+                                                    <Label Grid.Column="1"  Text="{Binding Role}" FontSize="18" TextColor="{Binding BorderStroke}"/>
+                                                </Grid>
+                                                <Grid ColumnDefinitions="Auto,Auto,Auto,Auto" ColumnSpacing="10" Padding="1,0,0,0">
+                                                    <Image Grid.Column="0" Source="placeimage.png" HeightRequest="26" WidthRequest="26"></Image>
+                                                    <Label Grid.Column="1"  Text="{Binding DeparturePlaceName}" FontSize="18" TextColor="{Binding BorderStroke}"  LineBreakMode="TailTruncation"/>
+                                                    <Label Grid.Column="2"  Text="➣" FontSize="20" TextColor="{Binding BorderStroke}" Padding="0,-3,0,0"/>
+                                                    <Label Grid.Column="3"  Text="{Binding ArrivePlaceName}" FontSize="18" TextColor="{Binding BorderStroke}" WidthRequest="159" LineBreakMode="TailTruncation"/>
+                                                </Grid>
+                                                <Grid ColumnDefinitions="Auto,Auto,Auto,Auto" ColumnSpacing="10" Padding="2,0,0,0">
+                                                    <Image Grid.Column="0" Source="dateimage.png" HeightRequest="23" WidthRequest="23"></Image>
+                                                    <Label Grid.Column="1"  Text="{Binding Date}" FontSize="18" TextColor="{Binding BorderStroke}"/>
+                                                    <Label Grid.Column="2"  Text="─" FontSize="18" TextColor="Black"/>
+                                                    <Label Grid.Column="3"  Text="{Binding Time}" FontSize="18" TextColor="{Binding BorderStroke}"/>
+                                                </Grid>
+                                                <Grid ColumnDefinitions="Auto,Auto" ColumnSpacing="5" Padding="0,0,0,0">
+                                                    <Image Grid.Column="0" Source="quentityimage.png" HeightRequest="25" WidthRequest="25"></Image>
+                                                    <Label Grid.Column="1"  Text="{Binding SeatsQuentity}" IsVisible="{Binding SeatsLabelVisible}" FontSize="18" TextColor="{Binding BorderStroke}"/>
+
+                                                    <Label Grid.Column="1"  Text="Места закончились" IsVisible="{Binding NoSeatsLabelVisible}" FontSize="18" TextColor="{Binding BorderStroke}"/>
+                                                </Grid>
+                                            </VerticalStackLayout>
+
+                                        </Grid>
+                                        <Border.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.GoTripDetailsCommand}" CommandParameter="{Binding}"/>
+                                        </Border.GestureRecognizers>
+                                    </Border>
+                                </Grid>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </ScrollView>
+
+                <Border Grid.Row="0" IsVisible="{Binding IsSearchEmpty}"
+                        Background="WhiteSmoke"
+                        Margin="20,0,20,10"
+                        Stroke="LightGray"
+                        StrokeThickness="2"
+                        StrokeShape="RoundRectangle 10">
+                    <Grid RowDefinitions="*,Auto" RowSpacing="25" VerticalOptions="Center" Padding="0,25,0,25">
+                        <Image Grid.Row="0"
+                               Source="notfind.png"
+                               HeightRequest="60"
+                               WidthRequest="60"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center">
+                        </Image>
+                        <Label Grid.Row="1" 
+                               Text="По заданным параметрам ничего не нашли" 
+                               TextColor="#214484"
+                               FontSize="23"
+                               FontAttributes="Bold"
+                               HorizontalOptions="Center"
+                               HorizontalTextAlignment="Center"/>
+                    </Grid>
+                </Border>
+
+
+
+                <!-- Разделитель -->
+                <BoxView Grid.Row="1" 
+                         IsVisible="{Binding ShowSearchResults}"
+                         HeightRequest="3" 
+                         Color="#214484"
+                         HorizontalOptions="Fill"
+                         Margin="7,0,7,0"/>
+                <Label Grid.Row="2"  
+                       IsVisible="{Binding ShowSearchResults}"
+                       Text="Все поездки" 
+                       TextColor="#214484"
+                       FontSize="18"
+                       FontAttributes="Bold"
+                       Margin="15,0,0,0"
+                       HorizontalOptions="Start"
+                       HorizontalTextAlignment="Center"/>
+
+                <!-- Все поездки -->
+                <ScrollView x:Name="DriverReusultScroll" Grid.Row="3" 
+                            IsVisible="True"
+                            VerticalOptions="Fill"
+                            Padding="10" 
+                            Margin="5,0,5,0">
+                    <!-- Если в таблице Trips есть данные -->
+                    <CollectionView ItemsSource="{Binding DriverAllTrips}">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Padding="0,0,0,10">
+                                    <Border Background="{Binding TripBackgroundColor}"
+                                            Stroke="{Binding BorderStroke}"
+                                            StrokeThickness="2" 
+                                            StrokeShape="RoundRectangle 10">
+                                        <Grid Padding="15,10,15,10" ColumnDefinitions="Auto, Auto, *, Auto" ColumnSpacing="10" RowDefinitions="Auto, Auto">
+                                            <Border Grid.Column="0" Grid.Row="0" HeightRequest="60"   
+                                                    WidthRequest="60"
+                                                    Stroke="{Binding BorderStroke}" 
+                                                    StrokeThickness="2"
+                                                    StrokeShape="RoundRectangle 70"
+                                                    HorizontalOptions="Start">
+                                                <Image Source="defoltavataricon.png" 
+                                                       Aspect="AspectFill"
+                                                       HeightRequest="55"     
+                                                       WidthRequest="55"
+                                                       HorizontalOptions="Center"
+                                                       VerticalOptions="Center"/>
+                                            </Border>
+                                            <VerticalStackLayout Grid.Column="0" Grid.Row="0" Padding="67,10,0,0" HorizontalOptions="Start"  >
+                                                <Label Text="{Binding UserName}" FontSize="22" FontAttributes="Bold" TextColor="{Binding BorderStroke}" Padding="5,0,0,0" WidthRequest="300" LineBreakMode="TailTruncation"></Label>
+                                                <Grid ColumnDefinitions="Auto,Auto" ColumnSpacing="5" Padding="0,0,0,10">
+                                                    <Image Grid.Column="0" Source="starrating.png" HeightRequest="25" WidthRequest="25"></Image>
+                                                    <Label Grid.Column="1" Text="{Binding UserRating}" FontSize="21" TextColor="{Binding BorderStroke}" ></Label>
+                                                </Grid>
+                                            </VerticalStackLayout>
+                                            <Label Grid.Column="3" Grid.Row="0" Text="{Binding Price}" FontSize="25" TextColor="{Binding BorderStroke}" HorizontalOptions="End" VerticalOptions="Center" Padding="0,0,32,0" Margin="0,30,0,0"></Label>
+                                            <Image Grid.Column="3" Grid.Row="0" Source="payimage.png" HeightRequest="26" WidthRequest="26" HorizontalOptions="End" VerticalOptions="Center" Margin="0,30,0,0"></Image>
+
+                                            <VerticalStackLayout Grid.Column="0" Grid.Row="1" Padding="-5,0,0,0" Spacing="7">
+                                                <Grid ColumnDefinitions="Auto,Auto" ColumnSpacing="5" Padding="0,0,0,0">
+                                                    <Image Grid.Column="0" Source="carimage.png" HeightRequest="30" WidthRequest="30"></Image>
+                                                    <Label Grid.Column="1"  Text="{Binding Role}" FontSize="18" TextColor="{Binding BorderStroke}"/>
+                                                </Grid>
+                                                <Grid ColumnDefinitions="Auto,Auto,Auto,Auto" ColumnSpacing="10" Padding="1,0,0,0">
+                                                    <Image Grid.Column="0" Source="placeimage.png" HeightRequest="26" WidthRequest="26"></Image>
+                                                    <Label Grid.Column="1"  Text="{Binding DeparturePlaceName}" FontSize="18" TextColor="{Binding BorderStroke}"  LineBreakMode="TailTruncation"/>
+                                                    <Label Grid.Column="2"  Text="➣" FontSize="20" TextColor="{Binding BorderStroke}" Padding="0,-3,0,0"/>
+                                                    <Label Grid.Column="3"  Text="{Binding ArrivePlaceName}" FontSize="18" TextColor="{Binding BorderStroke}" WidthRequest="159" LineBreakMode="TailTruncation"/>
+                                                </Grid>
+                                                <Grid ColumnDefinitions="Auto,Auto,Auto,Auto" ColumnSpacing="10" Padding="2,0,0,0">
+                                                    <Image Grid.Column="0" Source="dateimage.png" HeightRequest="23" WidthRequest="23"></Image>
+                                                    <Label Grid.Column="1"  Text="{Binding Date}" FontSize="18" TextColor="{Binding BorderStroke}"/>
+                                                    <Label Grid.Column="2"  Text="─" FontSize="18" TextColor="Black"/>
+                                                    <Label Grid.Column="3"  Text="{Binding Time}" FontSize="18" TextColor="{Binding BorderStroke}"/>
+                                                </Grid>
+                                                <Grid ColumnDefinitions="Auto,Auto" ColumnSpacing="5" Padding="0,0,0,0">
+                                                    <Image Grid.Column="0" Source="quentityimage.png" HeightRequest="25" WidthRequest="25"></Image>
+                                                    <Label Grid.Column="1"  Text="{Binding SeatsQuentity}" IsVisible="{Binding SeatsLabelVisible}" FontSize="18" TextColor="{Binding BorderStroke}"/>
+
+                                                    <Label Grid.Column="1"  Text="Места закончились" IsVisible="{Binding NoSeatsLabelVisible}" FontSize="18" TextColor="{Binding BorderStroke}"/>
+                                                </Grid>
+                                            </VerticalStackLayout>
+
+                                        </Grid>
+                                        <Border.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.GoTripDetailsCommand}" CommandParameter="{Binding}"/>
+                                        </Border.GestureRecognizers>
+                                    </Border>
+                                </Grid>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </ScrollView>
+
+                <Border Grid.Row="0" x:Name="DriverReusultScrollNotFind"
+                        IsVisible="False"
+                        Background="WhiteSmoke"
+                        Margin="20,0,20,10"
+                        Stroke="LightGray"
+                        StrokeThickness="2"
+                        StrokeShape="RoundRectangle 10"
+                        WidthRequest="375"
+                        HeightRequest="200">
+                    <Grid RowDefinitions="*,Auto" RowSpacing="25" VerticalOptions="Center" Padding="0,25,0,25">
+                        <Image Grid.Row="0"
+                                Source="notfind.png"
+                                HeightRequest="60"
+                                WidthRequest="60"
+                                HorizontalOptions="Center"
+                                VerticalOptions="Center">
+                        </Image>
+                        <Label Grid.Row="1" 
+                               Text="Пока нет ни одной опубликованной поездки" 
+                               TextColor="#214484"
+                               FontSize="23"
+                               FontAttributes="Bold"
+                               HorizontalOptions="Center"
+                               HorizontalTextAlignment="Center"/>
+                    </Grid>
+                </Border>
+                
+            </Grid>
+
+
+            <!-- Scroll Пассажира -->
+            <Grid Grid.Row="3" RowDefinitions="Auto, Auto, Auto, 600">
+                <ScrollView Grid.Row="0"
+                            IsVisible="{Binding ShowSearchResults}" 
+                            Padding="10" 
+                            Margin="5">
+                    <!-- По параметрам в таблице Trips есть данные -->
+                    <CollectionView ItemsSource="{Binding SearchTrips}">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Padding="0,0,0,10">
+                                    <Border Background="{Binding TripBackgroundColor}"
+                                            Stroke="{Binding BorderStroke}"
+                                            StrokeThickness="2" 
+                                            StrokeShape="RoundRectangle 10">
+                                        <Grid Padding="15,10,15,10" ColumnDefinitions="Auto, Auto, *, Auto" ColumnSpacing="10" RowDefinitions="Auto, Auto">
+                                            <Border Grid.Column="0" Grid.Row="0" HeightRequest="60"   
+                                                    WidthRequest="60"
+                                                    Stroke="{Binding BorderStroke}" 
+                                                    StrokeThickness="2"
+                                                    StrokeShape="RoundRectangle 70"
+                                                    HorizontalOptions="Start">
+                                                <Image Source="defoltavataricon.png" 
+                                                       Aspect="AspectFill"
+                                                       HeightRequest="55"     
+                                                       WidthRequest="55"
+                                                       HorizontalOptions="Center"
+                                                       VerticalOptions="Center"/>
+                                            </Border>
+                                            <VerticalStackLayout Grid.Column="0" Grid.Row="0" Padding="67,10,0,0" HorizontalOptions="Start"  >
+                                                <Label Text="{Binding UserName}" FontSize="22" FontAttributes="Bold" TextColor="{Binding BorderStroke}" Padding="5,0,0,0" WidthRequest="300" LineBreakMode="TailTruncation"></Label>
+                                                <Grid ColumnDefinitions="Auto,Auto" ColumnSpacing="5" Padding="0,0,0,10">
+                                                    <Image Grid.Column="0" Source="starrating.png" HeightRequest="25" WidthRequest="25"></Image>
+                                                    <Label Grid.Column="1" Text="{Binding UserRating}" FontSize="21" TextColor="{Binding BorderStroke}" ></Label>
+                                                </Grid>
+                                            </VerticalStackLayout>
+                                            <Label Grid.Column="3" Grid.Row="0" Text="{Binding Price}" FontSize="25" TextColor="{Binding BorderStroke}" HorizontalOptions="End" VerticalOptions="Center" Padding="0,0,32,0" Margin="0,30,0,0"></Label>
+                                            <Image Grid.Column="3" Grid.Row="0" Source="payimage.png" HeightRequest="26" WidthRequest="26" HorizontalOptions="End" VerticalOptions="Center" Margin="0,30,0,0"></Image>
+
+                                            <VerticalStackLayout Grid.Column="0" Grid.Row="1" Padding="-5,0,0,0" Spacing="7">
+                                                <Grid ColumnDefinitions="Auto,Auto" ColumnSpacing="5" Padding="0,0,0,0">
+                                                    <Image Grid.Column="0" Source="carimage.png" HeightRequest="30" WidthRequest="30"></Image>
+                                                    <Label Grid.Column="1"  Text="{Binding Role}" FontSize="18" TextColor="{Binding BorderStroke}"/>
+                                                </Grid>
+                                                <Grid ColumnDefinitions="Auto,Auto,Auto,Auto" ColumnSpacing="10" Padding="1,0,0,0">
+                                                    <Image Grid.Column="0" Source="placeimage.png" HeightRequest="26" WidthRequest="26"></Image>
+                                                    <Label Grid.Column="1"  Text="{Binding DeparturePlaceName}" FontSize="18" TextColor="{Binding BorderStroke}"  LineBreakMode="TailTruncation"/>
+                                                    <Label Grid.Column="2"  Text="➣" FontSize="20" TextColor="{Binding BorderStroke}" Padding="0,-3,0,0"/>
+                                                    <Label Grid.Column="3"  Text="{Binding ArrivePlaceName}" FontSize="18" TextColor="{Binding BorderStroke}" WidthRequest="159" LineBreakMode="TailTruncation"/>
+                                                </Grid>
+                                                <Grid ColumnDefinitions="Auto,Auto,Auto,Auto" ColumnSpacing="10" Padding="2,0,0,0">
+                                                    <Image Grid.Column="0" Source="dateimage.png" HeightRequest="23" WidthRequest="23"></Image>
+                                                    <Label Grid.Column="1"  Text="{Binding Date}" FontSize="18" TextColor="{Binding BorderStroke}"/>
+                                                    <Label Grid.Column="2"  Text="─" FontSize="18" TextColor="Black"/>
+                                                    <Label Grid.Column="3"  Text="{Binding Time}" FontSize="18" TextColor="{Binding BorderStroke}"/>
+                                                </Grid>
+                                                <Grid ColumnDefinitions="Auto,Auto" ColumnSpacing="5" Padding="0,0,0,0">
+                                                    <Image Grid.Column="0" Source="quentityimage.png" HeightRequest="25" WidthRequest="25"></Image>
+                                                    <Label Grid.Column="1"  Text="{Binding SeatsQuentity}" IsVisible="{Binding SeatsLabelVisible}" FontSize="18" TextColor="{Binding BorderStroke}"/>
+
+                                                    <Label Grid.Column="1"  Text="Места закончились" IsVisible="{Binding NoSeatsLabelVisible}" FontSize="18" TextColor="{Binding BorderStroke}"/>
+                                                </Grid>
+                                            </VerticalStackLayout>
+
+                                        </Grid>
+                                        <Border.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.GoTripDetailsCommand}" CommandParameter="{Binding}"/>
+                                        </Border.GestureRecognizers>
+                                    </Border>
+                                </Grid>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </ScrollView>
+
+                <Border Grid.Row="0" IsVisible="{Binding IsSearchEmpty}"
+                        Background="WhiteSmoke"
+                        Margin="20,0,20,10"
+                        Stroke="LightGray"
+                        StrokeThickness="2"
+                        StrokeShape="RoundRectangle 10">
+                    <Grid RowDefinitions="*,Auto" RowSpacing="25" VerticalOptions="Center" Padding="0,25,0,25">
+                        <Image Grid.Row="0"
+                               Source="notfind.png"
+                               HeightRequest="60"
+                               WidthRequest="60"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center">
+                        </Image>
+                        <Label Grid.Row="1" 
+                               Text="По заданным параметрам ничего не нашли" 
+                               TextColor="#214484"
+                               FontSize="23"
+                               FontAttributes="Bold"
+                               HorizontalOptions="Center"
+                               HorizontalTextAlignment="Center"/>
+                    </Grid>
+                </Border>
+
+                <!-- Разделитель -->
+                <BoxView Grid.Row="1" 
+                         IsVisible="{Binding ShowSearchResults}"
+                         HeightRequest="3" 
+                         Color="#214484"
+                         HorizontalOptions="Fill"
+                         Margin="7,0,7,0"/>
+                <Label Grid.Row="2"  
+                       IsVisible="{Binding ShowSearchResults}"
+                       Text="Все поездки" 
+                       TextColor="#214484"
+                       FontSize="18"
+                       FontAttributes="Bold"
+                       Margin="15,0,0,0"
+                       HorizontalOptions="Start"
+                       HorizontalTextAlignment="Center"/>
+
+                <ScrollView x:Name="PassengerReusultScroll" Grid.Row="3" 
+                            IsVisible="True"                             
+                            VerticalOptions="Fill"
+                            Padding="10" 
+                            Margin="5,0,5,0">
+                    <!-- Если в таблице Trips есть данные -->
+                    <CollectionView ItemsSource="{Binding PassengerAllTrips}">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Padding="0,0,0,10">
+                                    <Border Background="{Binding TripBackgroundColor}"
+                                        Stroke="{Binding BorderStroke}"
+                                        StrokeThickness="2" 
+                                        StrokeShape="RoundRectangle 10">
+                                        <Grid Padding="15,10,15,10" ColumnDefinitions="Auto, Auto, *, Auto" ColumnSpacing="10" RowDefinitions="Auto, Auto">
+                                            <Border Grid.Column="0" Grid.Row="0" HeightRequest="60"   
+                                                WidthRequest="60"
+                                                Stroke="{Binding BorderStroke}" 
+                                                StrokeThickness="2"
+                                                StrokeShape="RoundRectangle 70"
+                                                HorizontalOptions="Start">
+                                                <Image Source="defoltavataricon.png" 
+                                                   Aspect="AspectFill"
+                                                   HeightRequest="55"     
+                                                   WidthRequest="55"
+                                                   HorizontalOptions="Center"
+                                                   VerticalOptions="Center"/>
+                                            </Border>
+                                            <VerticalStackLayout Grid.Column="0" Grid.Row="0" Padding="67,10,0,0" HorizontalOptions="Start"  >
+                                                <Label Text="{Binding UserName}" FontSize="22" FontAttributes="Bold" TextColor="{Binding BorderStroke}" Padding="5,0,0,0" WidthRequest="300" LineBreakMode="TailTruncation"></Label>
+                                                <Grid ColumnDefinitions="Auto,Auto" ColumnSpacing="5" Padding="0,0,0,10">
+                                                    <Image Grid.Column="0" Source="starrating.png" HeightRequest="25" WidthRequest="25"></Image>
+                                                    <Label Grid.Column="1" Text="{Binding UserRating}" FontSize="21" TextColor="{Binding BorderStroke}" ></Label>
+                                                </Grid>
+                                            </VerticalStackLayout>
+                                            <Label Grid.Column="3" Grid.Row="0" Text="{Binding Price}" FontSize="25" TextColor="{Binding BorderStroke}" HorizontalOptions="End" VerticalOptions="Center" Padding="0,0,32,0" Margin="0,30,0,0"></Label>
+                                            <Image Grid.Column="3" Grid.Row="0" Source="payimage.png" HeightRequest="26" WidthRequest="26" HorizontalOptions="End" VerticalOptions="Center" Margin="0,30,0,0"></Image>
+
+                                            <VerticalStackLayout Grid.Column="0" Grid.Row="1" Padding="-5,0,0,0" Spacing="7">
+                                                <Grid ColumnDefinitions="Auto,Auto" ColumnSpacing="5" Padding="0,0,0,0">
+                                                    <Image Grid.Column="0" Source="groupsetting.png" HeightRequest="30" WidthRequest="30"></Image>
+                                                    <Label Grid.Column="1"  Text="{Binding Role}" FontSize="18" TextColor="{Binding BorderStroke}" Padding="2,3,0,0"/>
+                                                </Grid>
+                                                <Grid ColumnDefinitions="Auto,Auto,Auto,Auto" ColumnSpacing="10" Padding="1,0,0,0">
+                                                    <Image Grid.Column="0" Source="placeimage.png" HeightRequest="26" WidthRequest="26"></Image>
+                                                    <Label Grid.Column="1"  Text="{Binding DeparturePlaceName}" FontSize="18" TextColor="{Binding BorderStroke}"  LineBreakMode="TailTruncation"/>
+                                                    <Label Grid.Column="2"  Text="➣" FontSize="20" TextColor="{Binding BorderStroke}" Padding="0,-3,0,0"/>
+                                                    <Label Grid.Column="3"  Text="{Binding ArrivePlaceName}" FontSize="18" TextColor="{Binding BorderStroke}" WidthRequest="159" LineBreakMode="TailTruncation"/>
+                                                </Grid>
+                                                <Grid ColumnDefinitions="Auto,Auto,Auto,Auto" ColumnSpacing="10" Padding="2,0,0,0">
+                                                    <Image Grid.Column="0" Source="dateimage.png" HeightRequest="23" WidthRequest="23"></Image>
+                                                    <Label Grid.Column="1"  Text="{Binding Date}" FontSize="18" TextColor="{Binding BorderStroke}"/>
+                                                    <Label Grid.Column="2"  Text="─" FontSize="18" TextColor="{Binding BorderStroke}"/>
+                                                    <Label Grid.Column="3"  Text="{Binding Time}" FontSize="18" TextColor="{Binding BorderStroke}"/>
+                                                </Grid>
+                                                <Grid ColumnDefinitions="Auto,Auto" ColumnSpacing="5" Padding="0,0,0,0">
+                                                    <Image Grid.Column="0" Source="quentityimage.png" HeightRequest="25" WidthRequest="25"></Image>
+                                                    <Label Grid.Column="1"  Text="{Binding SeatsQuentity}" IsVisible="{Binding SeatsLabelVisible}" FontSize="18" TextColor="{Binding BorderStroke}"/>
+
+                                                    <Label Grid.Column="1"  Text="Места закончились" IsVisible="{Binding NoSeatsLabelVisible}" FontSize="18" TextColor="{Binding BorderStroke}"/>
+                                                </Grid>
+                                            </VerticalStackLayout>
+
+                                        </Grid>
+                                        <Border.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.GoTripDetailsCommand}" CommandParameter="{Binding}"/>
+                                        </Border.GestureRecognizers>
+                                    </Border>
+                                </Grid>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </ScrollView>
+
+                <Border Grid.Row="0" x:Name="PassengerReusultScrollNotFind"
+                        IsVisible="False"
+                        Background="WhiteSmoke"
+                        Margin="20,0,20,10"
+                        Stroke="LightGray"
+                        StrokeThickness="2"
+                        StrokeShape="RoundRectangle 10"
+                        WidthRequest="375"
+                        HeightRequest="200">
+                    <Grid RowDefinitions="*,Auto" RowSpacing="25" VerticalOptions="Center" Padding="0,25,0,25">
+                        <Image Grid.Row="0"
+                               Source="notfind.png"
+                               HeightRequest="60"
+                               WidthRequest="60"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center">
+                        </Image>
+                        <Label Grid.Row="1" 
+                               Text="Пока нет ни одной опубликованной поездки" 
+                               TextColor="#214484"
+                               FontSize="23"
+                               FontAttributes="Bold"
+                               HorizontalOptions="Center"
+                               HorizontalTextAlignment="Center"/>
+                    </Grid>
+                </Border>
+            </Grid>
+        </Grid>
+    </AbsoluteLayout>
+</ContentPage>

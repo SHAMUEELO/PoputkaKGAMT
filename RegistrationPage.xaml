@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PoputkaKGAMT.RegistrationPage"
+             Title="RegistrationPage"
+             Shell.NavBarIsVisible="False"
+             Background="#4167AB">
+
+    <Grid RowDefinitions="Auto, Auto, Auto" RowSpacing="10" Padding="0,10,0,0">
+
+        <Grid Grid.Row="0" RowDefinitions="Auto, *, *" RowSpacing="5">
+            <Grid Grid.Row="0" ColumnDefinitions="Auto, Auto" ColumnSpacing="10">
+                <Border Grid.Column="0"
+                        Background="White"
+                        WidthRequest="40" 
+                        HeightRequest="40"
+                        Stroke="White"
+                        StrokeThickness="1"
+                        StrokeShape="RoundRectangle 8"
+                        Margin="15, 20, 0, 0"
+                        Padding="8">
+                    <ImageButton Source="backiconwhite.png" 
+                                 HeightRequest="10"
+                                 WidthRequest="10"
+                                 Padding="5"
+                                 HorizontalOptions="Center"
+                                 Command="{Binding GoEntraceCommand}">
+                    </ImageButton>
+                </Border>
+
+
+                <Label Grid.Column="1"
+                       Text="Попутчики КГАМТ"
+                       TextColor="White"
+                       FontSize="25" 
+                       Margin="0, 20, 0, 0"
+                       FontAttributes="Bold"/>
+
+            </Grid>
+   
+
+            <Label Grid.Row="1"
+               Text="Регистрация"
+               TextColor="White"
+               FontAttributes="Bold"
+               FontSize="30"
+               HorizontalOptions="Start"
+               Margin="25, 10, 25, 0">
+            </Label>
+
+            <Label Grid.Row="2"
+                    Text="Создай аккаунт для входа в систему"
+                    TextColor="White"
+                    FontSize="18"
+                    Margin="25, 0, 25, 0"
+                    HorizontalOptions="Start"></Label>
+        </Grid>
+
+
+        <!-- Блок ввода данных -->
+        <Border Grid.Row="1"
+                Background="White"
+                Stroke="#A0B3D5"
+                StrokeThickness="4"         
+                StrokeShape="RoundRectangle 25"
+                Margin="25, 45, 25, 0">
+            <VerticalStackLayout Spacing="10">
+                <Label Text="Почта" FontSize="22"
+                       TextColor="#214484"  
+                       Padding="20,20,0,0"/>
+                <Border Stroke="#214484"
+                        StrokeThickness="1.5"
+                        StrokeShape="RoundRectangle 10"
+                        HeightRequest="50"
+                        Padding="3"
+                        Margin="20,0,20,0">
+                    <Entry Placeholder="student@gmail.com"
+                           PlaceholderColor="Gray"
+                           FontSize="20"
+                           TextColor="#214484"
+                           Text="{Binding Email}"/>
+                </Border>
+
+
+
+                <Label Text="Пароль" FontSize="22" 
+                       TextColor="#214484"
+                       Padding="20,5,20,0"/>
+                <Border Stroke="#214484"
+                        StrokeThickness="1.5"
+                        StrokeShape="RoundRectangle 10"
+                        HeightRequest="50"
+                        Padding="3"
+                        Margin="20,0,20,0">
+                    <Entry Placeholder="••••••••"
+                           PlaceholderColor="Gray"
+                           FontSize="20"
+                           TextColor="#214484"
+                           IsPassword="True"
+                           Text="{Binding Password}"/>
+                </Border>
+
+
+
+                <Label Text="Имя" FontSize="22" 
+                       TextColor="#214484"
+                       Padding="20,5,20,0"/>
+                <Border Stroke="#214484"
+                        StrokeThickness="1.5"
+                        StrokeShape="RoundRectangle 10"
+                        HeightRequest="50"
+                        Padding="3"
+                        Margin="20,0,20,0">
+                    <Entry Placeholder="Иван Иванов"
+                           PlaceholderColor="Gray"
+                           FontSize="20"
+                           TextColor="#214484"
+                           Text="{Binding UserName}"/>
+                </Border>
+
+
+
+                <Border Grid.Row="1" BackgroundColor="#A0B3D5"
+                        Stroke="#A0B3D5"
+                        StrokeThickness="2"
+                        StrokeShape="RoundRectangle 0,0,10,10"
+                        Opacity="0.9"
+                        HorizontalOptions="Fill"
+                        VerticalOptions="Center"
+                        HeightRequest="60"
+                        Margin="0,5,0,0">
+                    <Label Text="Зарегистрироваться"
+                           BackgroundColor="Transparent"
+                           TextColor="White"
+                           FontSize="20"
+                           FontAttributes="Bold"
+                           HorizontalOptions="Center" 
+                           VerticalOptions="Center"
+                           Padding="10"/>
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding GoSearchCommand}" />
+                    </Border.GestureRecognizers>
+                </Border>
+               
+            </VerticalStackLayout>
+        </Border>
+
+    </Grid>
+</ContentPage>

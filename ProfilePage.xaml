@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PoputkaKGAMT.ProfilePage"
+             Title="ProfilePage"
+             Shell.NavBarIsVisible="False"
+             Background="White">
+
+
+
+
+    <Grid RowDefinitions="500, Auto, *, Auto" RowSpacing="10"> 
+
+        <Border Grid.Row="0" 
+                Background="#214484" 
+                HeightRequest="500"
+                VerticalOptions="Start"
+                HorizontalOptions="Fill"
+                StrokeShape="RoundRectangle 0,0,25,25">
+
+            <Grid>
+                <Image Grid.Row="0" Grid.RowSpan="3"
+                       Source="kgamt.png"
+                       Aspect="AspectFill"
+                       Opacity="0.7"
+                       HorizontalOptions="Fill"
+                       VerticalOptions="Fill"
+                       ZIndex="-2"/>
+                <VerticalStackLayout Spacing="10" 
+                         VerticalOptions="Center"
+                         HorizontalOptions="Center">
+
+                    <Border HeightRequest="140"   
+                            WidthRequest="140"
+                            Stroke="White" 
+                            StrokeThickness="5"
+                            StrokeShape="RoundRectangle 70"
+                            HorizontalOptions="Center"
+                            VerticalOptions="Center">
+                        <Image Source="defoltavataricon.png" 
+                               Aspect="AspectFill"
+                               HeightRequest="132"     
+                               WidthRequest="132"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center"/>
+                    </Border>
+
+
+                    <Label Text="{Binding UserName}"
+                           TextColor="White"
+                           FontSize="24"
+                           FontAttributes="Bold"
+                           VerticalOptions="Center"
+                           HorizontalOptions="Center"/>
+
+                </VerticalStackLayout>
+            </Grid>
+        </Border>
+
+        
+        
+        
+        <!-- Кнопка МОИ ПОЕЗДКИ -->
+        <Border Grid.Row="1"
+                BackgroundColor="White"
+                Stroke="#214484"
+                StrokeThickness="2"
+                HeightRequest="60"  
+                StrokeShape="RoundRectangle 15"
+                Margin="25,-5,25,0"
+                Padding="20,0">
+            <Grid>
+                <HorizontalStackLayout Spacing="1"
+                                       VerticalOptions="Center"
+                                       HorizontalOptions="Center">
+                    <Image Source="darkbluemytrips.png" 
+                            HeightRequest="28" 
+                            WidthRequest="28"
+                            VerticalOptions="Center"/>
+
+                    <Label Text="Мои поездки"
+                            BackgroundColor="Transparent"
+                            TextColor="#214484"
+                            FontSize="20"
+                            FontAttributes="Bold"
+                            VerticalOptions="Center"                         
+                            Padding="10"/>
+                </HorizontalStackLayout>
+            </Grid>
+            <Border.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding GoMyTravelButtonCommand}" />
+            </Border.GestureRecognizers>
+        </Border>
+
+        <!-- Поездки, рейтинг и пассажир -->
+        <Grid Grid.Row="2" ColumnDefinitions="*,*,*" ColumnSpacing="2">
+
+            <Border Grid.Column="0" 
+                    BackgroundColor="White"
+                    Stroke="#214484"
+                    StrokeThickness="2"
+                    HeightRequest="110" 
+                    WidthRequest="115"
+                    StrokeShape="RoundRectangle 10"
+                    Padding="15">
+                <VerticalStackLayout Spacing="4" VerticalOptions="Center" HorizontalOptions="Center">
+                    <Label Text="{Binding IsDriverProfile}" TextColor="#84216B" FontSize="28" FontAttributes="Bold" HorizontalOptions="Center" />
+                    <Label Text="Водитель" TextColor="#214484" FontSize="17" HorizontalOptions="Center" FontAttributes="Bold"/>
+                </VerticalStackLayout>
+            </Border>
+
+            <Border Grid.Column="1"
+                    BackgroundColor="White"
+                    Stroke="#214484"
+                    StrokeThickness="2"
+                    HeightRequest="120"  
+                    WidthRequest="120"
+                    StrokeShape="RoundRectangle 10"
+                    Padding="15">
+                <VerticalStackLayout Spacing="4" VerticalOptions="Center" HorizontalOptions="Center">
+                    <Label Grid.Column="0" Text="{Binding RatingCore}" TextColor="#847821" FontSize="28" FontAttributes="Bold" HorizontalOptions="Center"/>
+                    <Label Text="Рейтинг" TextColor="#214484" FontSize="20" HorizontalOptions="Center" FontAttributes="Bold"/>
+                </VerticalStackLayout>
+            </Border>
+            
+
+            <Border Grid.Column="3" 
+                    BackgroundColor="White"
+                    Stroke="#214484"
+                    StrokeThickness="2"
+                    HeightRequest="110"
+                    WidthRequest="115"
+                    StrokeShape="RoundRectangle 10"
+                    Padding="15">
+                <VerticalStackLayout Spacing="4" VerticalOptions="Center" HorizontalOptions="Center">
+                    <Label Text="{Binding IsPassengerProfile}" TextColor="#21842C" FontSize="28" FontAttributes="Bold" HorizontalOptions="Center" />
+                    <Label Text="Пассажир" TextColor="#214484" FontSize="17" HorizontalOptions="Center" FontAttributes="Bold"/>
+                </VerticalStackLayout>
+            </Border>
+        </Grid>
+
+
+
+        <!-- Кнопки Настройки и Выйти -->
+        <Grid Grid.Row="3" ColumnDefinitions="Auto,*" ColumnSpacing="5" Padding="0,0,0,10">
+
+            <Border Grid.Column="0" 
+                    BackgroundColor="White"
+                    Stroke="#214484"
+                    StrokeThickness="2"
+                    WidthRequest="70"
+                    HeightRequest="60"  
+                    VerticalOptions="End"
+                    StrokeShape="RoundRectangle 15"
+                    Margin="10,0,0,0"
+                    Padding="20,0">
+                    <ImageButton Source="settingicon.png" 
+                                HeightRequest="20" 
+                                WidthRequest="20"
+                                VerticalOptions="Center"
+                                Command="{Binding GoSettingCommand}"/>
+            </Border>
+
+
+
+            <Border Grid.Column="1" 
+                    BackgroundColor="White"
+                    Stroke="#9C282A"
+                    StrokeThickness="2"
+                    StrokeShape="RoundRectangle 15"
+                    HeightRequest="60"  
+                    VerticalOptions="End"
+                    Margin="0,0,10,0"
+                    Padding="12,0">
+                <HorizontalStackLayout Spacing="1"
+                       VerticalOptions="Center"
+                       HorizontalOptions="Center">
+                    <Image Grid.Column="0"
+                           Source="exiticon.png" 
+                           HeightRequest="24" 
+                           WidthRequest="24"/>
+
+                    <Label Grid.Column="1"
+                            Text="Выйти"
+                            BackgroundColor="Transparent"
+                            TextColor="#9C282A"
+                            FontSize="20"
+                            FontAttributes="Bold"
+                            Padding="10"/>
+                </HorizontalStackLayout>
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding GoOutUserCommand}" />
+                </Border.GestureRecognizers>
+            </Border>
+        </Grid>
+
+
+
+    </Grid>
+
+</ContentPage>

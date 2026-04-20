@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PoputkaKGAMT.SettingPage"
+             Shell.NavBarIsVisible="False"
+             Background="White">
+
+    <Grid RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto, Auto" RowSpacing="8" Padding="0,5,0,0">
+        <Border Grid.Row="0"
+                Background="#214484"
+                HeightRequest="45"
+                Margin="10,0,10,0"
+                Stroke="#214484"
+                StrokeThickness="1"
+                StrokeShape="RoundRectangle 8"
+                VerticalOptions="Start">
+            <Grid Grid.Row="0" ColumnDefinitions="Auto, Auto" ColumnSpacing="10">
+                <Image Grid.Column="0" Source="backicon.png" 
+                       HorizontalOptions="Center">
+                </Image>
+
+                <Label Grid.Column="1"
+                       Text="Назад"
+                       TextColor="White"
+                       FontSize="20" 
+                       FontAttributes="Bold"
+                       Margin="-15,2,0,0"
+                       Padding="0,5,15,0"/>
+            </Grid>
+            <Border.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding GoBackCommand}" />
+            </Border.GestureRecognizers>
+        </Border>
+
+
+        <BoxView Grid.Row="1" 
+                 HeightRequest="2" 
+                 Color="#214484"
+                 HorizontalOptions="Fill"
+                 Margin="5,0,5,0"/>
+        <Label Grid.Row="2" 
+               Text="Параметры профиля" 
+               TextColor="#214484"
+               FontSize="25"
+               FontAttributes="Bold"
+               Margin="0,-5,0,0"
+               HorizontalOptions="Center"
+               HorizontalTextAlignment="Center"/>
+
+        <VerticalStackLayout Grid.Row="3" Spacing="10">
+            
+            <Grid ColumnDefinitions="Auto, *" ColumnSpacing="15">
+                <Image Grid.Column="0" 
+                       Source="usernamesetting.png"
+                       HeightRequest="50"
+                       WidthRequest="50"
+                       Margin="15,0,0,0"
+                       HorizontalOptions="Start"/>
+                <Label Grid.Column="1" 
+                       Margin="0,5,0,0"
+                       Text="Изменить имя" 
+                       TextColor="#214484"
+                       FontSize="23">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding ChangeUserNameCommand}" />
+                    </Label.GestureRecognizers>
+                </Label>
+            </Grid>
+        </VerticalStackLayout>
+
+        <BoxView Grid.Row="4" 
+                 HeightRequest="2" 
+                 Color="#214484"
+                 HorizontalOptions="Fill"
+                 Margin="5,0,5,0"/>
+        <Label Grid.Row="5" 
+               Text="Параметры аккаунта" 
+               TextColor="#214484"
+               FontSize="25"
+               FontAttributes="Bold"
+               Margin="0,-5,0,0"
+               HorizontalOptions="Center"
+               HorizontalTextAlignment="Center"/>
+
+        <VerticalStackLayout Grid.Row="6" Spacing="10">
+            <Grid ColumnDefinitions="Auto, *" ColumnSpacing="15">
+                <Image Grid.Column="0" 
+                       Source="emailsetting.png"
+                       HeightRequest="50"
+                       WidthRequest="50"
+                       Margin="15,0,0,0"
+                       HorizontalOptions="Start"/>
+                <Label Grid.Column="1" 
+                       Margin="0,5,0,0"
+                       Text="Изменить логин" 
+                       TextColor="#214484"
+                       FontSize="23">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding ChangeEmailCommand}" />
+                    </Label.GestureRecognizers>
+                </Label>
+            </Grid>
+            <Grid ColumnDefinitions="Auto, *" ColumnSpacing="15">
+                <Image Grid.Column="0" 
+                       Source="passwordsetting.png"
+                       HeightRequest="50"
+                       WidthRequest="50"
+                       Margin="15,0,0,0"
+                       HorizontalOptions="Start"/>
+                <Label Grid.Column="1" 
+                       Margin="0,5,0,0"
+                       Text="Изменить пароль" 
+                       TextColor="#214484"
+                       FontSize="23">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding ChangePasswordCommand}" />
+                    </Label.GestureRecognizers>
+                </Label>
+            </Grid>
+            <Grid ColumnDefinitions="Auto, *" ColumnSpacing="15">
+                <Image Grid.Column="0" 
+                       Source="deletesetting.png"
+                       HeightRequest="50"
+                       WidthRequest="50"
+                       Margin="13,0,0,0"
+                       HorizontalOptions="Start"/>
+                <Label Grid.Column="1" 
+                       Margin="0,5,0,0"
+                       Text="Удалить аккаунт" 
+                       TextColor="#9C282A"
+                       FontSize="23">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding GoEntranceCommand}" />
+                    </Label.GestureRecognizers>
+                </Label>
+            </Grid>
+            
+        </VerticalStackLayout>
+        
+    </Grid>
+</ContentPage>

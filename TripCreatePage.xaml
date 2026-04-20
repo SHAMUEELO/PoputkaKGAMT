@@ -1,0 +1,418 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PoputkaKGAMT.TripCreatePage"
+             Shell.NavBarIsVisible="False"
+             Title="TripCreatePage"
+             Background="White">
+
+    <Grid RowDefinitions="*"  RowSpacing="7" >
+
+        <Grid RowDefinitions="*, *" RowSpacing="7">
+
+            <!-- Я - Водитель -->
+            <Border x:Name="DriverButton" Grid.Row="0"
+                    Stroke="#214484"
+                    StrokeShape="15"
+                    StrokeThickness="2"
+                    Padding="10"
+                    Margin="10,10,10,0"
+                    HorizontalOptions="Fill"
+                    VerticalOptions="Fill"
+                    IsVisible="True">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OpenDriverForm" />
+                </Border.GestureRecognizers>
+
+                <VerticalStackLayout Spacing="10" VerticalOptions="Center">
+
+                    <Image Source="mendriverucon.png"
+                           Aspect="AspectFit"
+                           WidthRequest="160"
+                           HeightRequest="160"
+                           TranslationX="15"
+                           HorizontalOptions="Center"/>
+
+                    <Label Text="Я водитель"
+                           FontSize="24"
+                           TextColor="#214484"
+                           Background="White"
+                           HorizontalOptions="Center"/>
+                </VerticalStackLayout>
+            </Border>
+
+
+            <!-- Я - Пассажир -->
+            <Border x:Name="PassengerButton" Grid.Row="1"
+                    Stroke="#214484"
+                    StrokeShape="15"
+                    StrokeThickness="2"
+                    Padding="10"
+                    Margin="10,0,10,5"
+                    HorizontalOptions="Fill"
+                    VerticalOptions="Fill"
+                    IsVisible="True">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OpenPassengerForm"/>
+                </Border.GestureRecognizers>
+                <VerticalStackLayout Spacing="10" VerticalOptions="Center">
+
+                    <Image Source="menpassengericon.png"
+                           Aspect="AspectFit"
+                           WidthRequest="160"
+                           HeightRequest="160"
+                           TranslationX="15"
+                           HorizontalOptions="Center"/>
+
+                    <Label Text="Я пассажир"
+                           FontSize="24"
+                           TextColor="#214484"
+                           Background="White"
+                           HorizontalOptions="Center"/>
+                </VerticalStackLayout>
+            </Border>
+
+
+
+
+            
+            <!-- Формы заполнения -->
+            <ScrollView x:Name="FormScrollView" Grid.Row="0" 
+                        Grid.RowSpan="2"
+                        IsVisible="False" 
+                        Padding="10" 
+                        Margin="7">
+                <VerticalStackLayout Spacing="10">
+                    <Grid ColumnDefinitions="Auto, Auto" ColumnSpacing="10">
+                        <Border Grid.Column="0"
+                                Background="#214484"
+                                WidthRequest="40" 
+                                HeightRequest="40"
+                                Stroke="#214484"
+                                StrokeThickness="1"
+                                StrokeShape="RoundRectangle 8">
+                            <ImageButton Source="backicon.png" 
+                                         HeightRequest="10"
+                                         WidthRequest="10"
+                                         Padding="5"
+                                         HorizontalOptions="Center">
+                                <ImageButton.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnBackImageButton" />
+                                </ImageButton.GestureRecognizers>
+                            </ImageButton>
+                        </Border>
+                        
+                        <Label Grid.Column="1"
+                               Text="Назад"
+                               TextColor="#214484"
+                               FontSize="25" 
+                               FontAttributes="Bold"/>
+                    </Grid>
+
+
+                    <!-- Откуда -->
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8" Margin="0,10,0,0">
+                        <Image Grid.Column="0" 
+                                Source="buildimage.png"
+                                HeightRequest="30" WidthRequest="30"
+                                VerticalOptions="Center"/>
+                        <Label Grid.Column="1" 
+                                Text="Откуда"
+                                FontSize="24" 
+                                TextColor="#214484"
+                                VerticalOptions="Center"/>
+                    </Grid>
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8">
+                        <Label Grid.Column="0" Text="|" FontSize="30" TextColor="#214484"></Label>
+                        <Border Grid.Column="1"
+                                Stroke="#214484"
+                                StrokeThickness="1.5"
+                                StrokeShape="RoundRectangle 10"
+                                HeightRequest="50"
+                                Margin="0,0,50,0"
+                                Padding="2">
+                            <Picker FontSize="18"
+                                    ItemsSource="{Binding Places}"
+                                    ItemDisplayBinding="{Binding Name}"
+                                    SelectedItem="{Binding SelectedDeparturePlace}"/>
+                        </Border>
+                    </Grid>
+
+
+                    <!-- Куда -->
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8" >
+                        <Image Grid.Column="0" 
+                               Source="placeimage.png"
+                               HeightRequest="30" WidthRequest="30"
+                               VerticalOptions="Center"/>
+                        <Label Grid.Column="1" 
+                               Text="Куда"
+                               FontSize="24" 
+                               TextColor="#214484"
+                               VerticalOptions="Center"/>
+                    </Grid>
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8">
+                        <Label Grid.Column="0" Text="|" FontSize="30" TextColor="#214484"></Label>
+                        <Border Grid.Column="1"
+                                Stroke="#214484"
+                                StrokeThickness="1.5"
+                                StrokeShape="RoundRectangle 10"
+                                HeightRequest="50"
+                                Margin="0,0,50,0"
+                                Padding="2">
+                            <Picker FontSize="18"
+                                    ItemsSource="{Binding Places}"
+                                    ItemDisplayBinding="{Binding Name}"
+                                    SelectedItem="{Binding SelectedArrivePlace}"/>
+                        </Border>
+                    </Grid>
+
+
+
+                    <!-- Время и Дата -->
+                    <Grid ColumnDefinitions="Auto,*,Auto, *" ColumnSpacing="10">
+                        <Image Grid.Column="0" 
+                               Source="timeimage.png"
+                               HeightRequest="27" WidthRequest="27"
+                               VerticalOptions="Center"/>
+                        <Label Grid.Column="1" 
+                               Text="Время"
+                               FontSize="23" 
+                               TextColor="#214484"
+                               VerticalOptions="Center"/>
+
+                        <Image Grid.Column="2" 
+                               Source="dateimage.png"
+                               HeightRequest="27" WidthRequest="27"
+                               VerticalOptions="Center"/>
+                        <Label Grid.Column="3" 
+                               Text="Дата"
+                               FontSize="23" 
+                               TextColor="#214484"
+                               VerticalOptions="Center"/>
+                    </Grid>
+                    <Grid ColumnDefinitions="Auto,*,*, Auto" ColumnSpacing="5">
+                        <Label Grid.Column="0" Text="|" FontSize="30" TextColor="#214484"></Label>
+                        <Border Grid.Column="1"
+                                Stroke="#214484"
+                                StrokeThickness="1.5"
+                                StrokeShape="RoundRectangle 10"
+                                HeightRequest="50"
+                                Padding="2">
+                            <TimePicker FontSize="20"
+                                        Format="HH:mm"
+                                        Time="{Binding SelectedTime}"/>
+                        </Border>
+
+                        <Border Grid.Column="2"
+                                Stroke="#214484"
+                                StrokeThickness="1.5"
+                                StrokeShape="RoundRectangle 10"
+                                HeightRequest="50"
+                                Padding="2">
+                            
+                            <DatePicker FontSize="20"
+                                        Format="dd.MM.yyyy"
+                                        MinimumDate="{Binding MinDate}"
+                                        Date="{Binding SelectedDate}"/>
+                        </Border>
+                    </Grid>
+
+
+                    <!-- Количество -->
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8" >
+                        <Image Grid.Column="0" 
+                               Source="quentityimage.png"
+                               HeightRequest="37" WidthRequest="37"
+                               Margin="-4,0,0,0"
+                               VerticalOptions="Center"/>
+                        <Label Grid.Column="1" 
+                               Text="Пассажиры"
+                               FontSize="24" 
+                               TextColor="#214484"
+                               VerticalOptions="Center"/>
+                    </Grid>
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8">
+                        <Label Grid.Column="0" Text="|" FontSize="30" TextColor="#214484"></Label>
+                        <Border Grid.Column="1"
+                                Stroke="#214484"
+                                StrokeThickness="1.5"
+                                StrokeShape="RoundRectangle 10"
+                                HeightRequest="50"
+                                Margin="0,0,50,0"
+                                Padding="2">
+                            <Picker FontSize="20"
+                                    BackgroundColor="White"
+                                    ItemsSource="{Binding PessengerQuentity}"
+                                    SelectedItem="{Binding SelectedPessengerQuentity}"/>
+                        </Border>
+                    </Grid>
+
+
+                    <!-- Стоимость -->
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8">
+                        <Image Grid.Column="0" 
+                               Source="payimage.pngs"
+                               HeightRequest="30" WidthRequest="30"
+                               VerticalOptions="Center"/>
+                        <Label Grid.Column="1" 
+                               Text="Стоимость"
+                               FontSize="24" 
+                               TextColor="#214484"
+                               VerticalOptions="Center"/>
+                    </Grid>
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8">
+                        <Label Grid.Column="0" Text="|" FontSize="30" TextColor="#214484"></Label>
+                        <Border Grid.Column="1"
+                                Stroke="#214484"
+                                StrokeThickness="1.5"
+                                StrokeShape="RoundRectangle 10"
+                                HeightRequest="50"
+                                Margin="0,0,50,0"
+                                Padding="2">
+                            <Entry FontSize="20"
+                                   BackgroundColor="White"                
+                                   Keyboard="Numeric"
+                                   Text="{Binding Price, Mode=TwoWay}"/>
+                        </Border>
+                        
+                    </Grid>
+
+
+                    <!-- Модель авто -->
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8" x:Name="OnlyDriverForm" IsVisible="False">
+                        <Image Grid.Column="0" 
+                               Source="carimage.png"
+                               HeightRequest="39" WidthRequest="39"
+                               Aspect="AspectFit"
+                               Margin="-4,0,0,0"
+                               VerticalOptions="Center"/>
+                        <Label Grid.Column="1" 
+                               Text="Автомобиль"
+                               FontSize="24" 
+                               TextColor="#214484"
+                               VerticalOptions="Center"/>
+                    </Grid>
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8" x:Name="OnlyDriverFormBorder" IsVisible="False">
+                        <Label Grid.Column="0" Text="|" FontSize="30" TextColor="#214484"></Label>
+                        <Border Grid.Column="1"
+                                Stroke="#214484"
+                                StrokeThickness="1.5"
+                                StrokeShape="RoundRectangle 10"
+                                HeightRequest="50"
+                                Margin="0,0,50,0"
+                                Padding="2">
+                            <Entry Placeholder="Lada Granta, 123, белый"
+                                   PlaceholderColor="Gray"
+                                   FontSize="18"
+                                   BackgroundColor="White"
+                                   Text="{Binding CarDescription, Mode=TwoWay, FallbackValue=''}"/>
+                        </Border>
+                    </Grid>
+
+                    <!-- Дополнительное -->
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8">
+                        <Image Grid.Column="0" 
+                               Source="addimage.png"
+                               HeightRequest="30" WidthRequest="30"
+                               VerticalOptions="Center"/>
+                        <Label Grid.Column="1" 
+                               Text="Дополнительное"
+                               FontSize="24" 
+                               TextColor="#214484"
+                               VerticalOptions="Center"/>
+                    </Grid>
+                    <Grid ColumnDefinitions="Auto,Auto, *" ColumnSpacing="8">
+                        <Label Grid.Column="0" Text="|" FontSize="30" TextColor="#214484"></Label>
+                        <Switch Grid.Column="1" 
+                                IsToggled="{Binding MaxBack, Mode=TwoWay}"
+                                ThumbColor="#214484"
+                                OnColor="LightGray"/>
+                        <Label Grid.Column="2" 
+                               Text="Максимум двое сзади" 
+                               FontSize="20" 
+                               TextColor="#214484"
+                               Padding="0,9,0,0"></Label>
+                    </Grid>
+                    <Grid ColumnDefinitions="Auto,Auto, *" ColumnSpacing="8">
+                        <Label Grid.Column="0" Text="|" FontSize="30" TextColor="#214484"></Label>
+                        <Switch Grid.Column="1" 
+                                IsToggled="{Binding OnTime, Mode=TwoWay}"
+                                ThumbColor="#214484"
+                                OnColor="LightGray"/>
+                        <Label Grid.Column="2" 
+                               Text="Без задержек" 
+                               FontSize="20" 
+                               TextColor="#214484"
+                               Padding="0,9,0,0"></Label>
+                    </Grid>
+                    <!-- Доп.для вводителя-->
+                    <Grid ColumnDefinitions="Auto,Auto, *" ColumnSpacing="8">
+                        <Label Grid.Column="0" Text="|" FontSize="30" TextColor="#214484"></Label>
+                        <Switch Grid.Column="1" 
+                                IsToggled="{Binding NoSmoking, Mode=TwoWay}"
+                                ThumbColor="#214484"
+                                OnColor="LightGray"/>
+                        <Label Grid.Column="2" 
+                               Text="В машине не курят" 
+                               FontSize="20" 
+                               TextColor="#214484"
+                               Padding="0,9,0,0"></Label>
+                    </Grid>
+                    <Grid ColumnDefinitions="Auto,Auto, *" ColumnSpacing="8">
+                        <Label Grid.Column="0" Text="|" FontSize="30" TextColor="#214484"></Label>
+                        <Switch Grid.Column="1" 
+                                IsToggled="{Binding AirConditioing, Mode=TwoWay}"
+                                ThumbColor="#214484"
+                                OnColor="LightGray"/>
+                        <Label Grid.Column="2" 
+                               Text="Есть кондиционер" 
+                               FontSize="20" 
+                               TextColor="#214484"
+                               Padding="0,9,0,0"></Label>
+                    </Grid>
+
+                    <!-- Описание -->
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8">
+                        <Image Grid.Column="0" 
+                               Source="aboutimage.png"
+                               HeightRequest="30" WidthRequest="30"
+                               VerticalOptions="Center"/>
+                        <Label Grid.Column="1" 
+                               Text="Описание"
+                               FontSize="24" 
+                               TextColor="#214484"
+                               VerticalOptions="Center"/>
+                    </Grid>
+                    <Border Grid.Column="1"
+                                Stroke="#214484"
+                                StrokeThickness="1.5"
+                                StrokeShape="RoundRectangle 10"
+                                Padding="2">
+                            <Editor FontSize="18"
+                                    BackgroundColor="White"
+                                    MaxLength="1000"
+                                    AutoSize="TextChanges"
+                                    Text="{Binding Description}"/>
+                        </Border>
+                  
+                    
+                    <Button Grid.Row="1" 
+                            Text="Опубликовать"
+                            FontSize="20"
+                            Background="#214484" 
+                            TextColor="White"
+                            HeightRequest="50"
+                            WidthRequest="200"
+                            HorizontalOptions="End"
+                            Margin="0,10,0,0"
+                            Command="{Binding GoPublishCommand}"/>
+                </VerticalStackLayout>
+            </ScrollView>
+
+            
+        </Grid>
+
+
+    </Grid>
+</ContentPage>

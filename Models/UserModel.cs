@@ -1,0 +1,37 @@
+﻿using System.Text.Json.Serialization;
+
+namespace PoputkaKGAMT.Models
+{
+
+    public class UserModel
+    {
+        [JsonPropertyName("id")]
+        public string Id { get; set; } = "";
+
+        [JsonPropertyName("email")]
+        public string Email { get; set; } = "";
+
+        [JsonPropertyName("password")]
+        public string Password { get; set; } = "";
+
+        [JsonPropertyName("name")]
+        public string Name { get; set; } = "";
+
+        [JsonPropertyName("profile_photo")]
+        public string ProfilePhoto { get; set; } = "";
+
+        [JsonPropertyName("isdriver")]
+        public int Isdriver { get; set; }
+
+        [JsonPropertyName("ispassenger")]
+        public int Ispassenger { get; set; }
+
+        [JsonPropertyName("rating_core")]
+        public double Rating { get; set; } 
+
+        [JsonPropertyName("createdAt")]
+        public string Registration { get; set; } = "";
+
+
+    }
+}

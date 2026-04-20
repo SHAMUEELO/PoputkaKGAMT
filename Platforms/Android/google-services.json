@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "743786293603",
+    "firebase_url": "https://poputka-datebase-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "poputka-datebase",
+    "storage_bucket": "poputka-datebase.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:743786293603:android:da577479ce2fa1d8654b56",
+        "android_client_info": {
+          "package_name": "com.kgamt.poputka"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCrTeWfDUSvbSfBHPQeJ_vulkKL0EINOzg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
