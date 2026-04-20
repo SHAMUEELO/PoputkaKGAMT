@@ -141,7 +141,7 @@
 
 
 
-        <!-- Кнопки Настройки и Выйти -->
+        <!-- Кнопки Настройки и Выйти  -->
         <Grid Grid.Row="3" ColumnDefinitions="Auto,*" ColumnSpacing="5" Padding="0,0,0,10">
 
             <Border Grid.Column="0" 
