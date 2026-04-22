@@ -33,21 +33,23 @@
         </Border>
 
         <BoxView Grid.Row="1"
-                HeightRequest="150" 
+                HeightRequest="125" 
                 Color="WhiteSmoke"
                 HorizontalOptions="Fill"/>
         <Grid Grid.Row="1" ColumnDefinitions="*,*" ColumnSpacing="5" >
             <Label Grid.Column="0"  Text="0,00"
-                   FontSize="75"
+                   FontSize="60"
                    FontAttributes="Bold"
                    TextColor="#214484"
                    HorizontalOptions="Start"
+                   VerticalOptions="Center"
                    HorizontalTextAlignment="Center"
-                   Margin="50, 30,0,0"/>
+                   Margin="50,0,0,0"/>
 
             <Image Grid.Column="1" Grid.Row="0" Source="starrating.png"
-                   HeightRequest="125"
-                   WidthRequest="125"/>
+                   VerticalOptions="Center"
+                   HeightRequest="110"
+                   WidthRequest="110"/>
         </Grid>
 
         <!-- Разделитель -->
@@ -59,75 +61,71 @@
         <Label Grid.Row="3" 
                Text="0 отзыва" 
                TextColor="#214484"
-               FontSize="19"
-               Margin="10,0,0,0"
+               FontSize="17"
+               Margin="10,-5,0,0"
                HorizontalOptions="Start"
                HorizontalTextAlignment="Center"/>
 
 
 
-
-
-        <VerticalStackLayout Grid.Row="4" Padding="20,5,5,5" Spacing="12">
-            <Grid ColumnDefinitions="Auto, *" Padding="0,0,10,0">
+        <VerticalStackLayout Grid.Row="4" Padding="20,-5,0,5" Spacing="5">
+            <Grid ColumnDefinitions="Auto, *" Padding="0,0,5,0">
                 <Label Grid.Column="0" 
                        Text="Отлично" 
                        TextColor="#214484"
-                       FontSize="21"
+                       FontSize="18"
                        FontAttributes="Bold"
                        HorizontalOptions="Start"/>
                 <Label Grid.Column="1" 
                        Text="0" 
                        TextColor="#214484"
-                       FontSize="23"
+                       FontSize="20"
                        FontAttributes="Bold"
                        HorizontalOptions="End"/>
             </Grid>
             
-            <Grid ColumnDefinitions="Auto, *" Padding="0,0,10,0">
+            <Grid ColumnDefinitions="Auto, *" Padding="0,0,5,0">
                 <Label Grid.Column="0" 
                        Text="Хорошо" 
                        TextColor="#214484"
-                       FontSize="21"
+                       FontSize="18"
                        FontAttributes="Bold"
                        HorizontalOptions="Start"/>
                 <Label Grid.Column="1" 
                        Text="0" 
                        TextColor="#214484"
-                       FontSize="23"
+                       FontSize="20"
                        FontAttributes="Bold"
                        HorizontalOptions="End"/>
             </Grid>
-            <Grid ColumnDefinitions="Auto, *" Padding="0,0,10,0">
+            <Grid ColumnDefinitions="Auto, *" Padding="0,0,5,0">
                 <Label Grid.Column="0" 
                        Text="Нормально" 
                        TextColor="#214484"
-                       FontSize="21"
+                       FontSize="18"
                        FontAttributes="Bold"
                        HorizontalOptions="Start"/>
                 <Label Grid.Column="1" 
                        Text="0" 
                        TextColor="#214484"
-                       FontSize="23"
+                       FontSize="20"
                        FontAttributes="Bold"
                        HorizontalOptions="End"/>
             </Grid>
-            <Grid ColumnDefinitions="Auto, *" Padding="0,0,10,0">
+            <Grid ColumnDefinitions="Auto, *" Padding="0,0,5,0">
                 <Label Grid.Column="0" 
                        Text="Не понравилось" 
                        TextColor="#214484"
-                       FontSize="21"
+                       FontSize="18"
                        FontAttributes="Bold"
                        HorizontalOptions="Start"/>
                 <Label Grid.Column="1" 
                        Text="0" 
                        TextColor="#214484"
-                       FontSize="23"
+                       FontSize="20"
                        FontAttributes="Bold"
                        HorizontalOptions="End"/>
             </Grid>
-            
-
         </VerticalStackLayout>
 
         <BoxView Grid.Row="5" 
@@ -140,7 +138,7 @@
         <ScrollView Grid.Row="6" 
                     Grid.RowSpan="2" 
                     Padding="10" 
-                    Margin="7">
+                    Margin="5,-10,5,0">
             <Grid RowDefinitions="Auto, Auto">
 
                 <Border Grid.Row="0"

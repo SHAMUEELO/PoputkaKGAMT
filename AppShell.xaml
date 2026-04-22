@@ -9,16 +9,19 @@
         Shell.TabBarForegroundColor="White">
 
     <ShellContent ContentTemplate="{DataTemplate local:EntrancePage}" Route="EntrancePage"/>
-    
+
     <TabBar >
-        <Tab Title="Поиск" Route="SearchPage" Icon="searchicon.png">
-            <ShellContent ContentTemplate="{DataTemplate local:SearchPage}" Route="SearchPage"/>
-        </Tab>
         <Tab Title="Создать" Route="TripCreatePage" Icon="addtravelicon.png">
             <ShellContent ContentTemplate="{DataTemplate local:TripCreatePage}" Route="TripCreatePage"/>
         </Tab>
         <Tab Title="История" Route="TravelHistoryPage" Icon="travelcaricon.png">
             <ShellContent ContentTemplate="{DataTemplate local:TravelHistoryPage}" Route="TravelHistoryPage"/>
+        </Tab>
+        <Tab Title="Поиск" Route="SearchPage" Icon="searchicon.png">
+            <ShellContent ContentTemplate="{DataTemplate local:SearchPage}" Route="SearchPage"/>
+        </Tab>
+        <Tab Title="Входящие" Route="IncomingMessagesPage" Icon="messageicon.png">
+            <ShellContent ContentTemplate="{DataTemplate local:IncomingMessagesPage}" Route="IncomingMessagesPage"/>
         </Tab>
         <Tab Title="Профиль" Route="ProfilePage" Icon="profileicon.png">
             <ShellContent ContentTemplate="{DataTemplate local:ProfilePage}" Route="ProfilePage"/>

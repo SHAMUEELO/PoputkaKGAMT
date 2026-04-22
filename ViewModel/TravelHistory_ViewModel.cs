@@ -193,5 +193,11 @@ namespace PoputkaKGAMT.ViewModel
             Preferences.Set("PreviousPage", "TravelHistoryPage");
             await Shell.Current.GoToAsync("//TripDetailsPage");
         }
+
+        [RelayCommand]
+        public async Task OnMainPage()
+        {
+            await Shell.Current.GoToAsync("//SearchPage");
+        }
     }
 }

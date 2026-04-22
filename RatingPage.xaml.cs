@@ -10,4 +10,13 @@ public partial class RatingPage : ContentPage
 		BindingContext = new RatingPage_ViewModel();
 
     }
+
+    protected override bool OnBackButtonPressed()
+    {
+        if (BindingContext is RatingPage_ViewModel vm)
+        {
+            vm.GoBackProfileButton();
+        }
+        return true;
+    }
 }

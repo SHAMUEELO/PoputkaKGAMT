@@ -248,5 +248,11 @@ namespace PoputkaKGAMT.ViewModel
             }
             return true;
         }
+
+        [RelayCommand]
+        public async Task OnMainPage()
+        {
+            await Shell.Current.GoToAsync("//SearchPage");
+        }
     }
 }

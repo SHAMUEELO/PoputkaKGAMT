@@ -29,4 +29,13 @@ public partial class TravelHistoryPage : ContentPage
     {
         TravelHistoryVM.OnNavigatedFrom();
     }
+
+    protected override bool OnBackButtonPressed()
+    {
+        if (BindingContext is TravelHistory_ViewModel vm)
+        {
+            vm.OnMainPage();
+        }
+        return true;
+    }
 }

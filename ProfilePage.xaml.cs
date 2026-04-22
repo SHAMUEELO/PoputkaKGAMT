@@ -19,4 +19,13 @@ public partial class ProfilePage : ContentPage
         if (BindingContext is Profile_ViewModel vm)
             vm.LoadProfilInfo();  
     }
+
+    protected override bool OnBackButtonPressed()
+    {
+        if (BindingContext is Profile_ViewModel vm)
+        {
+            vm.OnMainPage();
+        }
+        return true;
+    }
 }

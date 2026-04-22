@@ -109,7 +109,6 @@ namespace PoputkaKGAMT.ViewModel
         [RelayCommand]
         public async Task GoBackProfileButton()
         {
-
             await Shell.Current.GoToAsync("//ProfilePage");
         }
     }

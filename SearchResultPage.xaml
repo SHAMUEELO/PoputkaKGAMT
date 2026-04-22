@@ -120,7 +120,8 @@
                                     <Border Background="{Binding TripBackgroundColor}"
                                             Stroke="{Binding BorderStroke}"
                                             StrokeThickness="2" 
-                                            StrokeShape="RoundRectangle 10">
+                                            StrokeShape="RoundRectangle 10"
+                                            Padding="0,0,10,0">
                                         <Grid Padding="15,10,15,10" ColumnDefinitions="Auto, Auto, *, Auto" ColumnSpacing="10" RowDefinitions="Auto, Auto">
                                             <Border Grid.Column="0" Grid.Row="0" HeightRequest="60"   
                                                     WidthRequest="60"
@@ -136,7 +137,7 @@
                                                        VerticalOptions="Center"/>
                                             </Border>
                                             <VerticalStackLayout Grid.Column="0" Grid.Row="0" Padding="67,10,0,0" HorizontalOptions="Start"  >
-                                                <Label Text="{Binding UserName}" FontSize="22" FontAttributes="Bold" TextColor="{Binding BorderStroke}" Padding="5,0,0,0" WidthRequest="300" LineBreakMode="TailTruncation"></Label>
+                                                <Label Text="{Binding UserName}" FontSize="22" FontAttributes="Bold" TextColor="{Binding BorderStroke}" Padding="5,0,20,0" WidthRequest="225" LineBreakMode="TailTruncation"></Label>
                                                 <Grid ColumnDefinitions="Auto,Auto" ColumnSpacing="5" Padding="0,0,0,10">
                                                     <Image Grid.Column="0" Source="starrating.png" HeightRequest="25" WidthRequest="25"></Image>
                                                     <Label Grid.Column="1" Text="{Binding UserRating}" FontSize="21" TextColor="{Binding BorderStroke}" ></Label>
@@ -238,7 +239,8 @@
                                     <Border Background="{Binding TripBackgroundColor}"
                                             Stroke="{Binding BorderStroke}"
                                             StrokeThickness="2" 
-                                            StrokeShape="RoundRectangle 10">
+                                            StrokeShape="RoundRectangle 10"
+                                            Padding="0,0,10,0">
                                         <Grid Padding="15,10,15,10" ColumnDefinitions="Auto, Auto, *, Auto" ColumnSpacing="10" RowDefinitions="Auto, Auto">
                                             <Border Grid.Column="0" Grid.Row="0" HeightRequest="60"   
                                                     WidthRequest="60"
@@ -254,7 +256,7 @@
                                                        VerticalOptions="Center"/>
                                             </Border>
                                             <VerticalStackLayout Grid.Column="0" Grid.Row="0" Padding="67,10,0,0" HorizontalOptions="Start"  >
-                                                <Label Text="{Binding UserName}" FontSize="22" FontAttributes="Bold" TextColor="{Binding BorderStroke}" Padding="5,0,0,0" WidthRequest="300" LineBreakMode="TailTruncation"></Label>
+                                                <Label Text="{Binding UserName}" FontSize="22" FontAttributes="Bold" TextColor="{Binding BorderStroke}" Padding="5,0,20,0" WidthRequest="225" LineBreakMode="TailTruncation"></Label>
                                                 <Grid ColumnDefinitions="Auto,Auto" ColumnSpacing="5" Padding="0,0,0,10">
                                                     <Image Grid.Column="0" Source="starrating.png" HeightRequest="25" WidthRequest="25"></Image>
                                                     <Label Grid.Column="1" Text="{Binding UserRating}" FontSize="21" TextColor="{Binding BorderStroke}" ></Label>
@@ -343,7 +345,8 @@
                                     <Border Background="{Binding TripBackgroundColor}"
                                             Stroke="{Binding BorderStroke}"
                                             StrokeThickness="2" 
-                                            StrokeShape="RoundRectangle 10">
+                                            StrokeShape="RoundRectangle 10"
+                                            Padding="0,0,10,0">
                                         <Grid Padding="15,10,15,10" ColumnDefinitions="Auto, Auto, *, Auto" ColumnSpacing="10" RowDefinitions="Auto, Auto">
                                             <Border Grid.Column="0" Grid.Row="0" HeightRequest="60"   
                                                     WidthRequest="60"
@@ -359,7 +362,7 @@
                                                        VerticalOptions="Center"/>
                                             </Border>
                                             <VerticalStackLayout Grid.Column="0" Grid.Row="0" Padding="67,10,0,0" HorizontalOptions="Start"  >
-                                                <Label Text="{Binding UserName}" FontSize="22" FontAttributes="Bold" TextColor="{Binding BorderStroke}" Padding="5,0,0,0" WidthRequest="300" LineBreakMode="TailTruncation"></Label>
+                                                <Label Text="{Binding UserName}" FontSize="22" FontAttributes="Bold" TextColor="{Binding BorderStroke}" Padding="5,0,20,0" WidthRequest="225" LineBreakMode="TailTruncation"></Label>
                                                 <Grid ColumnDefinitions="Auto,Auto" ColumnSpacing="5" Padding="0,0,0,10">
                                                     <Image Grid.Column="0" Source="starrating.png" HeightRequest="25" WidthRequest="25"></Image>
                                                     <Label Grid.Column="1" Text="{Binding UserRating}" FontSize="21" TextColor="{Binding BorderStroke}" ></Label>
@@ -458,7 +461,8 @@
                                     <Border Background="{Binding TripBackgroundColor}"
                                         Stroke="{Binding BorderStroke}"
                                         StrokeThickness="2" 
-                                        StrokeShape="RoundRectangle 10">
+                                        StrokeShape="RoundRectangle 10"
+                                        Padding="0,0,10,0">
                                         <Grid Padding="15,10,15,10" ColumnDefinitions="Auto, Auto, *, Auto" ColumnSpacing="10" RowDefinitions="Auto, Auto">
                                             <Border Grid.Column="0" Grid.Row="0" HeightRequest="60"   
                                                 WidthRequest="60"
@@ -474,7 +478,7 @@
                                                    VerticalOptions="Center"/>
                                             </Border>
                                             <VerticalStackLayout Grid.Column="0" Grid.Row="0" Padding="67,10,0,0" HorizontalOptions="Start"  >
-                                                <Label Text="{Binding UserName}" FontSize="22" FontAttributes="Bold" TextColor="{Binding BorderStroke}" Padding="5,0,0,0" WidthRequest="300" LineBreakMode="TailTruncation"></Label>
+                                                <Label Text="{Binding UserName}" FontSize="22" FontAttributes="Bold" TextColor="{Binding BorderStroke}" Padding="5,0,20,0" WidthRequest="225" LineBreakMode="TailTruncation"></Label>
                                                 <Grid ColumnDefinitions="Auto,Auto" ColumnSpacing="5" Padding="0,0,0,10">
                                                     <Image Grid.Column="0" Source="starrating.png" HeightRequest="25" WidthRequest="25"></Image>
                                                     <Label Grid.Column="1" Text="{Binding UserRating}" FontSize="21" TextColor="{Binding BorderStroke}" ></Label>
@@ -522,11 +526,10 @@
                 <Border Grid.Row="0" x:Name="PassengerReusultScrollNotFind"
                         IsVisible="False"
                         Background="WhiteSmoke"
-                        Margin="20,0,20,10"
+                        Margin="10,0,10,10"
                         Stroke="LightGray"
                         StrokeThickness="2"
                         StrokeShape="RoundRectangle 10"
-                        WidthRequest="375"
                         HeightRequest="200">
                     <Grid RowDefinitions="*,Auto" RowSpacing="25" VerticalOptions="Center" Padding="0,25,0,25">
                         <Image Grid.Row="0"

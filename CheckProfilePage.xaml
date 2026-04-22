@@ -35,8 +35,9 @@
         <Grid Grid.Row="1">
             <Border Grid.Column="0"
                     Background="White"
-                    HeightRequest="130"
+                    HeightRequest="135"
                     Margin="10,0,10,0"
+                    Padding="0,0,10,0"
                     Stroke="#214484"
                     StrokeThickness="2"
                     StrokeShape="RoundRectangle 8,8,0,0"
@@ -59,10 +60,10 @@
                     </Border>
 
                     <VerticalStackLayout Grid.Column="1" Padding="5,10,5,0" HorizontalOptions="Start">
-                        <Label Text="{Binding СheckSelectedUser.Name}" FontSize="21" FontAttributes="Bold" Padding="0,0,5,0" TextColor="#214484" WidthRequest="300" LineBreakMode="WordWrap" HorizontalOptions="Fill"></Label>
+                        <Label Text="{Binding СheckSelectedUser.Name}" FontSize="18" FontAttributes="Bold" Padding="-3,0,12,0" TextColor="#214484" WidthRequest="240" LineBreakMode="WordWrap"></Label>
                         <Grid ColumnDefinitions="Auto,Auto" ColumnSpacing="5" Padding="0,0,0,10">
-                            <Label Grid.Column="0" Text="Зарегистрирован(-а)" FontSize="16" TextColor="#214484" Padding="-3,0,0,0"></Label>
-                            <Label Grid.Column="1" Text="{Binding СheckSelectedUser.Registration}" FontSize="16" TextColor="#214484"  Padding="-3,0,2,0" Margin="0,1,0,0" WidthRequest="95" LineBreakMode="WordWrap" HorizontalOptions="Fill"></Label>
+                            <Label Grid.Column="0" Text="Зарегистрирован(-а)" FontSize="14" TextColor="#214484" Padding="-3,0,0,0"></Label>
+                            <Label Grid.Column="1" Text="{Binding СheckSelectedUser.Registration}" FontSize="14" TextColor="#214484"  Padding="-3,0,12,0" Margin="0,1,0,0" WidthRequest="95" LineBreakMode="WordWrap" HorizontalOptions="Fill"></Label>
                         </Grid>
                     </VerticalStackLayout>
                 </Grid>
@@ -72,7 +73,7 @@
         <Grid Grid.Row="2" RowDefinitions="Auto, Auto" RowSpacing="10" Padding="0,-12,0,0">
             <Border Grid.Row="0"
                     Background="White"
-                    HeightRequest="150"
+                    HeightRequest="140"
                     Margin="10,0,10,0"
                     Padding="5,10,5,5"
                     Stroke="#214484"
@@ -81,38 +82,67 @@
                     VerticalOptions="Start">
                 <Grid>
                     <Grid ColumnDefinitions="*, *" ColumnSpacing="5">
-                        <Grid Grid.Column="0" RowDefinitions="Auto, Auto, Auto" RowSpacing="5">
-                            <Image Grid.Row="0" Source="carimage.png" HeightRequest="50" WidthRequest="50" VerticalOptions="Center" Margin="0,-5,0,0"></Image>
-                            <Label Grid.Row="1" Text="{Binding СheckSelectedUser.Isdriver}" FontSize="25" FontAttributes="Bold" TextColor="#84216B" HorizontalOptions="Center" Margin="0,-7,0,0"></Label>
-                            <Label Grid.Row="2" Text="Был водителем" FontSize="18" TextColor="#214484" HorizontalOptions="Center"></Label>
+                        <Grid Grid.Column="0" RowDefinitions="Auto, Auto, Auto" RowSpacing="5" Padding="20,3,0,0">
+                            <Image Grid.Row="0" Source="carimage.png" HeightRequest="46" WidthRequest="46" VerticalOptions="Center" Margin="0,-5,0,0"></Image>
+                            <Label Grid.Row="1" Text="{Binding СheckSelectedUser.Isdriver}" FontSize="23" FontAttributes="Bold" TextColor="#84216B" HorizontalOptions="Center" Margin="0,-7,0,0"></Label>
+                            <Label Grid.Row="2" Text="Был водителем" FontSize="16" TextColor="#214484" HorizontalOptions="Center"></Label>
                         </Grid>
 
-                        <Grid Grid.Column="1" RowDefinitions="Auto, Auto, Auto" RowSpacing="5">
-                            <Image Grid.Row="0" Source="groupsetting.png" HeightRequest="41" WidthRequest="41" VerticalOptions="Center"></Image>
-                            <Label Grid.Row="1" Text="{Binding СheckSelectedUser.Ispassenger}" FontSize="25" FontAttributes="Bold" TextColor="#21842C" HorizontalOptions="Center"></Label>
-                            <Label Grid.Row="2" Text="Был пассажиром" FontSize="18" TextColor="#214484" HorizontalOptions="Center"></Label>
+                        <Grid Grid.Column="1" RowDefinitions="Auto, Auto, Auto" RowSpacing="5" Padding="-15,-2,5,0">
+                            <Image Grid.Row="0" Source="groupsetting.png" HeightRequest="40" WidthRequest="40" VerticalOptions="Center"></Image>
+                            <Label Grid.Row="1" Text="{Binding СheckSelectedUser.Ispassenger}" FontSize="23" FontAttributes="Bold" TextColor="#21842C" HorizontalOptions="Center"></Label>
+                            <Label Grid.Row="2" Text="Был пассажиром" FontSize="16" TextColor="#214484" HorizontalOptions="Center"></Label>
                         </Grid>
                     </Grid>
                 </Grid>
             </Border>
 
-            <Border Grid.Column="3" Grid.Row="2"
+            <Border Grid.Column="3" Grid.Row="3"
                     Background="White"
-                    HeightRequest="90"
-                    Margin="10,0,10,0"
+                    HeightRequest="85"
+                    Margin="10,-5,10,0"
                     Padding="5"
                     Stroke="#214484"
                     StrokeThickness="2"
-                    StrokeShape="RoundRectangle 8,8,8,8">
+                    StrokeShape="RoundRectangle 8,8,0,0">
                 <Grid RowDefinitions="Auto, Auto" RowSpacing="5">
-                    <Label Grid.Row="0" Text="Рейтинг" FontSize="23" FontAttributes="Bold" TextColor="#214484" Padding="5,0,0,0" Margin="0,2,0,0"></Label>
+                    <Label Grid.Row="0" Text="Рейтинг" FontSize="20" FontAttributes="Bold" TextColor="#214484" Padding="5,0,0,0" Margin="0,2,0,0"></Label>
                     <Grid Grid.Row="1" ColumnDefinitions="Auto,Auto,Auto" ColumnSpacing="5">
-                        <Image Grid.Column="0" Source="starrating.png" HeightRequest="27" WidthRequest="27" Margin="5,0,0,0"></Image>
-                        <Label Grid.Column="1" Text="{Binding СheckSelectedUser.Rating}" FontSize="23" Margin="2,0,0,0" TextColor="Black" ></Label>
-                        <Label Grid.Column="2" Text="из 5.0" FontSize="20" Margin="2,3,0,0" TextColor="Black" ></Label>
+                        <Image Grid.Column="0" Source="starrating.png" HeightRequest="25" WidthRequest="25" Margin="5,0,0,0"></Image>
+                        <Label Grid.Column="1" Text="{Binding СheckSelectedUser.Rating}" FontSize="20" Margin="2,0,0,0" TextColor="Black" ></Label>
+                        <Label Grid.Column="2" Text="из 5.0" FontSize="17" Margin="2,3,0,0" TextColor="Black" ></Label>
                     </Grid>
                 </Grid>
             </Border>
         </Grid>
+
+        <Border Grid.Row="3"
+                Background="White"
+                HeightRequest="50"
+                Margin="10,-9,10,0"
+                Padding="10,0,0,0"
+                Stroke="#214484"
+                StrokeThickness="2"
+                StrokeShape="RoundRectangle 0,0,8,8"
+                HorizontalOptions="Fill">
+            <HorizontalStackLayout Spacing="1"
+                                VerticalOptions="Center"
+                                HorizontalOptions="Center">
+                <Image Grid.Column="0"
+                       Source="messageicon.png" 
+                       HeightRequest="24" 
+                       WidthRequest="24"/>
+
+                <Label Grid.Column="1"
+                       Text="Написать"
+                       TextColor="#214484"
+                       FontSize="19"
+                       FontAttributes="Bold"
+                       Padding="3"/>
+            </HorizontalStackLayout>
+            <!--<Border.GestureRecognizers>
+         <TapGestureRecognizer Command="{Binding GoFellowTravelerPageCommand}"/>
+     </Border.GestureRecognizers>-->
+        </Border>
     </Grid>
 </ContentPage>

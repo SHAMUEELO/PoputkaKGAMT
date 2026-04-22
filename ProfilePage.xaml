@@ -9,15 +9,14 @@
 
 
 
-    <Grid RowDefinitions="500, Auto, *, Auto" RowSpacing="10"> 
+    <Grid RowDefinitions="415, Auto, *, Auto" RowSpacing="10">
 
         <Border Grid.Row="0" 
                 Background="#214484" 
-                HeightRequest="500"
+                HeightRequest="415"
                 VerticalOptions="Start"
                 HorizontalOptions="Fill"
                 StrokeShape="RoundRectangle 0,0,25,25">
-
             <Grid>
                 <Image Grid.Row="0" Grid.RowSpan="3"
                        Source="kgamt.png"
@@ -51,8 +50,10 @@
                            FontSize="24"
                            FontAttributes="Bold"
                            VerticalOptions="Center"
-                           HorizontalOptions="Center"/>
-
+                           HorizontalOptions="Center"
+                           VerticalTextAlignment="Center"
+                           LineBreakMode="WordWrap"
+                           Padding="15"/>
                 </VerticalStackLayout>
             </Grid>
         </Border>
@@ -95,6 +96,7 @@
         <!-- Поездки, рейтинг и пассажир -->
         <Grid Grid.Row="2" ColumnDefinitions="*,*,*" ColumnSpacing="2">
 
+            <!-- Поездки -->
             <Border Grid.Column="0" 
                     BackgroundColor="White"
                     Stroke="#214484"
@@ -102,39 +104,52 @@
                     HeightRequest="110" 
                     WidthRequest="115"
                     StrokeShape="RoundRectangle 10"
-                    Padding="15">
+                    Padding="15,10">
                 <VerticalStackLayout Spacing="4" VerticalOptions="Center" HorizontalOptions="Center">
-                    <Label Text="{Binding IsDriverProfile}" TextColor="#84216B" FontSize="28" FontAttributes="Bold" HorizontalOptions="Center" />
-                    <Label Text="Водитель" TextColor="#214484" FontSize="17" HorizontalOptions="Center" FontAttributes="Bold"/>
+                    <Label Text="{Binding IsDriverProfile}" TextColor="#84216B" FontSize="25" FontAttributes="Bold" HorizontalOptions="Center" />
+                    <Label Text="Водитель" TextColor="#214484" FontSize="15" HorizontalOptions="Center" FontAttributes="Bold"/>
                 </VerticalStackLayout>
             </Border>
 
-            <Border Grid.Column="1"
-                    BackgroundColor="White"
-                    Stroke="#214484"
-                    StrokeThickness="2"
-                    HeightRequest="120"  
-                    WidthRequest="120"
-                    StrokeShape="RoundRectangle 10"
-                    Padding="15">
-                <VerticalStackLayout Spacing="4" VerticalOptions="Center" HorizontalOptions="Center">
-                    <Label Grid.Column="0" Text="{Binding RatingCore}" TextColor="#847821" FontSize="28" FontAttributes="Bold" HorizontalOptions="Center"/>
-                    <Label Text="Рейтинг" TextColor="#214484" FontSize="20" HorizontalOptions="Center" FontAttributes="Bold"/>
-                </VerticalStackLayout>
-            </Border>
-            
+            <!-- рейтинг -->
+            <Grid Grid.Column="1">
+                <Border Grid.Column="0"
+                        BackgroundColor="White"
+                        Stroke="#214484"
+                        StrokeThickness="2"
+                        HeightRequest="120"  
+                        WidthRequest="120"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center"
+                        StrokeShape="RoundRectangle 10"
+                        Padding="15,10">
+                    <VerticalStackLayout Spacing="4" VerticalOptions="Center" HorizontalOptions="Center">
+                        <Label Grid.Column="0" Text="{Binding RatingCore}" TextColor="#847821" FontSize="25" FontAttributes="Bold" HorizontalOptions="Center"/>
+                        <Label Text="Рейтинг" TextColor="#214484" FontSize="17" HorizontalOptions="Center" FontAttributes="Bold"/>
+                    </VerticalStackLayout>
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.GoMyRatingCommand}" CommandParameter="{Binding}"/>
+                    </Border.GestureRecognizers>
+                </Border>
+                <Image Source="profilecheckicon.png" Grid.Column="0"   
+                       HeightRequest="30"     
+                       WidthRequest="30"
+                       HorizontalOptions="End"
+                       VerticalOptions="Center"/>
+            </Grid>
 
-            <Border Grid.Column="3" 
-                    BackgroundColor="White"
-                    Stroke="#214484"
-                    StrokeThickness="2"
-                    HeightRequest="110"
-                    WidthRequest="115"
-                    StrokeShape="RoundRectangle 10"
-                    Padding="15">
+            <!-- пассажир -->
+            <Border Grid.Column="2" 
+                BackgroundColor="White"
+                Stroke="#214484"
+                StrokeThickness="2"
+                HeightRequest="110"
+                WidthRequest="115"
+                StrokeShape="RoundRectangle 10"
+                Padding="15,10">
                 <VerticalStackLayout Spacing="4" VerticalOptions="Center" HorizontalOptions="Center">
-                    <Label Text="{Binding IsPassengerProfile}" TextColor="#21842C" FontSize="28" FontAttributes="Bold" HorizontalOptions="Center" />
-                    <Label Text="Пассажир" TextColor="#214484" FontSize="17" HorizontalOptions="Center" FontAttributes="Bold"/>
+                    <Label Text="{Binding IsPassengerProfile}" TextColor="#21842C" FontSize="25" FontAttributes="Bold" HorizontalOptions="Center" />
+                    <Label Text="Пассажир" TextColor="#214484" FontSize="15" HorizontalOptions="Center" FontAttributes="Bold"/>
                 </VerticalStackLayout>
             </Border>
         </Grid>
@@ -173,8 +188,8 @@
                     Margin="0,0,10,0"
                     Padding="12,0">
                 <HorizontalStackLayout Spacing="1"
-                       VerticalOptions="Center"
-                       HorizontalOptions="Center">
+                                       VerticalOptions="Center"
+                                       HorizontalOptions="Center">
                     <Image Grid.Column="0"
                            Source="exiticon.png" 
                            HeightRequest="24" 

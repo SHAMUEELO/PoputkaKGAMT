@@ -9,8 +9,7 @@ namespace PoputkaKGAMT.ViewModel
     partial class RatingPage_ViewModel : ObservableObject
     {
         [RelayCommand]
-
-        private async Task GoBackProfileButton()
+        public async Task GoBackProfileButton()
         {
             await Shell.Current.GoToAsync("//ProfilePage");
         }

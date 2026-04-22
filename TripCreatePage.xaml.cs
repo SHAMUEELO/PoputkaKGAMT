@@ -65,6 +65,11 @@ public partial class TripCreatePage : ContentPage
         DriverButton.IsVisible = true;
         PassengerButton.IsVisible = true;
         FormScrollView.IsVisible = false;
+        
+        if (BindingContext is TripCreate_ViewModel vm)
+        {
+            vm.OnMainPage();
+        }
         return true;
     }
 }

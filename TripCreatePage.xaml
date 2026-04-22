@@ -131,7 +131,7 @@
                                 HeightRequest="50"
                                 Margin="0,0,50,0"
                                 Padding="2">
-                            <Picker FontSize="18"
+                            <Picker FontSize="16"
                                     ItemsSource="{Binding Places}"
                                     ItemDisplayBinding="{Binding Name}"
                                     SelectedItem="{Binding SelectedDeparturePlace}"/>
@@ -160,7 +160,7 @@
                                 HeightRequest="50"
                                 Margin="0,0,50,0"
                                 Padding="2">
-                            <Picker FontSize="18"
+                            <Picker FontSize="16"
                                     ItemsSource="{Binding Places}"
                                     ItemDisplayBinding="{Binding Name}"
                                     SelectedItem="{Binding SelectedArrivePlace}"/>
@@ -199,7 +199,7 @@
                                 StrokeShape="RoundRectangle 10"
                                 HeightRequest="50"
                                 Padding="2">
-                            <TimePicker FontSize="20"
+                            <TimePicker FontSize="18"
                                         Format="HH:mm"
                                         Time="{Binding SelectedTime}"/>
                         </Border>
@@ -211,7 +211,7 @@
                                 HeightRequest="50"
                                 Padding="2">
                             
-                            <DatePicker FontSize="20"
+                            <DatePicker FontSize="18"
                                         Format="dd.MM.yyyy"
                                         MinimumDate="{Binding MinDate}"
                                         Date="{Binding SelectedDate}"/>
@@ -241,7 +241,7 @@
                                 HeightRequest="50"
                                 Margin="0,0,50,0"
                                 Padding="2">
-                            <Picker FontSize="20"
+                            <Picker FontSize="16"
                                     BackgroundColor="White"
                                     ItemsSource="{Binding PessengerQuentity}"
                                     SelectedItem="{Binding SelectedPessengerQuentity}"/>
@@ -270,7 +270,7 @@
                                 HeightRequest="50"
                                 Margin="0,0,50,0"
                                 Padding="2">
-                            <Entry FontSize="20"
+                            <Entry FontSize="16"
                                    BackgroundColor="White"                
                                    Keyboard="Numeric"
                                    Text="{Binding Price, Mode=TwoWay}"/>
@@ -304,7 +304,7 @@
                                 Padding="2">
                             <Entry Placeholder="Lada Granta, 123, белый"
                                    PlaceholderColor="Gray"
-                                   FontSize="18"
+                                   FontSize="16"
                                    BackgroundColor="White"
                                    Text="{Binding CarDescription, Mode=TwoWay, FallbackValue=''}"/>
                         </Border>
@@ -389,7 +389,7 @@
                                 StrokeThickness="1.5"
                                 StrokeShape="RoundRectangle 10"
                                 Padding="2">
-                            <Editor FontSize="18"
+                            <Editor FontSize="17"
                                     BackgroundColor="White"
                                     MaxLength="1000"
                                     AutoSize="TextChanges"

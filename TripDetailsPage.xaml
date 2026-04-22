@@ -4,7 +4,7 @@
              x:Class="PoputkaKGAMT.TripDetailsPage"
              Shell.NavBarIsVisible="False"
              Background="White">
-    <Grid RowDefinitions="Auto,425, Auto, Auto" RowSpacing="0" Padding="0,5,0,0" >
+    <Grid RowDefinitions="Auto,425, Auto, Auto, Auto, Auto" RowSpacing="0" Padding="0,5,0,0" >
         <Border Grid.Row="0"
                 Background="#214484"
                 HeightRequest="45"
@@ -37,6 +37,7 @@
                     Background="White"
                     HeightRequest="425"
                     Margin="15,-5,15,0"
+                    Padding="3,0,3,0"
                     Stroke="#214484"
                     StrokeThickness="2"
                     StrokeShape="RoundRectangle 0,0,8,8"
@@ -71,7 +72,7 @@
                                ZIndex="2"/>
 
                         <VerticalStackLayout Grid.Column="0" Grid.Row="0" Padding="85,10,0,0" HorizontalOptions="Start"  >
-                            <Label Text="{Binding SelectedTrip.UserName}" FontSize="25" FontAttributes="Bold" TextColor="#214484" Padding="5,0,0,0" WidthRequest="260" LineBreakMode="TailTruncation"></Label>
+                            <Label Text="{Binding SelectedTrip.UserName}" FontSize="25" FontAttributes="Bold" TextColor="#214484" Padding="5,0,10,0" WidthRequest="225" LineBreakMode="TailTruncation"></Label>
                             <Grid ColumnDefinitions="Auto,Auto" ColumnSpacing="5" Padding="0,0,0,10">
                                 <Image Grid.Column="0" Source="starrating.png" HeightRequest="27" WidthRequest="27"></Image>
                                 <Label Grid.Column="1" Text="{Binding SelectedTrip.UserRating}" FontSize="23" TextColor="Black" ></Label>
@@ -235,8 +236,30 @@
             </Border.GestureRecognizers>
         </Border>
 
-            <Border Grid.Row="3"
-                Background="#214484"
+        <Border Grid.Row="3"
+            Background="#214484"
+            HeightRequest="45"
+            Margin="15,5,15,0"
+            Padding="10,0,0,0"
+            Stroke="#214484"
+            StrokeThickness="1"
+            StrokeShape="RoundRectangle 8"
+            HorizontalOptions="Fill">
+            <Grid>
+                <Label Text="Попутный состав"
+                    TextColor="White"
+                    FontSize="18" 
+                    FontAttributes="Bold"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"/>
+            </Grid>
+            <Border.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding GoFellowTravelerPageCommand}"/>
+            </Border.GestureRecognizers>
+        </Border>
+        
+        <Border Grid.Row="4"
+                Background="White"
                 HeightRequest="45"
                 Margin="15,5,15,0"
                 Padding="10,0,0,0"
@@ -244,18 +267,49 @@
                 StrokeThickness="1"
                 StrokeShape="RoundRectangle 8"
                 HorizontalOptions="Fill">
-                <Grid>
-                    <Label Text="Попутный состав"
-                        TextColor="White"
-                        FontSize="18" 
-                        FontAttributes="Bold"
-                        HorizontalOptions="Center"
-                        VerticalOptions="Center"/>
-                </Grid>
-                <Border.GestureRecognizers>
-                    <TapGestureRecognizer Command="{Binding GoFellowTravelerPageCommand}"/>
-                </Border.GestureRecognizers>
-            </Border>
-        
+            <HorizontalStackLayout Spacing="1"
+                                   VerticalOptions="Center"
+                                   HorizontalOptions="Center">
+                <Image Source="messageicon.png" 
+                       HeightRequest="22" 
+                       WidthRequest="22"/>
+
+                <Label Text="Написать"
+                       BackgroundColor="White"
+                       TextColor="#214484"
+                       FontSize="18"
+                       FontAttributes="Bold"
+                       Padding="3"/>
+            </HorizontalStackLayout>
+            <!--<Border.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding GoFellowTravelerPageCommand}"/>
+            </Border.GestureRecognizers>-->
+        </Border>
+        <Border Grid.Row="5"
+                Background="White"
+                HeightRequest="45"
+                Margin="15,5,15,0"
+                Padding="10,0,0,0"
+                Stroke="#214484"
+                StrokeThickness="1"
+                StrokeShape="RoundRectangle 8"
+                HorizontalOptions="Fill">
+            <HorizontalStackLayout Spacing="1" VerticalOptions="Center" HorizontalOptions="Center">
+                
+                <Image Source="darkbluestaricon.png" 
+                       HeightRequest="23" 
+                       WidthRequest="23"/>
+
+                <Label Text="Оценить"
+                       BackgroundColor="White"
+                       TextColor="#214484"
+                       FontSize="18"
+                       FontAttributes="Bold"
+                       Padding="3"/>
+            </HorizontalStackLayout>
+            <!--<Border.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding GoFellowTravelerPageCommand}"/>
+            </Border.GestureRecognizers>-->
+        </Border>
     </Grid>
 </ContentPage>
