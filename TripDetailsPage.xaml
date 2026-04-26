@@ -307,9 +307,9 @@
                        FontAttributes="Bold"
                        Padding="3"/>
             </HorizontalStackLayout>
-            <!--<Border.GestureRecognizers>
-                <TapGestureRecognizer Command="{Binding GoFellowTravelerPageCommand}"/>
-            </Border.GestureRecognizers>-->
+            <Border.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding GoTripRatingPageCommand}"/>
+            </Border.GestureRecognizers>
         </Border>
     </Grid>
 </ContentPage>

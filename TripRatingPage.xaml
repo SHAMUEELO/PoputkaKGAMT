@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PoputkaKGAMT.TripRatingPage"
+             Title="TripRatingPage"
+             Shell.NavBarIsVisible="False"
+             Background="White">
+    <Grid RowDefinitions="Auto,Auto, Auto" RowSpacing="0" Padding="0,5,0,0" >
+        <Border Grid.Row="0"
+                Background="#214484"
+                HeightRequest="45"
+                Margin="10,0,10,0"
+                Stroke="#214484"
+                StrokeThickness="1"
+                StrokeShape="RoundRectangle 8"
+                VerticalOptions="Start"
+                ZIndex="1">
+            <Grid Grid.Row="0" ColumnDefinitions="Auto, Auto" ColumnSpacing="10">
+                <Image Grid.Column="0" Source="backicon.png" 
+                       HorizontalOptions="Center">
+                </Image>
+
+                <Label Grid.Column="1"
+                       Text="Назад"
+                       TextColor="White"
+                       FontSize="20" 
+                       FontAttributes="Bold"
+                       Margin="-15,2,0,0"
+                       Padding="0,5,15,0"/>
+            </Grid>
+            <Border.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding GoBackTripDetailsCommand}" />
+            </Border.GestureRecognizers>
+        </Border>
+
+        <Grid Grid.Row="1" RowDefinitions="Auto, Auto" RowSpacing="5" >
+            <Border Grid.Row="0"
+                    Background="White"
+                    Margin="15,-5,15,0"
+                    Padding="3,0,3,0"
+                    Stroke="#214484"
+                    StrokeThickness="2"
+                    StrokeShape="RoundRectangle 0,0,8,8"
+                    VerticalOptions="Start">
+                <!-- Данные -->
+                <Grid RowDefinitions="Auto, Auto, Auto" RowSpacing="10" Padding="3" Margin="5,0,5,0">
+                    <Grid Grid.Row="0" Padding="10,5,5,0" ColumnDefinitions="Auto, Auto, *, Auto" ColumnSpacing="10" RowDefinitions="Auto, Auto">
+                        <Border Grid.Column="0" Grid.Row="0" HeightRequest="60"   
+                                WidthRequest="60"
+                                Stroke="#214484" 
+                                StrokeThickness="2"
+                                StrokeShape="RoundRectangle 70"
+                                HorizontalOptions="Start"
+                                ZIndex="1">
+                            <Image Source="defoltavataricon.png" 
+                                   Aspect="AspectFill"
+                                   HeightRequest="55"     
+                                   WidthRequest="55"
+                                   HorizontalOptions="Center"
+                                   VerticalOptions="Center"/>
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.GoCheckProfileCommand}" CommandParameter="{Binding}"/>
+                            </Border.GestureRecognizers>
+                        </Border>
+                        <Image Source="profilecheckicon.png" Grid.Column="0" Grid.Row="0"   
+                               HeightRequest="24"     
+                               WidthRequest="24"
+                               HorizontalOptions="Start"
+                               VerticalOptions="End"
+                               Margin="40,0,0,0"
+                               ZIndex="2"/>
+
+                        <VerticalStackLayout Grid.Column="0" Grid.Row="0" Padding="85,10,0,0" HorizontalOptions="Start"  >
+                            <Label Text="{Binding SelectedTrip.UserName}" FontSize="25" FontAttributes="Bold" TextColor="#214484" Padding="5,0,10,0" WidthRequest="225" LineBreakMode="TailTruncation"></Label>
+                            <Grid ColumnDefinitions="Auto,Auto" ColumnSpacing="5" Padding="0,0,0,10">
+                                <Image Grid.Column="0" Source="starrating.png" HeightRequest="27" WidthRequest="27"></Image>
+                                <Label Grid.Column="1" Text="{Binding SelectedTrip.UserRating}" FontSize="23" TextColor="Black" ></Label>
+                            </Grid>
+                        </VerticalStackLayout>
+                    </Grid>
+
+                    <VerticalStackLayout Grid.Row="1" Padding="0,5,0,0" Spacing="5">
+                        <BoxView HeightRequest="2" 
+                                 Color="#214484"
+                                 HorizontalOptions="Fill"/>
+                        <HorizontalStackLayout Padding="0,5,0,0" Spacing="10" HorizontalOptions="Center">
+                            <Image x:Name="FirstStar" IsEnabled="True" Source="darkbluestaricon.png" HeightRequest="30" WidthRequest="30"/>
+                            <Image x:Name="SecondStar" Source="darkbluestaricon.png" HeightRequest="35" WidthRequest="35"/>
+                            <Image x:Name="ThirdStar" Source="darkbluestaricon.png" HeightRequest="40" WidthRequest="40"/>
+                            <Image x:Name="FourStar" Source="darkbluestaricon.png" HeightRequest="35" WidthRequest="35"/>
+                            <Image x:Name="FiveStar" Source="darkbluestaricon.png" HeightRequest="30" WidthRequest="30"/>
+                        </HorizontalStackLayout>
+                        
+                        <BoxView HeightRequest="2" 
+                                 Color="#214484"
+                                 HorizontalOptions="Fill"
+                                 Margin="0,5,0,0"/>
+                        <!-- Описание -->
+                        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8">
+                            <Image Grid.Column="0" 
+                                   Source="aboutimage.png"
+                                   HeightRequest="30" WidthRequest="30"
+                                   VerticalOptions="Center"/>
+                            <Label Grid.Column="1" 
+                                   Text="Оставить отзыв"
+                                   FontSize="24" 
+                                   TextColor="#214484"
+                                   VerticalOptions="Center"/>
+                        </Grid>
+                        <Border Stroke="#214484"
+                                StrokeThickness="1.5"
+                                StrokeShape="RoundRectangle 10"
+                                Padding="2">
+                            <Editor FontSize="17"
+                                    BackgroundColor="White"
+                                    MaxLength="1000"
+                                    AutoSize="TextChanges"
+                                    Text="{Binding .}"/>
+                        </Border>
+                        <Label Text="Не обязательно" FontSize="15" TextColor="Gray" VerticalOptions="Start"></Label>
+                    </VerticalStackLayout>
+
+                    <Border Grid.Row="2" BackgroundColor="#A0B3D5"
+                            Stroke="#A0B3D5"
+                            StrokeThickness="2"
+                            StrokeShape="RoundRectangle 0,0,10,10"
+                            Opacity="0.9"
+                            HorizontalOptions="Fill"
+                            VerticalOptions="Center"
+                            HeightRequest="60">
+                        <Label Text="Подтвердить"
+                               BackgroundColor="Transparent"
+                               TextColor="White"
+                               FontSize="20"
+                               FontAttributes="Bold"
+                               HorizontalOptions="Center" 
+                               VerticalOptions="Center"
+                               Padding="10"/>
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding GoSearchCommand}" />
+                        </Border.GestureRecognizers>
+                    </Border>
+                </Grid>
+            </Border>
+        </Grid>
+    </Grid>
+</ContentPage>

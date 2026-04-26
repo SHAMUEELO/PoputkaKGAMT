@@ -304,12 +304,10 @@
                 <Border Grid.Row="0" x:Name="DriverReusultScrollNotFind"
                         IsVisible="False"
                         Background="WhiteSmoke"
-                        Margin="20,0,20,10"
+                        Margin="10,0,10,5"
                         Stroke="LightGray"
                         StrokeThickness="2"
-                        StrokeShape="RoundRectangle 10"
-                        WidthRequest="375"
-                        HeightRequest="200">
+                        StrokeShape="RoundRectangle 10">
                     <Grid RowDefinitions="*,Auto" RowSpacing="25" VerticalOptions="Center" Padding="0,25,0,25">
                         <Image Grid.Row="0"
                                 Source="notfind.png"

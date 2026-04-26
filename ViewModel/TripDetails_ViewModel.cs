@@ -37,6 +37,7 @@ namespace PoputkaKGAMT.ViewModel
 
         [ObservableProperty]
         private bool showUsersTripForComplete = false; // Видимость "Завершить" для создтеля этой поездки
+
         [ObservableProperty]
         private Color completeTripButtonBackground = Color.FromArgb("#21842C"); // Зеленая для "Завершить поездку" при статусе 2 
         [ObservableProperty]
@@ -133,15 +134,21 @@ namespace PoputkaKGAMT.ViewModel
                         ShowUsersTrip = false;
 
                         // Цвет кнопки: зелёный если 2, серый если 1
-                        if (trip.StatusId == "2")
+                        if (trip.StatusId == "2") // Активна
                         {
                             CompleteTripButtonBackground = Color.FromArgb("#21842C"); // зелёный
                             CanCompleteTrip = true;
+
+                            BookButtonBackground = Color.FromArgb("#808080"); 
+                            CanBookTrip = false;
                         }
-                        if (trip.StatusId == "1")
+                        if (trip.StatusId == "1") // Завершен
                         {
                             CompleteTripButtonBackground = Color.FromArgb("#808080"); // серый
                             CanCompleteTrip = false;
+
+                            BookButtonBackground = Color.FromArgb("#808080");
+                            CanBookTrip = false;
                         }
                     }
                 }
@@ -390,6 +397,14 @@ namespace PoputkaKGAMT.ViewModel
                 previousPage = "SearchResultPage";
 
             await Shell.Current.GoToAsync($"//{previousPage}");
+        }
+
+        // К старнице оценки
+        [RelayCommand]
+        private async Task GoTripRatingPage()
+        {
+            //Preferences.Set("SelectedTripId", SelectedTrip.Id);
+            await Shell.Current.GoToAsync("//TripRatingPage");       
         }
     }
 }
