@@ -257,8 +257,8 @@
                 <TapGestureRecognizer Command="{Binding GoFellowTravelerPageCommand}"/>
             </Border.GestureRecognizers>
         </Border>
-        
-        <Border Grid.Row="4"
+
+        <Border Grid.Row="4" IsVisible="{Binding IsNotUserTrip}"
                 Background="White"
                 HeightRequest="45"
                 Margin="15,5,15,0"
@@ -285,7 +285,9 @@
                 <TapGestureRecognizer Command="{Binding GoFellowTravelerPageCommand}"/>
             </Border.GestureRecognizers>-->
         </Border>
-        <Border Grid.Row="5"
+
+
+        <Border Grid.Row="5" IsVisible="{Binding TripIsFinish}"
                 Background="White"
                 HeightRequest="45"
                 Margin="15,5,15,0"

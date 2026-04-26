@@ -134,8 +134,8 @@
                                            Margin="37,0,0,0"
                                            ZIndex="2"/>
 
-                                    <VerticalStackLayout Grid.Column="0" Grid.Row="0" Padding="67,10,0,0" HorizontalOptions="Start">
-                                        <Label Text="{Binding UserFellowName}" FontSize="22" FontAttributes="Bold" TextColor="#214484" Padding="5,0,0,0" WidthRequest="300" LineBreakMode="TailTruncation"></Label>
+                                    <VerticalStackLayout Grid.Column="0" Grid.Row="0" Padding="67,10,10,0" HorizontalOptions="Start">
+                                        <Label Text="{Binding UserFellowName}" FontSize="22" FontAttributes="Bold" TextColor="#214484" Padding="5,0,20,0" WidthRequest="225" LineBreakMode="TailTruncation"></Label>
                                         <Grid ColumnDefinitions="Auto,Auto" ColumnSpacing="5">
                                             <Image Grid.Column="0" Source="starrating.png" HeightRequest="25" WidthRequest="25"></Image>
                                             <Label Grid.Column="1" Text="{Binding UserFellowRating}" FontSize="21" TextColor="Black" ></Label>

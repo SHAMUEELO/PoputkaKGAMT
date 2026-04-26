@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using Firebase.Database;
 using Firebase.Database.Query;
 using PoputkaKGAMT.Models;
@@ -40,11 +41,18 @@ namespace PoputkaKGAMT.ViewModel
 
         [ObservableProperty]
         private Color completeTripButtonBackground = Color.FromArgb("#21842C"); // Зеленая для "Завершить поездку" при статусе 2 
+        
         [ObservableProperty]
         private bool canCompleteTrip = true; 
 
         [ObservableProperty]
         private bool showTrip = true; // Видимость "Забронировать" для пассажира
+
+        [ObservableProperty]
+        private bool tripIsFinish = false; // Видимость "Оценить" при завершении поездки
+
+        [ObservableProperty]
+        private bool isNotUserTrip = true; // Видимость "Написать" для попутчиков водителя\пассажира
 
         [ObservableProperty]
         private bool isOnlyTwo, isNotLate, isNotSmoking, isConditioner = false;
@@ -70,17 +78,26 @@ namespace PoputkaKGAMT.ViewModel
         [ObservableProperty]
         private string roleBooking = "Забронировать";
 
+        // Таймер
+        private System.Threading.Timer? reloadTimer;
+        // Для таймера вся таблица поездок
+        private TripModel? currentTripp;
+
+        [ObservableProperty]
+        private string? lastFellowStatus; // Последний известный статус
+
         [RelayCommand]
         public async Task LoadTrip()
         {
             try
             {
                 string tripId = Preferences.Get("SelectedTripId", "");
+                string currentUserId = Preferences.Get("CurrentUserKey", "");
 
                 var allTrips = await tripService.GetTrips();
                 var allUsers = await userService.GetUsers();
                 var allPlaces = await placeService.GetPlaces();
-
+                
                 var trip = allTrips.FirstOrDefault(t => t.Id == tripId);
                 
 
@@ -97,28 +114,22 @@ namespace PoputkaKGAMT.ViewModel
                 trip.DeparturePlaceName = departurePlace?.Name ?? "Неизвестно";
                 trip.ArrivePlaceName = arrivePlace?.Name ?? "Неизвестно";
 
-                // Загружаем данные от лица водителя или от лица пассажира
-                trip.Role = trip.IsDriver ? "Водитель" : "Пассажир";
-                if (trip.IsDriver == false)
-                {
-                    IsDriverTrip = false;
-                    IsPassengerTrip = true;
-                    RoleBooking = "Откликнуться";
-                }
-                else
-                {
-                    IsDriverTrip = true;
-                    IsPassengerTrip = false;
-                    RoleBooking = "Забронировать";
-                }
-
                 RoleText = trip.RoleText;
                 CanBookTrip = trip.CanBookTrip;
                 SeatsLabelVisible = trip.SeatsLabelVisible;
                 BookButtonBackground = trip.BookButtonBackground;
 
+                // Если поездка завершена
+                if (trip.StatusId == "1") 
+                {
+                    TripIsFinish = true;
+                }
+
+                // Если поездка является моей, то кнопка "Написать" не появляется
+                if (trip.UserId == currentUserId && trip.Id == tripId) { IsNotUserTrip = false;}
+                else { IsNotUserTrip = true; }
+
                 // Логика показа спец. кнопок для водителя или пассажира
-                string currentUserId = Preferences.Get("CurrentUserKey", "");
                 if (trip.UserId == currentUserId)
                 {
                     if (trip.StatusId == "3")
@@ -139,7 +150,7 @@ namespace PoputkaKGAMT.ViewModel
                             CompleteTripButtonBackground = Color.FromArgb("#21842C"); // зелёный
                             CanCompleteTrip = true;
 
-                            BookButtonBackground = Color.FromArgb("#808080"); 
+                            BookButtonBackground = Color.FromArgb("#808080");
                             CanBookTrip = false;
                         }
                         if (trip.StatusId == "1") // Завершен
@@ -153,6 +164,29 @@ namespace PoputkaKGAMT.ViewModel
                     }
                 }
 
+                 
+                // Если пользователь уже отправил бронь\откликнулся, или его заявку приняли(Короче, если есть в таблице FellowTraveler), то кнопка становиться серой и не нажимается
+                var allFellowTravelers = await fellowTravelerService.GetFellowTravelers(); // Загружаем всех пользователей, который бронировали поездку
+                var myFellowTraveler = allFellowTravelers.FirstOrDefault(ft => ft.TripId == tripId && ft.FellowUserId == currentUserId);
+
+                if(myFellowTraveler != null) // Если есть запись — кнопка серая/заблокирована
+                {               
+                    // Всегда серый цвет при наличии записи (StatusId == "5" или "6")
+                    BookButtonBackground = Color.FromArgb("#808080");
+                    CanBookTrip = false;
+
+                    // Текст по статусу (StatusId=="6" = одобрено/едет)
+                    RoleBooking = myFellowTraveler.StatusId == "6" ? "Запрос одобрен" : "Запрос отправлен";
+                }
+                else
+                {
+                    BookButtonBackground = Color.FromArgb("#214484");
+                    CanBookTrip = true;
+                    RoleBooking = trip.IsDriver ? "Забронировать" : "Откликнуться";
+                }
+                lastFellowStatus = myFellowTraveler?.StatusId;
+
+
                 if (trip.UserId != currentUserId) { ShowUsersTrip = false; ShowTrip = true; }
 
                 // Дополнительные детали
@@ -164,12 +198,60 @@ namespace PoputkaKGAMT.ViewModel
 
                 // Загружаем выбранные элементы
                 SelectedTrip = trip;
+                currentTripp = trip;
 
+                StartReloadTimer();
+                
             }
             catch (Exception ex)
             {
                 await Shell.Current.DisplayAlertAsync("Ошибка", "Не удалось загрузить данные!\nВозможно проблемы с интернетом\nОшибка:\n" + ex.Message, "OK");
             }
+        }
+
+        // Обновления изменения старницы
+        private void StartReloadTimer()
+        {
+            reloadTimer?.Dispose();  // Очистка
+            reloadTimer = new System.Threading.Timer(async _ =>
+            {
+                await MainThread.InvokeOnMainThreadAsync(async () =>
+                {
+                    string tripId = Preferences.Get("SelectedTripId", "");
+                    string currentUserId = Preferences.Get("CurrentUserKey", "");
+
+                    var allFellowTravelers = await fellowTravelerService.GetFellowTravelers();
+                    var myFellowTraveler = allFellowTravelers.FirstOrDefault(ft => ft.TripId == tripId && ft.FellowUserId == currentUserId);
+
+                    // Всегда пересчитываем кнопку, даже если записи нет
+                    if (myFellowTraveler != null)
+                    {
+                        BookButtonBackground = Color.FromArgb("#808080");
+                        CanBookTrip = false;
+                        RoleBooking = myFellowTraveler.StatusId == "6" ? "Запрос одобрен" : "Запрос отправлен";
+                    }
+                    else
+                    {
+                        BookButtonBackground = Color.FromArgb("#214484");
+                        CanBookTrip = true;
+                        RoleBooking = currentTripp?.IsDriver == true ? "Забронировать" : "Откликнуться";
+                    }
+
+                    lastFellowStatus = myFellowTraveler?.StatusId;
+                });
+            }, null, TimeSpan.FromSeconds(2), TimeSpan.FromSeconds(2));
+        }
+
+        private void StopReloadTimer()
+        {
+            reloadTimer?.Dispose();
+            reloadTimer = null;
+        }
+
+        // Когда пользователь уходит со старницы
+        private void Cleanup()
+        {
+            StopReloadTimer();
         }
 
 
@@ -308,7 +390,7 @@ namespace PoputkaKGAMT.ViewModel
                     await firebase.Child("fellow_travelers").Child(result.Key).PatchAsync(new { id = result.Key });
 
                     await Shell.Current.DisplayAlertAsync("Успешно", "Ваш запрос отправлен!\nОжидайте решение водителя\n\nВаш статус запроса можно посмотреть перейдя по «Попутный состав»", "Ок");
-
+                    await LoadTripCommand.ExecuteAsync(null);
                 }
                 else if (RoleBooking == "Откликнуться")
                 {
@@ -340,6 +422,7 @@ namespace PoputkaKGAMT.ViewModel
                     await firebase.Child("fellow_travelers").Child(result.Key).PatchAsync(new { id = result.Key });
 
                     await Shell.Current.DisplayAlertAsync("Успешно", "Ваш запрос отправлен!\nОжидайте решение пассажира\n\nВаш статус запроса можно посмотреть перейдя по «Попутный состав»", "Ок");
+                    await LoadTripCommand.ExecuteAsync(null);
                 }
             }
             catch(Exception ex) { await Shell.Current.DisplayAlertAsync("Внимание", "Не удалось отправить бронь!\nВозможно проблемы с интернетом", "Ок"); }
@@ -390,6 +473,8 @@ namespace PoputkaKGAMT.ViewModel
             IsNotLate = false; 
             IsNotSmoking = false;
             IsConditioner = false;
+
+            Cleanup();
 
             string previousPage = Preferences.Get("PreviousPage", "");
             // Если ссылка пуста, то по умолчанию SearchResultPage
