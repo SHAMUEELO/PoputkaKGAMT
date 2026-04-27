@@ -5,7 +5,7 @@
              Title="TripRatingPage"
              Shell.NavBarIsVisible="False"
              Background="White">
-    <Grid RowDefinitions="Auto,Auto, Auto" RowSpacing="0" Padding="0,5,0,0" >
+    <Grid RowDefinitions="Auto,Auto, 500" RowSpacing="5" Padding="0,5,0,0" >
         <Border Grid.Row="0"
                 Background="#214484"
                 HeightRequest="45"
@@ -33,17 +33,16 @@
             </Border.GestureRecognizers>
         </Border>
 
-        <Grid Grid.Row="1" RowDefinitions="Auto, Auto" RowSpacing="5" >
+        <Label Grid.Row="1" FontAttributes="Italic" FontSize="15" TextColor="Gray" Text="Выберите попутчика для выставления оценки" Margin="15,0,15,0"></Label>
+        <Grid Grid.Row="1" RowDefinitions="Auto, Auto" RowSpacing="5" IsVisible="{Binding IsReviewFormOpen}">
             <Border Grid.Row="0"
                     Background="White"
-                    Margin="15,-5,15,0"
-                    Padding="3,0,3,0"
+                    Margin="15,-10,15,0"
                     Stroke="#214484"
                     StrokeThickness="2"
-                    StrokeShape="RoundRectangle 0,0,8,8"
                     VerticalOptions="Start">
                 <!-- Данные -->
-                <Grid RowDefinitions="Auto, Auto, Auto" RowSpacing="10" Padding="3" Margin="5,0,5,0">
+                <Grid RowDefinitions="Auto, Auto" RowSpacing="10" Padding="3" Margin="5,0,5,0">
                     <Grid Grid.Row="0" Padding="10,5,5,0" ColumnDefinitions="Auto, Auto, *, Auto" ColumnSpacing="10" RowDefinitions="Auto, Auto">
                         <Border Grid.Column="0" Grid.Row="0" HeightRequest="60"   
                                 WidthRequest="60"
@@ -67,81 +66,139 @@
                                WidthRequest="24"
                                HorizontalOptions="Start"
                                VerticalOptions="End"
-                               Margin="40,0,0,0"
+                               Margin="40,0,0,3"
                                ZIndex="2"/>
 
-                        <VerticalStackLayout Grid.Column="0" Grid.Row="0" Padding="85,10,0,0" HorizontalOptions="Start"  >
-                            <Label Text="{Binding SelectedTrip.UserName}" FontSize="25" FontAttributes="Bold" TextColor="#214484" Padding="5,0,10,0" WidthRequest="225" LineBreakMode="TailTruncation"></Label>
+                        <VerticalStackLayout Grid.Column="0" Grid.Row="0" Padding="70,10,0,0" HorizontalOptions="Start"  >
+                            <Label Text="{Binding SelectedUser.UserFellowName}" FontSize="21" FontAttributes="Bold" TextColor="#214484" Padding="5,0,10,0" WidthRequest="250" LineBreakMode="TailTruncation"></Label>
                             <Grid ColumnDefinitions="Auto,Auto" ColumnSpacing="5" Padding="0,0,0,10">
                                 <Image Grid.Column="0" Source="starrating.png" HeightRequest="27" WidthRequest="27"></Image>
-                                <Label Grid.Column="1" Text="{Binding SelectedTrip.UserRating}" FontSize="23" TextColor="Black" ></Label>
+                                <Label Grid.Column="1" Text="{Binding SelectedUser.UserFellowRating}" FontSize="20" TextColor="Black" ></Label>
                             </Grid>
                         </VerticalStackLayout>
                     </Grid>
 
-                    <VerticalStackLayout Grid.Row="1" Padding="0,5,0,0" Spacing="5">
+                    <VerticalStackLayout Grid.Row="1" Spacing="5">
                         <BoxView HeightRequest="2" 
                                  Color="#214484"
                                  HorizontalOptions="Fill"/>
-                        <HorizontalStackLayout Padding="0,5,0,0" Spacing="10" HorizontalOptions="Center">
-                            <Image x:Name="FirstStar" IsEnabled="True" Source="darkbluestaricon.png" HeightRequest="30" WidthRequest="30"/>
-                            <Image x:Name="SecondStar" Source="darkbluestaricon.png" HeightRequest="35" WidthRequest="35"/>
-                            <Image x:Name="ThirdStar" Source="darkbluestaricon.png" HeightRequest="40" WidthRequest="40"/>
-                            <Image x:Name="FourStar" Source="darkbluestaricon.png" HeightRequest="35" WidthRequest="35"/>
-                            <Image x:Name="FiveStar" Source="darkbluestaricon.png" HeightRequest="30" WidthRequest="30"/>
+                        <HorizontalStackLayout Padding="0,5,0,0" Spacing="12" HorizontalOptions="Center">
+                            <Image x:Name="FirstStar" IsEnabled="True" Source="darkbluestaricon.png" HeightRequest="35" WidthRequest="35"/>
+                            <Image x:Name="SecondStar" Source="darkbluestarholeicon.png" HeightRequest="35" WidthRequest="35"/>
+                            <Image x:Name="ThirdStar" Source="darkbluestarholeicon.png" HeightRequest="35" WidthRequest="35"/>
+                            <Image x:Name="FourStar" Source="darkbluestarholeicon.png" HeightRequest="35" WidthRequest="35"/>
+                            <Image x:Name="FiveStar" Source="darkbluestarholeicon.png" HeightRequest="35" WidthRequest="35"/>
                         </HorizontalStackLayout>
-                        
+
                         <BoxView HeightRequest="2" 
                                  Color="#214484"
                                  HorizontalOptions="Fill"
                                  Margin="0,5,0,0"/>
                         <!-- Описание -->
-                        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8">
+                        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="5" Padding="3,3,0,0">
                             <Image Grid.Column="0" 
-                                   Source="aboutimage.png"
-                                   HeightRequest="30" WidthRequest="30"
+                                   Source="reviewicon.png"
+                                   HeightRequest="25" WidthRequest="25"
                                    VerticalOptions="Center"/>
                             <Label Grid.Column="1" 
                                    Text="Оставить отзыв"
-                                   FontSize="24" 
+                                   FontSize="20"
                                    TextColor="#214484"
                                    VerticalOptions="Center"/>
                         </Grid>
-                        <Border Stroke="#214484"
-                                StrokeThickness="1.5"
-                                StrokeShape="RoundRectangle 10"
-                                Padding="2">
-                            <Editor FontSize="17"
-                                    BackgroundColor="White"
-                                    MaxLength="1000"
-                                    AutoSize="TextChanges"
-                                    Text="{Binding .}"/>
-                        </Border>
-                        <Label Text="Не обязательно" FontSize="15" TextColor="Gray" VerticalOptions="Start"></Label>
-                    </VerticalStackLayout>
+                        <Label Text="Не обязательно" FontSize="15" TextColor="Gray" VerticalOptions="Start" Margin="4,-3,0,0"></Label>
+                        <Editor FontSize="16"
+                                BackgroundColor="White"
+                                MaxLength="1000"
+                                AutoSize="TextChanges"
+                                HorizontalOptions="Fill"
+                                Margin="-2,0,0,5"/>
 
-                    <Border Grid.Row="2" BackgroundColor="#A0B3D5"
-                            Stroke="#A0B3D5"
-                            StrokeThickness="2"
-                            StrokeShape="RoundRectangle 0,0,10,10"
-                            Opacity="0.9"
-                            HorizontalOptions="Fill"
-                            VerticalOptions="Center"
-                            HeightRequest="60">
-                        <Label Text="Подтвердить"
-                               BackgroundColor="Transparent"
-                               TextColor="White"
-                               FontSize="20"
-                               FontAttributes="Bold"
-                               HorizontalOptions="Center" 
-                               VerticalOptions="Center"
-                               Padding="10"/>
-                        <Border.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding GoSearchCommand}" />
-                        </Border.GestureRecognizers>
-                    </Border>
+                    </VerticalStackLayout>
                 </Grid>
             </Border>
+            <Border Grid.Row="1" BackgroundColor="#214484"
+                    Stroke="#214484"
+                    StrokeThickness="2"
+                    StrokeShape="RoundRectangle 0,0,10,10"
+                    Margin="15,-10,15,0"
+                    VerticalOptions="End"
+                    HeightRequest="40">
+                <Label Text="Подтвердить"
+                        BackgroundColor="Transparent"
+                        TextColor="White"
+                        FontSize="17"
+                        FontAttributes="Bold"
+                        HorizontalOptions="Center" 
+                        VerticalOptions="Center"
+                        Padding="2"/>
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding CloseReviewFormAndSendDataCommand}" />
+                </Border.GestureRecognizers>
+            </Border>
         </Grid>
+
+        <!-- Список -->
+        <ScrollView Grid.Row="2"
+                    HorizontalOptions="Fill"
+                    VerticalOptions="Fill"
+                    Padding="10,0,10,0" 
+                    Margin="5,0,5,0">
+            <CollectionView ItemsSource="{Binding UsersForEstimate}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Padding="0,0,0,10" RowDefinitions="Auto, Auto, Auto">
+                            <Border Grid.Row="0" Background="White"
+                                    Stroke="#214484"
+                                    StrokeThickness="2" 
+                                    StrokeShape="RoundRectangle 10,10,10,10">
+                                <Grid Padding="15,5,15,12" ColumnDefinitions="Auto, Auto, *, Auto" ColumnSpacing="10" RowDefinitions="Auto, Auto" RowSpacing="10">
+                                    <Border Grid.Column="0" Grid.Row="0" HeightRequest="60"   
+                                            WidthRequest="60"
+                                            Stroke="#214484" 
+                                            StrokeThickness="2"
+                                            StrokeShape="RoundRectangle 70"
+                                            HorizontalOptions="Start"
+                                            ZIndex="1">
+                                        <Image Source="defoltavataricon.png" 
+                                               Aspect="AspectFill"
+                                               HeightRequest="55"     
+                                               WidthRequest="55"
+                                               HorizontalOptions="Center"
+                                               VerticalOptions="Center"/>
+                                        <Border.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.GoCheckProfileCommand}" CommandParameter="{Binding}"/>
+                                        </Border.GestureRecognizers>
+                                    </Border>
+                                    <Image Source="profilecheckicon.png" Grid.Column="0" Grid.Row="0"   
+                                           HeightRequest="25"     
+                                           WidthRequest="25"
+                                           HorizontalOptions="Start"
+                                           VerticalOptions="End"
+                                           Margin="37,0,0,0"
+                                           ZIndex="2"/>
+
+                                    <VerticalStackLayout Grid.Column="0" Grid.Row="0" Padding="67,10,10,0" HorizontalOptions="Start">
+                                        <Label Text="{Binding UserFellowName}" FontSize="22" FontAttributes="Bold" TextColor="#214484" Padding="5,0,20,0" WidthRequest="225" LineBreakMode="TailTruncation"></Label>
+                                        <Grid ColumnDefinitions="Auto,Auto" ColumnSpacing="5">
+                                            <Image Grid.Column="0" Source="starrating.png" HeightRequest="25" WidthRequest="25"></Image>
+                                            <Label Grid.Column="1" Text="{Binding UserFellowRating}" FontSize="21" TextColor="Black" ></Label>
+                                        </Grid>
+                                    </VerticalStackLayout>
+
+                                    <Grid Grid.Column="0" Grid.Row="1" ColumnDefinitions="Auto,Auto" ColumnSpacing="5" Padding="-4,-5,0,0" IsVisible="{Binding FellowUserIsDriver}">
+                                        <Image Grid.Column="0" Source="carimage.png" HeightRequest="35" WidthRequest="35" VerticalOptions="Center"></Image>
+                                        <Label Grid.Column="1" Text="{Binding UserCar}" FontSize="18" TextColor="#214484" Padding="0,4,0,0"/>
+                                    </Grid>
+                                </Grid>
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.OpenReviewFormCommand}" CommandParameter="{Binding}" />
+                                </Border.GestureRecognizers>
+                            </Border>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </ScrollView>
     </Grid>
 </ContentPage>
