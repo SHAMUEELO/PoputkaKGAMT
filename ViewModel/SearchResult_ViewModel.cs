@@ -1,5 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Firebase.Database;
+using Firebase.Database.Query;
 using PoputkaKGAMT.Models;
 using PoputkaKGAMT.Services;
 using System.Collections.ObjectModel;
@@ -9,17 +11,22 @@ namespace PoputkaKGAMT.ViewModel
 
     public partial class SearchResult_ViewModel : ObservableObject
     {
+        // Подключение к БД
+        private FirebaseClient firebase = new FirebaseClient("https://poputka-datebase-default-rtdb.europe-west1.firebasedatabase.app/");
+
         private readonly IBackgroundUpdateService backgroundUpdateService;
         private readonly TripService tripService;
         private readonly UserService userService;
         private readonly PlaceService placeService;
+        private readonly FellowTravelerService fellowTravelerService;
 
-        public SearchResult_ViewModel(IBackgroundUpdateService backgroundUpdateService,TripService tripService,UserService userService, PlaceService placeService)
+        public SearchResult_ViewModel(IBackgroundUpdateService backgroundUpdateService,TripService tripService,UserService userService, PlaceService placeService, FellowTravelerService fellowTravelerService)
         {
             this.backgroundUpdateService = backgroundUpdateService;
             this.tripService = tripService;
             this.userService = userService;
             this.placeService = placeService;
+            this.fellowTravelerService = fellowTravelerService;
 
             // 
             backgroundUpdateService.OnTripsUpdated += () =>
@@ -70,6 +77,7 @@ namespace PoputkaKGAMT.ViewModel
             var allTrips = await tripService.GetTrips();
             var allUsers = await userService.GetUsers();
             var allPlaces = await placeService.GetPlaces();
+            var allFellowTravelers = await fellowTravelerService.GetFellowTravelers();
 
 
             var allDrivers = new List<TripModel>();
@@ -80,9 +88,22 @@ namespace PoputkaKGAMT.ViewModel
             {
                 foreach (var trip in allTrips)
                 {
+                    // если StatusId == "2" или "1" и попутчиков нет, то удаляе  поещдку из БД
+                    if ((trip.StatusId == "2" || trip.StatusId == "1") && trip.SeatsQuentity == trip.OriginalSeatsQuentity)
+                    {
+                        // Используем логику удаления с очисткой попутчиков
+                        await firebase.Child("trips").Child(trip.Id).DeleteAsync();
+
+                        // Также нужно удалить связанные с поездкой попутчиков
+                        foreach (var ft in allFellowTravelers.Where(f => f.TripId == trip.Id))
+                        {
+                            await firebase.Child("fellow_travelers").Child(ft.Id).DeleteAsync();
+                        }
+                    }
                     // если StatusId == "2" или "1", то не показываем в SearchResult
-                    if (trip.StatusId == "2" || trip.StatusId == "1")
+                    else if (trip.StatusId == "2" || trip.StatusId == "1")
                         continue;
+
 
                     var user = allUsers.FirstOrDefault(u => u.Id?.Equals(trip.UserId, StringComparison.OrdinalIgnoreCase) == true);
 

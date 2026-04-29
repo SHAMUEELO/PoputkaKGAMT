@@ -45,7 +45,7 @@
                 <!-- Данные -->
                 <Grid RowDefinitions="Auto, 300" RowSpacing="10" Padding="3" 
                             Margin="5,0,5,0">
-                    <Grid Grid.Row="0" Padding="15,10,15,5" ColumnDefinitions="Auto, Auto, *, Auto" ColumnSpacing="10" RowDefinitions="Auto, Auto">
+                    <Grid Grid.Row="0" Padding="10,10,15,5" ColumnDefinitions="Auto, Auto, *, Auto" ColumnSpacing="10" RowDefinitions="Auto, Auto">
                         <Border Grid.Column="0" Grid.Row="0" HeightRequest="75"   
                                 WidthRequest="75"
                                 Stroke="#214484" 
@@ -86,7 +86,7 @@
                         <Grid RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto" RowSpacing="10" Padding="3">
                             <Grid Grid.Row="0" ColumnDefinitions="Auto,Auto" ColumnSpacing="5" Padding="3,-5,0,0" IsVisible="{Binding IsDriverTrip}">
                                 <Image Grid.Column="0" Source="carimage.png" HeightRequest="35" WidthRequest="35" VerticalOptions="Center"></Image>
-                                <Label Grid.Column="1" Text="{Binding SelectedTrip.CarDescrtiption}" FontSize="18" TextColor="#214484" Padding="0,4,0,0" FontAttributes="Italic"/>
+                                <Label Grid.Column="1" Text="{Binding SelectedTrip.CarDescrtiption}" FontSize="18" TextColor="#214484" Padding="0,4,0,0" WidthRequest="230" LineBreakMode="WordWrap" FontAttributes="Italic"/>
                             </Grid>
                             <Grid Grid.Row="1" ColumnDefinitions="Auto, Auto" ColumnSpacing="5" Padding="3,-10,0,0" IsVisible="{Binding IsDriverTrip}">
                                 <Label Grid.Column="1"  Text="{Binding SelectedTrip.SeatsQuentity}" IsVisible="{Binding SeatsLabelVisible}" FontSize="18" TextColor="#214484" FontAttributes="Italic"/>

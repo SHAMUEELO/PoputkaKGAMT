@@ -15,10 +15,13 @@ namespace PoputkaKGAMT.ViewModel
         private FirebaseClient firebase = new FirebaseClient("https://poputka-datebase-default-rtdb.europe-west1.firebasedatabase.app/");
         private readonly UserService userService;
         private readonly FellowTravelerService fellowTravelerService;
+        private readonly TripService tripService;
+
         public FellowTraveler_ViewModel()
         {
             userService = new UserService();
             fellowTravelerService = new FellowTravelerService();
+            tripService = new TripService();
         }
 
         [ObservableProperty]
@@ -29,18 +32,23 @@ namespace PoputkaKGAMT.ViewModel
 
         [ObservableProperty]
         private bool isTripOwner;
-
         [ObservableProperty]
         private bool atLeastOneFellowUser = false;
 
         [ObservableProperty]
         private bool isFellowTravelerEmpty = true; // Показывает данные при отсутствии брони выбранной поездки
-
+        
         [ObservableProperty]
         private bool canAcceptPassenger = true;
 
         [ObservableProperty]
         private Color acceptButtonColor = Color.FromArgb("#21842C");
+
+        [ObservableProperty]
+        private string tripStatusId = ""; // статус поездки
+
+        // Таймер
+        private System.Threading.Timer? _reloadTimer;
 
         [RelayCommand]
         public async Task LoadFellowTravelers()
@@ -51,57 +59,99 @@ namespace PoputkaKGAMT.ViewModel
                 string tripId = Preferences.Get("SelectedTripId", "");
                 string currentUserId = Preferences.Get("CurrentUserKey", "");
 
-                var data = await Task.Run(async () =>
+                var allUsers = await userService.GetUsers();
+                var allFellowTravelers = await fellowTravelerService.GetFellowTravelers();
+                var allTrips = await tripService.GetTrips();
+
+                var trip = allTrips.FirstOrDefault(t => t.Id == tripId);
+                TripStatusId = trip?.StatusId ?? "";
+
+                if (trip?.StatusId == "2" || trip?.StatusId == "1")
                 {
-                    var allUsers = await userService.GetUsers();
-                    var allFellowTravelers = await fellowTravelerService.GetFellowTravelers();
-                    var allTrips = await new TripService().GetTrips();
+                    allFellowTravelers = allFellowTravelers.Where(f => f.TripId != tripId || f.StatusId != "5").ToList();
+                }
 
-                    var trip = allTrips.FirstOrDefault(t => t.Id == tripId);
-                    if (trip?.StatusId == "2" || trip?.StatusId == "1")
-                    {
-                        allFellowTravelers = allFellowTravelers.Where(f => f.TripId != tripId || f.StatusId != "5").ToList();
-                    }
+                var tripFellowTravelers = allFellowTravelers.Where(f => f.TripId == tripId).ToList();
+                var currentTrip = allTrips.FirstOrDefault(t => t.Id == tripId);
 
-                    var tripFellowTravelers = allFellowTravelers.Where(f => f.TripId == tripId).ToList();
-                    var currentTrip = allTrips.FirstOrDefault(t => t.Id == tripId);
+                // Подготовка списка
+                var preparedList = new List<FellowTravelerModel>();
+                foreach (var fellowTraveler in tripFellowTravelers)
+                {
+                    var user = allUsers.FirstOrDefault(u => u.Id?.Equals(fellowTraveler.FellowUserId, StringComparison.OrdinalIgnoreCase) == true);
+                    fellowTraveler.UserFellowName = user?.Name ?? "Неизвестный";
+                    fellowTraveler.UserFellowAvatar = user?.ProfilePhoto ?? "defoltavataricon.png";
+                    fellowTraveler.UserFellowRating = user?.Rating ?? 0.00;
+                    // Определение цвета кнопок
+                    fellowTraveler.IsCurrentUser = fellowTraveler.FellowUserId == currentUserId;
+                    fellowTraveler.MyFellowBackgroundColor = fellowTraveler.IsCurrentUser ? Color.FromArgb("#EFF4FF") : Colors.White;
 
-                    // Подготовка списка
-                    var preparedList = new List<FellowTravelerModel>();
-                    foreach (var fellowTraveler in tripFellowTravelers)
-                    {
-                        var user = allUsers.FirstOrDefault(u => u.Id?.Equals(fellowTraveler.FellowUserId, StringComparison.OrdinalIgnoreCase) == true);
-                        fellowTraveler.UserFellowName = user?.Name ?? "Неизвестный";
-                        fellowTraveler.UserFellowAvatar = user?.ProfilePhoto ?? "defoltavataricon.png";
-                        fellowTraveler.UserFellowRating = user?.Rating ?? 0.00;
-                        // Определение цвета кнопок
-                        fellowTraveler.IsCurrentUser = fellowTraveler.FellowUserId == currentUserId;
-                        fellowTraveler.MyFellowBackgroundColor = fellowTraveler.IsCurrentUser ? Color.FromArgb("#EFF4FF") : Colors.White;
-                        preparedList.Add(fellowTraveler);
-                    }
+                    fellowTraveler.IsCurrentUserVisible = !IsTripOwner && fellowTraveler.IsCurrentUser && TripStatusId == "3"; // True, если если Я попутчик(Отпарвил запрос) и статус поездки Запланирвоан
 
-                    return (preparedList, currentTrip, tripFellowTravelers.Any(f => f.FellowUserId == currentUserId));
-                });
+                    fellowTraveler.IsCreatorVisible = IsTripOwner && TripStatusId == "3"; // True, если если Я создатель и статус поездки Запланирвоан
+
+                    preparedList.Add(fellowTraveler);
+                }
 
                 MainThread.BeginInvokeOnMainThread(() =>
                 {
-                    FellowUsers.Clear();
-                    foreach (var item in data.preparedList)
-                        FellowUsers.Add(item);
+                    // Разница: есть в старом списке, но нет в новом
+                    var toRemove = FellowUsers.Where(f => !preparedList.Any(fp => fp.Id == f.Id)).ToList();
 
-                    AtLeastOneFellowUser = data.preparedList.Any();
+                    // Сначала удаляем
+                    foreach (var f in toRemove)
+                        FellowUsers.Remove(f);
+
+                    // Потом обновляем/добавляем
+                    foreach (var item in preparedList)
+                    {
+                        var existing = FellowUsers.FirstOrDefault(fu => fu.Id == item.Id);
+                        if (existing != null)
+                        {
+                            existing.StatusId = item.StatusId;
+                        }
+                        else
+                        {
+                            FellowUsers.Add(item);
+                        }
+                    }
+
+                    AtLeastOneFellowUser = preparedList.Any();
                     IsFellowTravelerEmpty = !AtLeastOneFellowUser;
-                    IsMyBooking = data.Item3;
-                    IsTripOwner = data.currentTrip?.UserId == currentUserId;
-                    CanAcceptPassenger = data.currentTrip?.SeatsQuentity > 0;
+                    IsMyBooking = preparedList.Any(f => f.FellowUserId == currentUserId);
+                    IsTripOwner = trip?.UserId == currentUserId;
+                    CanAcceptPassenger = trip?.SeatsQuentity > 0;
                     AcceptButtonColor = CanAcceptPassenger ? Color.FromArgb("#21842C") : Color.FromArgb("#808080");
                 });
+                StartReloadTimer();
             }
             catch (Exception ex)
             {
                 await Shell.Current.DisplayAlertAsync("Ошибка", "Не удалось загрузить данные!\nВозможно проблемы с интернетом\nОшибка:\n" + ex.Message, "OK");
             }
         }
+
+        // Логика таймера
+        private void StartReloadTimer()
+        {
+            _reloadTimer?.Dispose();
+
+            _reloadTimer = new System.Threading.Timer(async _ =>
+            {
+                await MainThread.InvokeOnMainThreadAsync(async () =>
+                {
+                    // Перезагружаем список попутчиков каждые 2 секунды
+                    await LoadFellowTravelersCommand.ExecuteAsync(null);
+                });
+            }, null, TimeSpan.FromSeconds(2), TimeSpan.FromSeconds(2));
+        }
+
+        private void StopReloadTimer()
+        {
+            _reloadTimer?.Dispose();
+            _reloadTimer = null;
+        }
+
 
         // К профилю пользователя
         [RelayCommand]
@@ -221,6 +271,7 @@ namespace PoputkaKGAMT.ViewModel
         {
             try
             {
+                StopReloadTimer();
                 IsMyBooking = false;
                 IsTripOwner = false;
                 await Shell.Current.GoToAsync("//TripDetailsPage");
@@ -235,6 +286,7 @@ namespace PoputkaKGAMT.ViewModel
         [RelayCommand]
         private async Task GoBackSearchResult()
         {
+            StopReloadTimer();
             Preferences.Remove("SelectedTripId");
             await Shell.Current.GoToAsync("//SearchResultPage");
         }

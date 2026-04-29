@@ -48,6 +48,12 @@ namespace PoputkaKGAMT.Models
         public bool IsCurrentUser { get; set; }
 
         [JsonIgnore]
+        public bool IsCurrentUserVisible { get; set; }
+
+        [JsonIgnore]
+        public bool IsCreatorVisible { get; set; }
+
+        [JsonIgnore]
         public Color StatusColor
         {
             get

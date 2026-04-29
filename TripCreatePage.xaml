@@ -273,7 +273,8 @@
                             <Entry FontSize="16"
                                    BackgroundColor="White"                
                                    Keyboard="Numeric"
-                                   Text="{Binding Price, Mode=TwoWay}"/>
+                                   Text="{Binding Price, Mode=TwoWay}"
+                                   Completed="Entry_PriceCompleted"/>
                         </Border>
                         
                     </Grid>

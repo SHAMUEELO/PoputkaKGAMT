@@ -99,9 +99,13 @@ namespace PoputkaKGAMT.ViewModel
                 var allPlaces = await placeService.GetPlaces();
                 
                 var trip = allTrips.FirstOrDefault(t => t.Id == tripId);
-                
 
                 var user = allUsers.FirstOrDefault(u => u.Id?.Equals(trip.UserId, StringComparison.OrdinalIgnoreCase) == true);
+
+                // Видимость текста того, кто явялется сощдателем
+                IsDriverTrip = trip.IsDriver;           // Это водитель
+                IsPassengerTrip = !trip.IsDriver;       // Это пассажир
+                RoleText = trip.RoleText;               // "Свободных мест" и "Требуется мест"
 
                 // Данные пользователя
                 trip.UserName = user?.Name ?? "Неизвестный";
@@ -124,9 +128,10 @@ namespace PoputkaKGAMT.ViewModel
                 {
                     TripIsFinish = true;
                 }
+                else { TripIsFinish = false; }
 
                 // Если поездка является моей, то кнопка "Написать" не появляется
-                if (trip.UserId == currentUserId && trip.Id == tripId) { IsNotUserTrip = false;}
+                if (trip.UserId == currentUserId && trip.Id == tripId) { IsNotUserTrip = false; }
                 else { IsNotUserTrip = true; }
 
                 // Логика показа спец. кнопок для водителя или пассажира
@@ -200,8 +205,9 @@ namespace PoputkaKGAMT.ViewModel
                 SelectedTrip = trip;
                 currentTripp = trip;
 
+                SeatsLabelVisible = SelectedTrip.SeatsQuentity > 0;
                 StartReloadTimer();
-                
+
             }
             catch (Exception ex)
             {
@@ -218,8 +224,27 @@ namespace PoputkaKGAMT.ViewModel
                 await MainThread.InvokeOnMainThreadAsync(async () =>
                 {
                     string tripId = Preferences.Get("SelectedTripId", "");
-                    string currentUserId = Preferences.Get("CurrentUserKey", "");
+                    if (string.IsNullOrEmpty(tripId)) return;  // Защита
 
+
+                    // Также обновляем поездку из БД, чтобы синхронизировать seats_quentity
+                    var allTrips = await tripService.GetTrips();
+                    var trip = allTrips.FirstOrDefault(t => t.Id == tripId);
+
+                    if (trip != null && SelectedTrip != null)
+                    {
+                        int oldValue = SelectedTrip.SeatsQuentity;
+                        SelectedTrip.SeatsQuentity = trip.SeatsQuentity;
+                        
+                        OnPropertyChanged(nameof(SelectedTrip));
+
+                        SeatsLabelVisible = trip.SeatsQuentity > 0;
+                        IsDriverTrip = trip.IsDriver;
+                        IsPassengerTrip = !trip.IsDriver;
+                        RoleText = trip.RoleText;
+                    }
+
+                    string currentUserId = Preferences.Get("CurrentUserKey", "");
                     var allFellowTravelers = await fellowTravelerService.GetFellowTravelers();
                     var myFellowTraveler = allFellowTravelers.FirstOrDefault(ft => ft.TripId == tripId && ft.FellowUserId == currentUserId);
 
@@ -230,6 +255,12 @@ namespace PoputkaKGAMT.ViewModel
                         CanBookTrip = false;
                         RoleBooking = myFellowTraveler.StatusId == "6" ? "Запрос одобрен" : "Запрос отправлен";
                     }
+                    else if (trip == null || trip.SeatsQuentity == 0)
+                    {
+                        BookButtonBackground = Color.FromArgb("#808080");
+                        CanBookTrip = false;
+                        RoleBooking = "Места закончились";
+                    }
                     else
                     {
                         BookButtonBackground = Color.FromArgb("#214484");
@@ -238,6 +269,8 @@ namespace PoputkaKGAMT.ViewModel
                     }
 
                     lastFellowStatus = myFellowTraveler?.StatusId;
+
+                    
                 });
             }, null, TimeSpan.FromSeconds(2), TimeSpan.FromSeconds(2));
         }
@@ -248,11 +281,7 @@ namespace PoputkaKGAMT.ViewModel
             reloadTimer = null;
         }
 
-        // Когда пользователь уходит со старницы
-        private void Cleanup()
-        {
-            StopReloadTimer();
-        }
+       
 
 
         [RelayCommand]
@@ -457,6 +486,8 @@ namespace PoputkaKGAMT.ViewModel
                 Preferences.Set("SelectedUserIdForCheckProfile", user.Id);
                 Preferences.Set("PreviousPageCheckProfile", "TripDetailsPage");
                 await Shell.Current.GoToAsync("//CheckProfilePage");
+
+                StopReloadTimer();
             }
             catch (Exception ex) { await Shell.Current.DisplayAlertAsync("Внимание", "Не удалось открыть страницу!\nВозможно проблемы с интернетом\nОшибка:\n" + ex.Message, "Ок"); }
         }
@@ -474,7 +505,7 @@ namespace PoputkaKGAMT.ViewModel
             IsNotSmoking = false;
             IsConditioner = false;
 
-            Cleanup();
+            StopReloadTimer();
 
             string previousPage = Preferences.Get("PreviousPage", "");
             // Если ссылка пуста, то по умолчанию SearchResultPage
@@ -488,6 +519,7 @@ namespace PoputkaKGAMT.ViewModel
         [RelayCommand]
         private async Task GoTripRatingPage()
         {
+            StopReloadTimer();
             //Preferences.Set("SelectedTripId", SelectedTrip.Id);
             await Shell.Current.GoToAsync("//TripRatingPage");       
         }

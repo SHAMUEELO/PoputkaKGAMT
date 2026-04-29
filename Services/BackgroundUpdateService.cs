@@ -62,7 +62,10 @@ namespace PoputkaKGAMT.Services
                         trip.StatusId = "2";
                         await firebase.Child("trips").Child(trip.Id).PatchAsync(new { status_id = "2" }); // обновить в Firebase
 
-
+                        // Измененяем видимость в SearchResult
+                        await firebase.Child("trips").Child(trip.Id).PatchAsync(
+                            new { is_visible_on_searchresult_page = false }
+                        );
 
                         // После того как статус поездки = "2" — удаляем все заявки со status_id = "5"
                         var allFellowTravelers = await firebase.Child("fellow_travelers").OnceAsync<FellowTravelerModel>();

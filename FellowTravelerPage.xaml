@@ -149,7 +149,7 @@
                                 </Grid>
                             </Border>
 
-                            <Border Grid.Row="2" IsVisible="{Binding IsCurrentUser}" 
+                            <Border Grid.Row="2" IsVisible="{Binding IsCurrentUserVisible}" 
                                     BackgroundColor="#9C282A"
                                     Stroke="#9C282A"
                                     StrokeThickness="2"
@@ -194,7 +194,7 @@
                                     </Border.GestureRecognizers>
                                 </Border>
 
-                                <Border Grid.Column="1"
+                                <Border Grid.Column="1" IsVisible="{Binding IsCreatorVisible }" 
                                         BackgroundColor="#9C282A"
                                         Stroke="#9C282A"
                                         StrokeThickness="2"

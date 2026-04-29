@@ -96,6 +96,7 @@ namespace PoputkaKGAMT.ViewModel
         [ObservableProperty]
         private string description;
 
+
         [RelayCommand]
         private async Task GoPublish()
         {
@@ -113,11 +114,10 @@ namespace PoputkaKGAMT.ViewModel
                 Price = "";
                 return;
             }
-            if (Price.Length <= 0)
+            if (!int.TryParse(Price, out int price) || price <= 0)
             {
-                await Shell.Current.DisplayAlertAsync("Внимание", "Стоимость поездки не может быть отрицательным", "OK");
-                Price = "";
-                return;
+                await Shell.Current.DisplayAlertAsync("Внимание", "Цена не может быть отрицательной!", "OK");
+                Price = "0"; return;
             }
             // проверка корректности использования мест отьезда
             if (SelectedDeparturePlace.Name == SelectedArrivePlace.Name)

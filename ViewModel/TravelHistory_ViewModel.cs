@@ -1,5 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Firebase.Database;
+using Firebase.Database.Query;
 using PoputkaKGAMT.Models;
 using PoputkaKGAMT.Services;
 using System.Collections.ObjectModel;
@@ -10,6 +12,9 @@ namespace PoputkaKGAMT.ViewModel
 {
     public partial class TravelHistory_ViewModel : ObservableObject
     {
+        // Подключение к БД
+        private FirebaseClient firebase = new FirebaseClient("https://poputka-datebase-default-rtdb.europe-west1.firebasedatabase.app/");
+
         private readonly FellowTravelerService fellowtravelerService;
         private readonly IBackgroundUpdateService backgroundUpdateService;
         private readonly TripService tripService;
@@ -78,6 +83,19 @@ namespace PoputkaKGAMT.ViewModel
                     // Только мои поездки
                     if (!trip.UserId.Equals(myId, StringComparison.OrdinalIgnoreCase))
                         continue;
+
+                    // если StatusId == "2" или "1" и попутчиков нет, то удаляе  поездку из БД
+                    if ((trip.StatusId == "2" || trip.StatusId == "1") && trip.SeatsQuentity == trip.OriginalSeatsQuentity)
+                    {
+                        // Используем логику удаления с очисткой попутчиков
+                        await firebase.Child("trips").Child(trip.Id).DeleteAsync();
+
+                        // Также нужно удалить связанные с поездкой попутчиков
+                        foreach (var ft in allFellows.Where(f => f.TripId == trip.Id))
+                        {
+                            await firebase.Child("fellow_travelers").Child(ft.Id).DeleteAsync();
+                        }
+                    }
 
                     // Берем только данные пользователя
                     var user = allUsers.FirstOrDefault(u => u.Id?.Equals(trip.UserId, StringComparison.OrdinalIgnoreCase) == true);

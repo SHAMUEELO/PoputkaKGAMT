@@ -49,12 +49,13 @@
                     <Image Grid.Column="0" x:Name="WheelImage"
                        Source="wheeliconresult.png"
                        HorizontalOptions="Start"
-                       HeightRequest="36"
-                       WidthRequest="36">
+                       HeightRequest="32"
+                       WidthRequest="32"
+                       Margin="10,0,0,0">
                     </Image>
                     <Label Grid.Column="1" x:Name="DriverLabel"
                        Text="Водители"
-                       FontSize="22"
+                       FontSize="21"
                        FontAttributes="Bold"
                        TextColor="#214484"
                        HorizontalOptions="Center">
@@ -69,12 +70,12 @@
                     <Image Grid.Column="0" x:Name="PassengerImage"
                        Source="graypassengericonresult.png"
                        HorizontalOptions="Start"
-                       HeightRequest="33"
-                       WidthRequest="33">
+                       HeightRequest="29"
+                       WidthRequest="29">
                     </Image>
                     <Label Grid.Column="1" x:Name="PassengerLabel"
                        Text="Пассажиры"
-                       FontSize="22"
+                       FontSize="21"
                        FontAttributes="Bold"
                        TextColor="Black"
                        HorizontalOptions="Center">

@@ -1,5 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Firebase.Database;
+using Firebase.Database.Query;
 using PoputkaKGAMT.Models;
 using PoputkaKGAMT.Services;
 using System.Collections.ObjectModel;
@@ -9,15 +11,20 @@ namespace PoputkaKGAMT.ViewModel
 {
     partial class MyTravel_ViewModel : ObservableObject
     {
+        // Подключение к БД
+        private FirebaseClient firebase = new FirebaseClient("https://poputka-datebase-default-rtdb.europe-west1.firebasedatabase.app/");
+
         private readonly TripService tripService;
         private readonly UserService userService;
         private readonly PlaceService placeService;
+        private readonly FellowTravelerService fellowTravelerService;
 
         public MyTravel_ViewModel()
         {
             tripService = new TripService();
             userService = new UserService();
             placeService = new PlaceService();
+            fellowTravelerService = new FellowTravelerService();
             LoadMyTripData();
         }
 
@@ -38,6 +45,7 @@ namespace PoputkaKGAMT.ViewModel
                 var allTrips = await tripService.GetTrips();
                 var allUsers = await userService.GetUsers();
                 var allPlaces = await placeService.GetPlaces();
+                var allFellowTravelers = await fellowTravelerService.GetFellowTravelers();
 
                 var myTripsOnly = new List<TripModel>();
             
@@ -48,6 +56,19 @@ namespace PoputkaKGAMT.ViewModel
                     // Только мои поездки
                     if (!trip.UserId.Equals(myUserId, StringComparison.OrdinalIgnoreCase))
                         continue;
+
+                    // если StatusId == "2" или "1" и попутчиков нет, то удаляем  поездку из БД
+                    if ((trip.StatusId == "2" || trip.StatusId == "1") && trip.SeatsQuentity == trip.OriginalSeatsQuentity)
+                    {
+                        // Используем логику удаления с очисткой попутчиков
+                        await firebase.Child("trips").Child(trip.Id).DeleteAsync();
+
+                        // Также нужно удалить связанные с поездкой попутчиков
+                        foreach (var ft in allFellowTravelers.Where(f => f.TripId == trip.Id))
+                        {
+                            await firebase.Child("fellow_travelers").Child(ft.Id).DeleteAsync();
+                        }
+                    }
 
                     // Берем только данные пользователя
                     var user = allUsers.FirstOrDefault(u => u.Id?.Equals(trip.UserId, StringComparison.OrdinalIgnoreCase) == true);

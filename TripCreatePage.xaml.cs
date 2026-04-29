@@ -72,4 +72,16 @@ public partial class TripCreatePage : ContentPage
         }
         return true;
     }
+
+    private async void Entry_PriceCompleted(object sender, EventArgs e)
+    {
+        if (BindingContext is TripCreate_ViewModel vm)
+        {
+            if (!int.TryParse(vm.Price, out int price) || price <= 0)
+            {
+                await Shell.Current.DisplayAlertAsync("Внимание", "Цена не может быть отрицательной!", "OK");
+                vm.Price = "0";
+            }
+        }
+    }
 }
