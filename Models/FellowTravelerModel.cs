@@ -6,7 +6,7 @@ using System.Text.Json.Serialization;
 
 namespace PoputkaKGAMT.Models
 {
-    public class FellowTravelerModel
+    public class FellowTravelerModel : ObservableObject
     {
         [JsonPropertyName("id")]
         public string Id { get; set; } = "";
@@ -21,7 +21,22 @@ namespace PoputkaKGAMT.Models
         public string TripId { get; set; } = "";
 
         [JsonPropertyName("status_id")]
-        public string StatusId { get; set; } = "";
+        public string StatusId 
+        {
+            get => _statusId;
+            set
+            {
+                if (_statusId != value)
+                {
+                    _statusId = value;
+                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(StatusColor));
+                    OnPropertyChanged(nameof(StatusTitle));
+                    OnPropertyChanged(nameof(CanAccept));
+                }
+            }
+        }
+        private string _statusId = "";
 
         [JsonPropertyName("fellow_user_is_driver")]
         public bool FellowUserIsDriver { get; set; }

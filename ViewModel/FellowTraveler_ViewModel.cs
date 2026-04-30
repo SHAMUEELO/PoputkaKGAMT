@@ -53,7 +53,6 @@ namespace PoputkaKGAMT.ViewModel
         [RelayCommand]
         public async Task LoadFellowTravelers()
         {
-            FellowUsers.Clear();
             try
             {
                 string tripId = Preferences.Get("SelectedTripId", "");
@@ -75,54 +74,60 @@ namespace PoputkaKGAMT.ViewModel
                 var currentTrip = allTrips.FirstOrDefault(t => t.Id == tripId);
 
                 // Подготовка списка
-                var preparedList = new List<FellowTravelerModel>();
-                foreach (var fellowTraveler in tripFellowTravelers)
+                TripStatusId = trip?.StatusId ?? "";
+
+                // Удаляем из списка тех, кого нет в Firebase
+                var toRemove = FellowUsers.Where(f => !tripFellowTravelers.Any(ft => ft.Id == f.Id)).ToList();
+                foreach (var f in toRemove)
+                    FellowUsers.Remove(f);
+
+                // Обновляем уже есть
+                var toUpdate = tripFellowTravelers.Where(ft => FellowUsers.Any(f => f.Id == ft.Id)).ToList();
+                foreach (var ft in toUpdate)
                 {
-                    var user = allUsers.FirstOrDefault(u => u.Id?.Equals(fellowTraveler.FellowUserId, StringComparison.OrdinalIgnoreCase) == true);
-                    fellowTraveler.UserFellowName = user?.Name ?? "Неизвестный";
-                    fellowTraveler.UserFellowAvatar = user?.ProfilePhoto ?? "defoltavataricon.png";
-                    fellowTraveler.UserFellowRating = user?.Rating ?? 0.00;
-                    // Определение цвета кнопок
-                    fellowTraveler.IsCurrentUser = fellowTraveler.FellowUserId == currentUserId;
-                    fellowTraveler.MyFellowBackgroundColor = fellowTraveler.IsCurrentUser ? Color.FromArgb("#EFF4FF") : Colors.White;
-
-                    fellowTraveler.IsCurrentUserVisible = !IsTripOwner && fellowTraveler.IsCurrentUser && TripStatusId == "3"; // True, если если Я попутчик(Отпарвил запрос) и статус поездки Запланирвоан
-
-                    fellowTraveler.IsCreatorVisible = IsTripOwner && TripStatusId == "3"; // True, если если Я создатель и статус поездки Запланирвоан
-
-                    preparedList.Add(fellowTraveler);
+                    var existing = FellowUsers.FirstOrDefault(f => f.Id == ft.Id);
+                    if (existing != null)
+                    {
+                        existing.StatusId = ft.StatusId;
+                        existing.IsCurrentUserVisible = !IsTripOwner && existing.IsCurrentUser && TripStatusId == "3";
+                        existing.IsCreatorVisible = IsTripOwner && TripStatusId == "3";
+                    }
                 }
 
-                MainThread.BeginInvokeOnMainThread(() =>
+                // Добавляем новые
+                var toAdd = tripFellowTravelers.Where(ft => !FellowUsers.Any(f => f.Id == ft.Id)).ToList();
+                foreach (var ft in toAdd)
                 {
-                    // Разница: есть в старом списке, но нет в новом
-                    var toRemove = FellowUsers.Where(f => !preparedList.Any(fp => fp.Id == f.Id)).ToList();
+                    var user = allUsers.FirstOrDefault(u =>
+                        u.Id?.Equals(ft.FellowUserId, StringComparison.OrdinalIgnoreCase) == true
+                    );
 
-                    // Сначала удаляем
-                    foreach (var f in toRemove)
-                        FellowUsers.Remove(f);
+                    ft.UserFellowName = user?.Name ?? "Неизвестный";
+                    ft.UserFellowAvatar = user?.ProfilePhoto ?? "defoltavataricon.png";
+                    ft.UserFellowRating = user?.Rating ?? 0.00;
 
-                    // Потом обновляем/добавляем
-                    foreach (var item in preparedList)
-                    {
-                        var existing = FellowUsers.FirstOrDefault(fu => fu.Id == item.Id);
-                        if (existing != null)
-                        {
-                            existing.StatusId = item.StatusId;
-                        }
-                        else
-                        {
-                            FellowUsers.Add(item);
-                        }
-                    }
+                    ft.IsCurrentUser = ft.FellowUserId == currentUserId;
+                    ft.MyFellowBackgroundColor = ft.IsCurrentUser ? Color.FromArgb("#EFF4FF") : Colors.White;
 
-                    AtLeastOneFellowUser = preparedList.Any();
-                    IsFellowTravelerEmpty = !AtLeastOneFellowUser;
-                    IsMyBooking = preparedList.Any(f => f.FellowUserId == currentUserId);
-                    IsTripOwner = trip?.UserId == currentUserId;
-                    CanAcceptPassenger = trip?.SeatsQuentity > 0;
-                    AcceptButtonColor = CanAcceptPassenger ? Color.FromArgb("#21842C") : Color.FromArgb("#808080");
-                });
+                    ft.IsCurrentUserVisible = !IsTripOwner && ft.IsCurrentUser && TripStatusId == "3";
+                    ft.IsCreatorVisible = IsTripOwner && TripStatusId == "3";
+
+                    FellowUsers.Add(ft);
+                }
+
+                foreach (var ft in FellowUsers)
+                {
+                    ft.IsCreatorVisible = IsTripOwner && TripStatusId == "3";
+                }
+
+
+                AtLeastOneFellowUser = FellowUsers.Any();
+                IsFellowTravelerEmpty = !AtLeastOneFellowUser;
+                IsMyBooking = FellowUsers.Any(f => f.FellowUserId == currentUserId);
+                IsTripOwner = trip?.UserId == currentUserId;
+                CanAcceptPassenger = trip?.SeatsQuentity > 0;
+                AcceptButtonColor = CanAcceptPassenger ? Color.FromArgb("#21842C") : Color.FromArgb("#808080");
+            
                 StartReloadTimer();
             }
             catch (Exception ex)
@@ -211,7 +216,6 @@ namespace PoputkaKGAMT.ViewModel
                 FellowUsers.Remove(selectedPassenger);
 
                 IsMyBooking = false;
-                LoadFellowTravelers();
             }
             catch (Exception ex) { await Shell.Current.DisplayAlertAsync("Внимание", "Не удалось отменить бронь!\nВозможно проблемы с интернетом", "Ок"); }
         }
@@ -258,8 +262,6 @@ namespace PoputkaKGAMT.ViewModel
                         await firebase.Child("fellow_travelers").Child(otherBooking.Id).DeleteAsync();
                     }
                 }
-
-                LoadFellowTravelers();
             }
             catch (Exception ex) { await Shell.Current.DisplayAlertAsync("Внимание", "Не удалось принять пользователя!\nВозможно проблемы с интернетом", "Ок"); }
         }
