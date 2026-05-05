@@ -43,7 +43,7 @@
                     VerticalOptions="Start">
                 <!-- Данные -->
                 <Grid RowDefinitions="Auto, Auto" RowSpacing="10" Padding="3" Margin="5,0,5,0">
-                    <Grid Grid.Row="0" Padding="10,5,5,0" ColumnDefinitions="Auto, Auto, *, Auto" ColumnSpacing="10" RowDefinitions="Auto, Auto">
+                    <Grid Grid.Row="0" Padding="5,5,5,0" ColumnDefinitions="Auto, Auto, *, Auto" ColumnSpacing="10" RowDefinitions="Auto, Auto">
                         <Border Grid.Column="0" Grid.Row="0" HeightRequest="60"   
                                 WidthRequest="60"
                                 Stroke="#214484" 
@@ -70,10 +70,10 @@
                                ZIndex="2"/>
 
                         <VerticalStackLayout Grid.Column="0" Grid.Row="0" Padding="70,10,0,0" HorizontalOptions="Start"  >
-                            <Label Text="{Binding SelectedUser.UserFellowName}" FontSize="21" FontAttributes="Bold" TextColor="#214484" Padding="5,0,10,0" WidthRequest="250" LineBreakMode="TailTruncation"></Label>
+                            <Label Text="{Binding SelectedUser.UserName}" FontSize="21" FontAttributes="Bold" TextColor="#214484" Padding="5,0,10,0" WidthRequest="250" LineBreakMode="TailTruncation"></Label>
                             <Grid ColumnDefinitions="Auto,Auto" ColumnSpacing="5" Padding="0,0,0,10">
                                 <Image Grid.Column="0" Source="starrating.png" HeightRequest="27" WidthRequest="27"></Image>
-                                <Label Grid.Column="1" Text="{Binding SelectedUser.UserFellowRating}" FontSize="20" TextColor="Black" ></Label>
+                                <Label Grid.Column="1" Text="{Binding SelectedUser.UserRating}" FontSize="20" TextColor="Black" ></Label>
                             </Grid>
                         </VerticalStackLayout>
                     </Grid>
@@ -83,11 +83,31 @@
                                  Color="#214484"
                                  HorizontalOptions="Fill"/>
                         <HorizontalStackLayout Padding="0,5,0,0" Spacing="12" HorizontalOptions="Center">
-                            <Image x:Name="FirstStar" IsEnabled="True" Source="darkbluestaricon.png" HeightRequest="35" WidthRequest="35"/>
-                            <Image x:Name="SecondStar" Source="darkbluestarholeicon.png" HeightRequest="35" WidthRequest="35"/>
-                            <Image x:Name="ThirdStar" Source="darkbluestarholeicon.png" HeightRequest="35" WidthRequest="35"/>
-                            <Image x:Name="FourStar" Source="darkbluestarholeicon.png" HeightRequest="35" WidthRequest="35"/>
-                            <Image x:Name="FiveStar" Source="darkbluestarholeicon.png" HeightRequest="35" WidthRequest="35"/>
+                            <Image x:Name="FirstStar" Source="darkbluestarholeicon.png" HeightRequest="35" WidthRequest="35" IsEnabled="True">
+                                <Image.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnStarTapped" CommandParameter="1"/>
+                                </Image.GestureRecognizers>
+                            </Image>
+                            <Image x:Name="SecondStar" Source="darkbluestarholeicon.png" HeightRequest="35" WidthRequest="35" IsEnabled="True">
+                                <Image.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnStarTapped" CommandParameter="2"/>
+                                </Image.GestureRecognizers>
+                            </Image>
+                            <Image x:Name="ThirdStar" Source="darkbluestarholeicon.png" HeightRequest="35" WidthRequest="35" IsEnabled="True">
+                                <Image.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnStarTapped" CommandParameter="3"/>
+                                </Image.GestureRecognizers>
+                            </Image>
+                            <Image x:Name="FourStar" Source="darkbluestarholeicon.png" HeightRequest="35" WidthRequest="35" IsEnabled="True">
+                                <Image.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnStarTapped" CommandParameter="4"/>
+                                </Image.GestureRecognizers>
+                            </Image>
+                            <Image x:Name="FiveStar" Source="darkbluestarholeicon.png" HeightRequest="35" WidthRequest="35" IsEnabled="True">
+                                <Image.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnStarTapped" CommandParameter="5"/>
+                                </Image.GestureRecognizers>
+                            </Image>
                         </HorizontalStackLayout>
 
                         <BoxView HeightRequest="2" 
@@ -112,7 +132,8 @@
                                 MaxLength="1000"
                                 AutoSize="TextChanges"
                                 HorizontalOptions="Fill"
-                                Margin="-2,0,0,5"/>
+                                Margin="-2,0,0,5"
+                                Text="{Binding Review}"/>
 
                     </VerticalStackLayout>
                 </Grid>
@@ -147,7 +168,7 @@
             <CollectionView ItemsSource="{Binding UsersForEstimate}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <Grid Padding="0,0,0,10" RowDefinitions="Auto, Auto, Auto">
+                        <Grid RowSpacing="0" Padding="0,0,0,10" RowDefinitions="Auto, Auto, Auto">
                             <Border Grid.Row="0" Background="White"
                                     Stroke="#214484"
                                     StrokeThickness="2" 
@@ -159,7 +180,7 @@
                                             StrokeThickness="2"
                                             StrokeShape="RoundRectangle 70"
                                             HorizontalOptions="Start"
-                                            ZIndex="1">
+                                            ZIndex="98">
                                         <Image Source="defoltavataricon.png" 
                                                Aspect="AspectFill"
                                                HeightRequest="55"     
@@ -176,25 +197,61 @@
                                            HorizontalOptions="Start"
                                            VerticalOptions="End"
                                            Margin="37,0,0,0"
-                                           ZIndex="2"/>
+                                           ZIndex="99"/>
 
-                                    <VerticalStackLayout Grid.Column="0" Grid.Row="0" Padding="67,10,10,0" HorizontalOptions="Start">
-                                        <Label Text="{Binding UserFellowName}" FontSize="22" FontAttributes="Bold" TextColor="#214484" Padding="5,0,20,0" WidthRequest="225" LineBreakMode="TailTruncation"></Label>
+                                    <VerticalStackLayout 
+                                    IsEnabled="{Binding CanReview}" Grid.Column="0" Grid.Row="0" Padding="67,10,10,0" HorizontalOptions="Start">
+                                        <Label Text="{Binding UserName}" FontSize="22" FontAttributes="Bold" TextColor="#214484" Padding="5,0,20,0" WidthRequest="225" LineBreakMode="TailTruncation"></Label>
                                         <Grid ColumnDefinitions="Auto,Auto" ColumnSpacing="5">
                                             <Image Grid.Column="0" Source="starrating.png" HeightRequest="25" WidthRequest="25"></Image>
-                                            <Label Grid.Column="1" Text="{Binding UserFellowRating}" FontSize="21" TextColor="Black" ></Label>
+                                            <Label Grid.Column="1" Text="{Binding UserRating}" FontSize="21" TextColor="Black" ></Label>
                                         </Grid>
+                                        <VerticalStackLayout.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.OpenReviewFormCommand}" CommandParameter="{Binding}"/>
+                                        </VerticalStackLayout.GestureRecognizers>
                                     </VerticalStackLayout>
-
-                                    <Grid Grid.Column="0" Grid.Row="1" ColumnDefinitions="Auto,Auto" ColumnSpacing="5" Padding="-4,-5,0,0" IsVisible="{Binding FellowUserIsDriver}">
-                                        <Image Grid.Column="0" Source="carimage.png" HeightRequest="35" WidthRequest="35" VerticalOptions="Center"></Image>
-                                        <Label Grid.Column="1" Text="{Binding UserCar}" FontSize="18" TextColor="#214484" Padding="0,4,0,0"/>
-                                    </Grid>
                                 </Grid>
-                                <Border.GestureRecognizers>
-                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.OpenReviewFormCommand}" CommandParameter="{Binding}" />
-                                </Border.GestureRecognizers>
                             </Border>
+
+                            <Border Grid.Row="1" IsVisible="{Binding UserHaveReview}" 
+                                     BackgroundColor="White"
+                                     Stroke="#214484"
+                                     StrokeThickness="2"
+                                     StrokeShape="RoundRectangle 0,0,10,10"
+                                     Margin="0,-15,0,0"
+                                     HorizontalOptions="Fill"
+                                     VerticalOptions="Center">
+                                <Grid RowDefinitions="Auto, Auto, Auto">
+                                    <Label Grid.Row="0" Text="{Binding EstimateTitle}" 
+                                           BackgroundColor="Transparent"
+                                           TextColor="#214484"
+                                           FontSize="18"
+                                           FontAttributes="Bold"
+                                           HorizontalOptions="Start"                        
+                                           Padding="10,3,0,0"/>
+                                    
+                                    <Label Grid.Row="1"
+                                           IsVisible="{Binding IsUserHaveReviewForShow}"
+                                           Text="{Binding Review}" 
+                                           BackgroundColor="Transparent"
+                                           TextColor="#4167AB"
+                                           FontSize="16"
+                                           FontAttributes="Italic"
+                                           HorizontalOptions="Start" 
+                                           WidthRequest="280" 
+                                           LineBreakMode="TailTruncation"
+                                           Padding="10,-3,0,0"/>
+                                    
+                                    <Label Grid.Row="2"
+                                           Text="{Binding Created}" 
+                                           BackgroundColor="Transparent"
+                                           TextColor="#4167AB"
+                                           FontSize="16"
+                                           HorizontalOptions="Start"                        
+                                           Padding="10,5,0,3"/>
+                                </Grid>
+                            </Border>
+                            
                         </Grid>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>

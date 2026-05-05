@@ -89,6 +89,5 @@ namespace PoputkaKGAMT.Models
         [JsonIgnore]
         public bool CanAccept => StatusId != "6";
 
-        
     }
 }

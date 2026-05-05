@@ -117,7 +117,7 @@ namespace PoputkaKGAMT.ViewModel
 
                 foreach (var ft in FellowUsers)
                 {
-                    ft.IsCreatorVisible = IsTripOwner && TripStatusId == "3";
+                    ft.IsCreatorVisible = IsTripOwner && TripStatusId == "3"; 
                 }
 
 

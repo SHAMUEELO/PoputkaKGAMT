@@ -25,19 +25,26 @@ namespace PoputkaKGAMT.ViewModel
         [RelayCommand]
         public async void LoadProfilInfo()
         {
-            // Загружаем все данные о пользователях в список users
-            var allUsers = await userService.GetUsers(); 
-            Users = new ObservableCollection<UserModel>(allUsers);
+            try
+            {
+                // Загружаем все данные о пользователях в список users
+                var allUsers = await userService.GetUsers(); 
+                Users = new ObservableCollection<UserModel>(allUsers);
             
-            // Загрузка данных
-            string userKey = Preferences.Get("CurrentUserKey", "");
-            var userData = Users.FirstOrDefault(u => u.Id == userKey);
+                // Загрузка данных
+                string userKey = Preferences.Get("CurrentUserKey", "");
+                var userData = Users.FirstOrDefault(u => u.Id == userKey);
                 
-            UserName = userData.Name;
-            IsDriverProfile = userData.Isdriver;
-            IsPassengerProfile = userData.Ispassenger;
-            RatingCore = userData.Rating;
+                UserName = userData.Name;
+                IsDriverProfile = userData.Isdriver;
+                IsPassengerProfile = userData.Ispassenger;
+                RatingCore = userData.Rating;
 
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.DisplayAlertAsync("Ошибка", "Не удалось загрузить\nВозможно проблемы с интернетом\nОшибка:\n" + ex.Message, "OK");
+            }
         }
 
         [ObservableProperty]
