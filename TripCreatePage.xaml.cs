@@ -44,6 +44,12 @@ public partial class TripCreatePage : ContentPage
     {
         base.OnDisappearing();
 
+        if (BindingContext is TripCreate_ViewModel vm)
+        {
+            if (vm.NavigateToPlacePage == true)
+                return;
+        }
+
         DriverButton.IsVisible = true;
         PassengerButton.IsVisible = true;
         FormScrollView.IsVisible = false;
@@ -56,7 +62,23 @@ public partial class TripCreatePage : ContentPage
         base.OnAppearing();
         if (BindingContext is TripCreate_ViewModel vm)
         {
-            vm.LoadData();
+            var place = Preferences.Get("SelectedPlace", "");
+
+            if (!string.IsNullOrWhiteSpace(place))
+            {
+                var target = Preferences.Get("PlaceTarget", "");
+
+                if (target == "Departure")
+                    vm.DeparturePlace = place;
+                else if (target == "Arrive")
+                    vm.ArrivePlace = place;
+
+                Preferences.Remove("SelectedPlace");
+                Preferences.Remove("PlaceTarget");
+            }
+
+                vm.LoadData();
+                
         }
     }
 

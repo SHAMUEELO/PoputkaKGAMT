@@ -1,0 +1,785 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PoputkaKGAMT.VillagePage"
+             Shell.NavBarIsVisible="False"
+            Background="White">
+    <Grid RowDefinitions="Auto, Auto, *" RowSpacing="5" Padding="0,5,0,0">
+        <Border Grid.Row="0"
+                Background="#214484"
+                HeightRequest="45"
+                Margin="10,0,10,0"
+                Stroke="#214484"
+                StrokeThickness="1"
+                StrokeShape="RoundRectangle 8"
+                VerticalOptions="Start"
+                ZIndex="1">
+            <Grid Grid.Row="0" ColumnDefinitions="Auto, Auto" ColumnSpacing="10">
+                <Image Grid.Column="0" Source="backicon.png" 
+                       HorizontalOptions="Center">
+                </Image>
+
+                <Label Grid.Column="1"
+                       Text="Назад"
+                       TextColor="White"
+                       FontSize="20" 
+                       FontAttributes="Bold"
+                       Margin="-15,2,0,0"
+                       Padding="0,5,15,0"/>
+            </Grid>
+            <Border.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding GoBackCommand}" />
+            </Border.GestureRecognizers>
+        </Border>
+
+        <FlexLayout  Grid.Row="1" Direction="Row" Wrap="Wrap" JustifyContent="Start" AlignItems="Start" Padding="5,0,5,5">
+            <Button Text="А" FontSize="15" Background="#214484" TextColor="White" Margin="0,0,1,1" MaximumHeightRequest="40" MaximumWidthRequest="30" Padding="0" Clicked="OnLetterClicked" />
+            <Button Text="Б" FontSize="15" Background="#214484" TextColor="White" Margin="0,0,1,1" MaximumHeightRequest="40" MaximumWidthRequest="30" Padding="0" Clicked="OnLetterClicked"/>
+            <Button Text="В" FontSize="15" Background="#214484" TextColor="White" Margin="0,0,1,1" MaximumHeightRequest="40" MaximumWidthRequest="30" Padding="0" Clicked="OnLetterClicked"/>
+            <Button Text="Е" FontSize="15" Background="#214484" TextColor="White" Margin="0,0,1,1" MaximumHeightRequest="40" MaximumWidthRequest="30" Padding="0" Clicked="OnLetterClicked"/>
+            <Button Text="З" FontSize="15" Background="#214484" TextColor="White" Margin="0,0,1,1" MaximumHeightRequest="40" MaximumWidthRequest="30" Padding="0" Clicked="OnLetterClicked"/>
+            <Button Text="И" FontSize="15" Background="#214484" TextColor="White" Margin="0,0,1,1" MaximumHeightRequest="40" MaximumWidthRequest="30" Padding="0" Clicked="OnLetterClicked"/>
+            <Button Text="К" FontSize="15" Background="#214484" TextColor="White" Margin="0,0,1,1" MaximumHeightRequest="40" MaximumWidthRequest="30" Padding="0" Clicked="OnLetterClicked"/>
+            <Button Text="Л" FontSize="15" Background="#214484" TextColor="White" Margin="0,0,1,1" MaximumHeightRequest="40" MaximumWidthRequest="30" Padding="0" Clicked="OnLetterClicked"/>
+            <Button Text="М" FontSize="15" Background="#214484" TextColor="White" Margin="0,0,1,1" MaximumHeightRequest="40" MaximumWidthRequest="30" Padding="0" Clicked="OnLetterClicked"/>
+            <Button Text="Н" FontSize="15" Background="#214484" TextColor="White" Margin="0,0,1,1" MaximumHeightRequest="40" MaximumWidthRequest="30" Padding="0" Clicked="OnLetterClicked"/>
+            <Button Text="О" FontSize="15" Background="#214484" TextColor="White" Margin="0,0,1,1" MaximumHeightRequest="40" MaximumWidthRequest="30" Padding="0" Clicked="OnLetterClicked"/>
+            <Button Text="П" FontSize="15" Background="#214484" TextColor="White" Margin="0,0,1,1" MaximumHeightRequest="40" MaximumWidthRequest="30" Padding="0" Clicked="OnLetterClicked"/>
+            <Button Text="С" FontSize="15" Background="#214484" TextColor="White" Margin="0,0,1,1" MaximumHeightRequest="40" MaximumWidthRequest="30" Padding="0" Clicked="OnLetterClicked"/>
+            <Button Text="Т" FontSize="15" Background="#214484" TextColor="White" Margin="0,0,1,1" MaximumHeightRequest="40" MaximumWidthRequest="30" Padding="0" Clicked="OnLetterClicked"/>
+            <Button Text="У" FontSize="15" Background="#214484" TextColor="White" Margin="0,0,1,1" MaximumHeightRequest="40" MaximumWidthRequest="30" Padding="0" Clicked="OnLetterClicked"/>
+            <Button Text="Х" FontSize="15" Background="#214484" TextColor="White" Margin="0,0,1,1" MaximumHeightRequest="40" MaximumWidthRequest="30" Padding="0" Clicked="OnLetterClicked"/>
+            <Button Text="Ч" FontSize="15" Background="#214484" TextColor="White" Margin="0,0,1,1" MaximumHeightRequest="40" MaximumWidthRequest="30" Padding="0" Clicked="OnLetterClicked"/>
+            <Button Text="Ш" FontSize="15" Background="#214484" TextColor="White" Margin="0,0,1,1" MaximumHeightRequest="40" MaximumWidthRequest="30" Padding="0" Clicked="OnLetterClicked"/>
+            <Button Text="Я" FontSize="15" Background="#214484" TextColor="White" Margin="0,0,1,1" MaximumHeightRequest="40" MaximumWidthRequest="30" Padding="0" Clicked="OnLetterClicked"/>
+        </FlexLayout>
+
+        <ScrollView Grid.Row="2" x:Name="MainScroll">
+            <Grid RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto" RowSpacing="7">
+                <Grid Grid.Row="0" RowDefinitions="Auto, Auto, Auto">
+                    <BoxView Grid.Row="0" x:Name="AnchorA"
+                             HeightRequest="2" 
+                             Color="#214484"
+                             HorizontalOptions="Fill"
+                             VerticalOptions="Start"
+                             Margin="10,0,10,0"/> <!-- А -->
+                    <Label Grid.Row="1" FontAttributes="Bold" Text="А" FontSize="25" TextColor="#214484" Padding="0,0,5,0" HorizontalOptions="Center"></Label>
+                    <FlexLayout  Grid.Row="2" Direction="Row" Wrap="Wrap" JustifyContent="Start" AlignItems="Start" Padding="0,0,5,0">
+                        <Label FontAttributes="Italic" Text="Авлаш" FontSize="22" TextColor="#214484" Padding="15,0,0,10" HorizontalOptions="Start">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <Label FontAttributes="Italic" Text="," FontSize="22" TextColor="#214484" HorizontalOptions="Start"></Label>
+                        <Label FontAttributes="Italic" Text="Азьмушкино" FontSize="22" TextColor="#214484" Padding="15,0,0,10" HorizontalOptions="Start">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <Label FontAttributes="Italic" Text="," FontSize="22" TextColor="#214484" HorizontalOptions="Start"></Label>
+                        <Label FontAttributes="Italic" Text="Артамоновка" FontSize="22" TextColor="#214484" Padding="15,0,0,0" HorizontalOptions="Start">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </FlexLayout>
+                </Grid>
+                
+                <Grid Grid.Row="1" RowDefinitions="Auto, Auto, Auto">
+                    <BoxView Grid.Row="0" x:Name="AnchorB"
+                             HeightRequest="2" 
+                             Color="#214484"
+                             VerticalOptions="Start"
+                             Margin="10,0,10,0"/> <!-- Б -->
+                    <Label Grid.Row="1" FontAttributes="Bold" Text="Б" FontSize="25" TextColor="#214484" Padding="0,0,5,0" HorizontalOptions="Center"></Label>
+                    <FlexLayout  Grid.Row="2" Direction="Row" Wrap="Wrap" JustifyContent="Start" AlignItems="Start" Padding="0,0,5,0">
+                        <Label FontAttributes="Italic" Text="Бай-Буляк" FontSize="22" TextColor="#214484" Padding="15,0,0,10" HorizontalOptions="Start">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <Label FontAttributes="Italic" Text="," FontSize="22" TextColor="#214484" HorizontalOptions="Start"></Label>
+                        <Label FontAttributes="Italic" Text="Бакчасарай" FontSize="22" TextColor="#214484" Padding="15,0,0,10" HorizontalOptions="Start">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <Label FontAttributes="Italic" Text="," FontSize="22" TextColor="#214484" HorizontalOptions="Start"></Label>
+                        <Label FontAttributes="Italic" Text="Белоус" FontSize="22" TextColor="#214484" Padding="15,0,0,10" HorizontalOptions="Start">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <Label FontAttributes="Italic" Text="," FontSize="22" TextColor="#214484" HorizontalOptions="Start"></Label>
+                        <Label FontAttributes="Italic" Text="Бетьки" FontSize="22" TextColor="#214484" Padding="15,0,0,10" HorizontalOptions="Start">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <Label FontAttributes="Italic" Text="," FontSize="22" TextColor="#214484" HorizontalOptions="Start"></Label>
+                        <Label FontAttributes="Italic" Text="Биклянь" FontSize="22" TextColor="#214484" Padding="15,0,0,10" HorizontalOptions="Start">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <Label FontAttributes="Italic" Text="," FontSize="22" TextColor="#214484" HorizontalOptions="Start"></Label>
+                        <Label FontAttributes="Italic" Text="Биюрган" FontSize="22" TextColor="#214484" Padding="15,0,0,10" HorizontalOptions="Start">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <Label FontAttributes="Italic" Text="," FontSize="22" TextColor="#214484" HorizontalOptions="Start"></Label>
+                        <Label FontAttributes="Italic" Text="Бурды" FontSize="22" TextColor="#214484" Padding="15,0,0,10" HorizontalOptions="Start">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <Label FontAttributes="Italic" Text="," FontSize="22" TextColor="#214484" HorizontalOptions="Start"></Label>
+                        <Label FontAttributes="Italic" Text="Бурдыбаш" FontSize="22" TextColor="#214484" Padding="15,0,0,10" HorizontalOptions="Start">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <Label FontAttributes="Italic" Text="," FontSize="22" TextColor="#214484" HorizontalOptions="Start"></Label>
+                        <Label FontAttributes="Italic" Text="Большая Шильна" FontSize="22" TextColor="#214484" Padding="15,0,0,0" HorizontalOptions="Start">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </FlexLayout>
+                </Grid>
+                
+                <Grid Grid.Row="2" RowDefinitions="Auto, Auto, Auto, Auto">
+                    <BoxView Grid.Row="0" x:Name="AnchorV"
+                             HeightRequest="2" 
+                             Color="#214484"
+                             HorizontalOptions="Fill"
+                             VerticalOptions="Start"
+                             Margin="10,0,10,0"/> <!-- В -->
+                        <Label Grid.Row="1" FontAttributes="Bold" Text="В" FontSize="25" TextColor="#214484" Padding="0,0,5,0" HorizontalOptions="Center"></Label>
+                        <Label Grid.Row="2" FontAttributes="Italic" Text="Верхний Байлар" FontSize="22" TextColor="#214484" Padding="15,0,0,0" HorizontalOptions="Start">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                        </Label.GestureRecognizers>
+                    </Label>
+                        <Label Grid.Row="3" FontAttributes="Italic" Text="Верхний Суык-Су" FontSize="22" TextColor="#214484" Padding="15,0,0,0" HorizontalOptions="Start">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                        </Label.GestureRecognizers>
+                    </Label>
+                </Grid>
+                
+                <Grid Grid.Row="3" RowDefinitions="Auto, Auto, Auto">
+                    <BoxView Grid.Row="0" x:Name="AnchorE"
+                             HeightRequest="2" 
+                             Color="#214484"
+                             HorizontalOptions="Fill"
+                             VerticalOptions="Start"
+                             Margin="10,0,10,0"/> <!-- Е -->
+                    <Label Grid.Row="1" FontAttributes="Bold" Text="Е" FontSize="25" TextColor="#214484" Padding="0,0,5,0" HorizontalOptions="Center"></Label>
+                    <Label Grid.Row="2" FontAttributes="Italic" Text="Евлево" FontSize="22" TextColor="#214484" Padding="15,0,0,0" HorizontalOptions="Start">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                        </Label.GestureRecognizers>
+                    </Label>
+                </Grid>
+                
+                <Grid Grid.Row="4" RowDefinitions="Auto, Auto, Auto">
+                    <BoxView Grid.Row="0" x:Name="AnchorZ"
+                             HeightRequest="2" 
+                             Color="#214484"
+                             HorizontalOptions="Fill"
+                             VerticalOptions="Start"
+                             Margin="10,0,10,0"/> <!-- З -->
+                    <Label Grid.Row="1" FontAttributes="Bold" Text="З" FontSize="25" TextColor="#214484" Padding="0,0,5,0" HorizontalOptions="Center"></Label>
+                    <Label Grid.Row="2" FontAttributes="Italic" Text="Зиканни-Куль" FontSize="22" TextColor="#214484" Padding="15,0,0,0" HorizontalOptions="Start">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                        </Label.GestureRecognizers>
+                    </Label>                
+                </Grid>
+                
+                <Grid Grid.Row="5" RowDefinitions="Auto, Auto, Auto">
+                    <BoxView Grid.Row="0" x:Name="AnchorI"
+                             HeightRequest="2" 
+                             Color="#214484"
+                             HorizontalOptions="Fill"
+                             VerticalOptions="Start"
+                             Margin="10,0,10,0"/> <!-- И -->
+                    <Label Grid.Row="1" FontAttributes="Bold" Text="И" FontSize="25" TextColor="#214484" Padding="0,0,5,0" HorizontalOptions="Center"></Label>
+                    <FlexLayout  Grid.Row="2" Direction="Row" Wrap="Wrap" JustifyContent="Start" AlignItems="Start" Padding="0,0,5,0">
+                        <Label FontAttributes="Italic" Text="Игенче" FontSize="22" TextColor="#214484" Padding="15,0,0,10" HorizontalOptions="Start">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <Label FontAttributes="Italic" Text="," FontSize="22" TextColor="#214484" HorizontalOptions="Start"></Label>
+                        <Label FontAttributes="Italic" Text="Ильбухтино" FontSize="22" TextColor="#214484" Padding="15,0,0,10" HorizontalOptions="Start">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <Label FontAttributes="Italic" Text="," FontSize="22" TextColor="#214484" HorizontalOptions="Start"></Label>
+                        <Label FontAttributes="Italic" Text="Ильичевский" FontSize="22" TextColor="#214484" Padding="15,0,0,10" HorizontalOptions="Start">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <Label FontAttributes="Italic" Text="," FontSize="22" TextColor="#214484" HorizontalOptions="Start"></Label>
+                        <Label FontAttributes="Italic" Text="Ирек-Тан" FontSize="22" TextColor="#214484" Padding="15,0,0,10" HorizontalOptions="Start">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <Label FontAttributes="Italic" Text="," FontSize="22" TextColor="#214484" HorizontalOptions="Start"></Label>
+                        <Label FontAttributes="Italic" Text="Иштеряково" FontSize="22" TextColor="#214484" Padding="15,0,0,0" HorizontalOptions="Start">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </FlexLayout>
+                </Grid>
+
+                <Grid Grid.Row="6" RowDefinitions="Auto, Auto, Auto">
+                    <BoxView Grid.Row="0" x:Name="AnchorK"
+                             HeightRequest="2" 
+                             Color="#214484"
+                             HorizontalOptions="Fill"
+                             VerticalOptions="Start"
+                             Margin="10,0,10,0"/> <!-- К -->
+                    <Label Grid.Row="1" FontAttributes="Bold" Text="К" FontSize="25" TextColor="#214484" Padding="0,0,5,0" HorizontalOptions="Center"></Label>
+                    <FlexLayout  Grid.Row="2" Direction="Row" Wrap="Wrap" JustifyContent="Start" AlignItems="Start" Padding="0,0,5,0">
+                        <Label FontAttributes="Italic" Text="Казаклар" FontSize="22" TextColor="#214484" Padding="15,0,0,10" HorizontalOptions="Start">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <Label FontAttributes="Italic" Text="," FontSize="22" TextColor="#214484" HorizontalOptions="Start"></Label>
+                        <Label FontAttributes="Italic" Text="Казиле" FontSize="22" TextColor="#214484" Padding="15,0,0,10" HorizontalOptions="Start">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <Label FontAttributes="Italic" Text="," FontSize="22" TextColor="#214484" HorizontalOptions="Start"></Label>
+                        <Label FontAttributes="Italic" Text="Калинино" FontSize="22" TextColor="#214484" Padding="15,0,0,10" HorizontalOptions="Start">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <Label FontAttributes="Italic" Text="," FontSize="22" TextColor="#214484" HorizontalOptions="Start"></Label>
+                        <Label FontAttributes="Italic" Text="Калиновка" FontSize="22" TextColor="#214484" Padding="15,0,0,10" HorizontalOptions="Start">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <Label FontAttributes="Italic" Text="," FontSize="22" TextColor="#214484" HorizontalOptions="Start"></Label>
+                        <Label FontAttributes="Italic" Text="Калмаш" FontSize="22" TextColor="#214484" Padding="15,0,0,10" HorizontalOptions="Start">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <Label FontAttributes="Italic" Text="," FontSize="22" TextColor="#214484" HorizontalOptions="Start"></Label>
+                        <Label FontAttributes="Italic" Text="Калмия" FontSize="22" TextColor="#214484" Padding="15,0,0,10" HorizontalOptions="Start">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <Label FontAttributes="Italic" Text="," FontSize="22" TextColor="#214484" HorizontalOptions="Start"></Label>
+                        <Label FontAttributes="Italic" Text="Кама" FontSize="22" TextColor="#214484" Padding="15,0,0,10" HorizontalOptions="Start">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <Label FontAttributes="Italic" Text="," FontSize="22" TextColor="#214484" HorizontalOptions="Start"></Label>
+                        <Label FontAttributes="Italic" Text="Кзыл-Байрак" FontSize="22" TextColor="#214484" Padding="15,0,0,10" HorizontalOptions="Start">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <Label FontAttributes="Italic" Text="," FontSize="22" TextColor="#214484" HorizontalOptions="Start"></Label>
+                        <Label FontAttributes="Italic" Text="Кзыл-Юл" FontSize="22" TextColor="#214484" Padding="15,0,0,10" HorizontalOptions="Start">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <Label FontAttributes="Italic" Text="," FontSize="22" TextColor="#214484" HorizontalOptions="Start"></Label>
+                        <Label FontAttributes="Italic" Text="Князево" FontSize="22" TextColor="#214484" Padding="15,0,0,10" HorizontalOptions="Start">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <Label FontAttributes="Italic" Text="," FontSize="22" TextColor="#214484" HorizontalOptions="Start"></Label>
+                        <Label FontAttributes="Italic" Text="Комсомолец" FontSize="22" TextColor="#214484" Padding="15,0,0,10" HorizontalOptions="Start">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <Label FontAttributes="Italic" Text="," FontSize="22" TextColor="#214484" HorizontalOptions="Start"></Label>
+                        <Label FontAttributes="Italic" Text="Крещеное Мазино" FontSize="22" TextColor="#214484" Padding="15,0,0,10" HorizontalOptions="Start">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <Label FontAttributes="Italic" Text="," FontSize="22" TextColor="#214484" HorizontalOptions="Start"></Label>
+                        <Label FontAttributes="Italic" Text="деревня Круглое Поле" FontSize="22" TextColor="#214484" Padding="15,0,0,10" HorizontalOptions="Start">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <Label FontAttributes="Italic" Text="," FontSize="22" TextColor="#214484" HorizontalOptions="Start"></Label>
+                        <Label FontAttributes="Italic" Text="посёлок Круглое Поле" FontSize="22" TextColor="#214484" Padding="15,0,0,10" HorizontalOptions="Start">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <Label FontAttributes="Italic" Text="," FontSize="22" TextColor="#214484" HorizontalOptions="Start"></Label>
+                        <Label FontAttributes="Italic" Text="Куаклы" FontSize="22" TextColor="#214484" Padding="15,0,0,10" HorizontalOptions="Start">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <Label FontAttributes="Italic" Text="," FontSize="22" TextColor="#214484" HorizontalOptions="Start"></Label>
+                        <Label FontAttributes="Italic" Text="Кувады" FontSize="22" TextColor="#214484" Padding="15,0,0,10" HorizontalOptions="Start">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <Label FontAttributes="Italic" Text="," FontSize="22" TextColor="#214484" HorizontalOptions="Start"></Label>
+                        <Label FontAttributes="Italic" Text="Кугашево" FontSize="22" TextColor="#214484" Padding="15,0,0,10" HorizontalOptions="Start">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <Label FontAttributes="Italic" Text="," FontSize="22" TextColor="#214484" HorizontalOptions="Start"></Label>
+                        <Label FontAttributes="Italic" Text="Кузкеево" FontSize="22" TextColor="#214484" Padding="15,0,0,10" HorizontalOptions="Start">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <Label FontAttributes="Italic" Text="," FontSize="22" TextColor="#214484" HorizontalOptions="Start"></Label>
+                        <Label FontAttributes="Italic" Text="Куктяк-Мирсаитово" FontSize="22" TextColor="#214484" Padding="15,0,0,10" HorizontalOptions="Start">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <Label FontAttributes="Italic" Text="," FontSize="22" TextColor="#214484" HorizontalOptions="Start"></Label>
+                        <Label FontAttributes="Italic" Text="Кулушево" FontSize="22" TextColor="#214484" Padding="15,0,0,10" HorizontalOptions="Start">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <Label FontAttributes="Italic" Text="," FontSize="22" TextColor="#214484" HorizontalOptions="Start"></Label>
+                        <Label FontAttributes="Italic" Text="Куперле" FontSize="22" TextColor="#214484" Padding="15,0,0,10" HorizontalOptions="Start">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <Label FontAttributes="Italic" Text="," FontSize="22" TextColor="#214484" HorizontalOptions="Start"></Label>
+                        <Label FontAttributes="Italic" Text="Кырныш" FontSize="22" TextColor="#214484" Padding="15,0,0,0" HorizontalOptions="Start">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </FlexLayout>
+                </Grid>
+                
+                <Grid Grid.Row="7" RowDefinitions="Auto, Auto, Auto">
+                    <BoxView Grid.Row="0" x:Name="AnchorL"
+                             HeightRequest="2" 
+                             Color="#214484"
+                             HorizontalOptions="Fill"
+                             VerticalOptions="Start"
+                             Margin="10,0,10,0"/> <!-- Л -->
+                    <Label Grid.Row="1" FontAttributes="Bold" Text="Л" FontSize="25" TextColor="#214484" Padding="0,0,5,0" HorizontalOptions="Center"></Label>
+                    <FlexLayout  Grid.Row="2" Direction="Row" Wrap="Wrap" JustifyContent="Start" AlignItems="Start" Padding="0,0,5,0">
+                        <Label FontAttributes="Italic" Text="Левашёво" FontSize="22" TextColor="#214484" Padding="15,0,0,0" HorizontalOptions="Start">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </FlexLayout>
+                </Grid>
+                
+                <Grid Grid.Row="8" RowDefinitions="Auto, Auto, Auto">
+                    <BoxView Grid.Row="0" x:Name="AnchorM"
+                             HeightRequest="2" 
+                             Color="#214484"
+                             HorizontalOptions="Fill"
+                             VerticalOptions="Start"
+                             Margin="10,0,10,0"/> <!-- М -->
+                    <Label Grid.Row="1" FontAttributes="Bold" Text="М" FontSize="25" TextColor="#214484" Padding="0,0,5,0" HorizontalOptions="Center"></Label>
+                    <FlexLayout  Grid.Row="2" Direction="Row" Wrap="Wrap" JustifyContent="Start" AlignItems="Start" Padding="0,0,5,0">
+                        <Label FontAttributes="Italic" Text="Малая Шильна" FontSize="22" TextColor="#214484" Padding="15,0,0,10" HorizontalOptions="Start">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <Label FontAttributes="Italic" Text="," FontSize="22" TextColor="#214484" HorizontalOptions="Start"></Label>
+                        <Label FontAttributes="Italic" Text="Малтабарово" FontSize="22" TextColor="#214484" Padding="15,0,0,10" HorizontalOptions="Start">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <Label FontAttributes="Italic" Text="," FontSize="22" TextColor="#214484" HorizontalOptions="Start"></Label>
+                        <Label FontAttributes="Italic" Text="Мелекес" FontSize="22" TextColor="#214484" Padding="15,0,0,10" HorizontalOptions="Start">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <Label FontAttributes="Italic" Text="," FontSize="22" TextColor="#214484" HorizontalOptions="Start"></Label>
+                        <Label FontAttributes="Italic" Text="Мрясово" FontSize="22" TextColor="#214484" Padding="15,0,0,10" HorizontalOptions="Start">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <Label FontAttributes="Italic" Text="," FontSize="22" TextColor="#214484" HorizontalOptions="Start"></Label>
+                        <Label FontAttributes="Italic" Text="Мусабай-Завод" FontSize="22" TextColor="#214484" Padding="15,0,0,0" HorizontalOptions="Start">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </FlexLayout>
+                </Grid>
+                
+                <Grid Grid.Row="9" RowDefinitions="Auto, Auto, Auto">
+                    <BoxView Grid.Row="0" x:Name="AnchorN"
+                             HeightRequest="2" 
+                             Color="#214484"
+                             HorizontalOptions="Fill"
+                             VerticalOptions="Start"
+                             Margin="10,0,10,0"/> <!-- Н -->
+                    <Label Grid.Row="1" FontAttributes="Bold" Text="Н" FontSize="25" TextColor="#214484" Padding="0,0,5,0" HorizontalOptions="Center"></Label>
+                    <FlexLayout  Grid.Row="2" Direction="Row" Wrap="Wrap" JustifyContent="Start" AlignItems="Start" Padding="0,0,5,0">
+                        <Label FontAttributes="Italic" Text="Нефтебаза" FontSize="22" TextColor="#214484" Padding="15,0,0,10" HorizontalOptions="Start">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <Label FontAttributes="Italic" Text="," FontSize="22" TextColor="#214484" HorizontalOptions="Start"></Label>
+                        <Label FontAttributes="Italic" Text="Нижний Суык-Су" FontSize="22" TextColor="#214484" Padding="15,0,0,10" HorizontalOptions="Start">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <Label FontAttributes="Italic" Text="," FontSize="22" TextColor="#214484" HorizontalOptions="Start"></Label>
+                        <Label FontAttributes="Italic" Text="Никошновка" FontSize="22" TextColor="#214484" Padding="15,0,0,10" HorizontalOptions="Start">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <Label FontAttributes="Italic" Text="," FontSize="22" TextColor="#214484" HorizontalOptions="Start"></Label>
+                        <Label FontAttributes="Italic" Text="Новотроицкое" FontSize="22" TextColor="#214484" Padding="15,0,0,10" HorizontalOptions="Start">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <Label FontAttributes="Italic" Text="," FontSize="22" TextColor="#214484" HorizontalOptions="Start"></Label>
+                        <Label FontAttributes="Italic" Text="Новые Ерыклы" FontSize="22" TextColor="#214484" Padding="15,0,0,10" HorizontalOptions="Start">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <Label FontAttributes="Italic" Text="," FontSize="22" TextColor="#214484" HorizontalOptions="Start"></Label>
+                        <Label FontAttributes="Italic" Text="Новые Сарайлы" FontSize="22" TextColor="#214484" Padding="15,0,0,10" HorizontalOptions="Start">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <Label FontAttributes="Italic" Text="," FontSize="22" TextColor="#214484" HorizontalOptions="Start"></Label>
+                        <Label FontAttributes="Italic" Text="Новый" FontSize="22" TextColor="#214484" Padding="15,0,0,10" HorizontalOptions="Start">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <Label FontAttributes="Italic" Text="," FontSize="22" TextColor="#214484" HorizontalOptions="Start"></Label>
+                        <Label FontAttributes="Italic" Text="Новый Байлар" FontSize="22" TextColor="#214484" Padding="15,0,0,10" HorizontalOptions="Start">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <Label FontAttributes="Italic" Text="," FontSize="22" TextColor="#214484" HorizontalOptions="Start"></Label>
+                        <Label FontAttributes="Italic" Text="Новый Мусабай" FontSize="22" TextColor="#214484" Padding="15,0,0,0" HorizontalOptions="Start">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </FlexLayout>
+                </Grid>
+                
+                <Grid Grid.Row="10" RowDefinitions="Auto, Auto, Auto">
+                    <BoxView Grid.Row="0" x:Name="AnchorO"
+                             HeightRequest="2" 
+                             Color="#214484"
+                             HorizontalOptions="Fill"
+                             VerticalOptions="Start"
+                             Margin="10,0,10,0"/> <!-- О -->
+                    <Label Grid.Row="1" FontAttributes="Bold" Text="О" FontSize="25" TextColor="#214484" Padding="0,0,5,0" HorizontalOptions="Center"></Label>
+                    <FlexLayout  Grid.Row="2" Direction="Row" Wrap="Wrap" JustifyContent="Start" AlignItems="Start" Padding="0,0,5,0">
+                        <Label FontAttributes="Italic" Text="Октябрь-Буляк" FontSize="22" TextColor="#214484" Padding="15,0,0,10" HorizontalOptions="Start">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <Label FontAttributes="Italic" Text="," FontSize="22" TextColor="#214484" HorizontalOptions="Start"></Label>
+                        <Label FontAttributes="Italic" Text="Опушка" FontSize="22" TextColor="#214484" Padding="15,0,0,10" HorizontalOptions="Start">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <Label FontAttributes="Italic" Text="," FontSize="22" TextColor="#214484" HorizontalOptions="Start"></Label>
+                        <Label FontAttributes="Italic" Text="Останково" FontSize="22" TextColor="#214484" Padding="15,0,0,0" HorizontalOptions="Start">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </FlexLayout>
+                </Grid>
+                            
+                <Grid Grid.Row="11" RowDefinitions="Auto, Auto, Auto">
+                    <BoxView Grid.Row="0" x:Name="AnchorP"
+                             HeightRequest="2" 
+                             Color="#214484"
+                             HorizontalOptions="Fill"
+                             VerticalOptions="Start"
+                             Margin="10,0,10,0"/> <!-- П -->
+                    <Label Grid.Row="1" FontAttributes="Bold" Text="П" FontSize="25" TextColor="#214484" Padding="0,0,5,0" HorizontalOptions="Center"></Label>
+                    <FlexLayout  Grid.Row="2" Direction="Row" Wrap="Wrap" JustifyContent="Start" AlignItems="Start" Padding="0,0,5,0">
+                        <Label FontAttributes="Italic" Text="Подгорный Дрюш" FontSize="22" TextColor="#214484" Padding="15,0,0,0" HorizontalOptions="Start">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </FlexLayout>
+                </Grid>
+                
+                <Grid Grid.Row="12" RowDefinitions="Auto, Auto, Auto">
+                    <BoxView Grid.Row="0" x:Name="AnchorS"
+                             HeightRequest="2" 
+                             Color="#214484"
+                             HorizontalOptions="Fill"
+                             VerticalOptions="Start"
+                             Margin="10,0,10,0"/> <!-- С -->
+                    <Label Grid.Row="1" FontAttributes="Bold" Text="С" FontSize="25" TextColor="#214484" Padding="0,0,5,0" HorizontalOptions="Center"></Label>
+                    <FlexLayout  Grid.Row="2" Direction="Row" Wrap="Wrap" JustifyContent="Start" AlignItems="Start" Padding="0,0,5,0">
+                        <Label FontAttributes="Italic" Text="Саитово" FontSize="22" TextColor="#214484" Padding="15,0,0,10" HorizontalOptions="Start">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <Label FontAttributes="Italic" Text="," FontSize="22" TextColor="#214484" HorizontalOptions="Start"></Label>
+                        <Label FontAttributes="Italic" Text="Салих-Тукай" FontSize="22" TextColor="#214484" Padding="15,0,0,10" HorizontalOptions="Start">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <Label FontAttributes="Italic" Text="," FontSize="22" TextColor="#214484" HorizontalOptions="Start"></Label>
+                        <Label FontAttributes="Italic" Text="Семекеево" FontSize="22" TextColor="#214484" Padding="15,0,0,10" HorizontalOptions="Start">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <Label FontAttributes="Italic" Text="," FontSize="22" TextColor="#214484" HorizontalOptions="Start"></Label>
+                        <Label FontAttributes="Italic" Text="Совхоз «Татарстан»" FontSize="22" TextColor="#214484" Padding="15,0,0,10" HorizontalOptions="Start">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <Label FontAttributes="Italic" Text="," FontSize="22" TextColor="#214484" HorizontalOptions="Start"></Label>
+                        <Label FontAttributes="Italic" Text="Сосновый Бор" FontSize="22" TextColor="#214484" Padding="15,0,0,10" HorizontalOptions="Start">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <Label FontAttributes="Italic" Text="," FontSize="22" TextColor="#214484" HorizontalOptions="Start"></Label>
+                        <Label FontAttributes="Italic" Text="Старое Абдулово" FontSize="22" TextColor="#214484" Padding="15,0,0,10" HorizontalOptions="Start">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <Label FontAttributes="Italic" Text="," FontSize="22" TextColor="#214484" HorizontalOptions="Start"></Label>
+                        <Label FontAttributes="Italic" Text="Старое Клянчино" FontSize="22" TextColor="#214484" Padding="15,0,0,10" HorizontalOptions="Start">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <Label FontAttributes="Italic" Text="," FontSize="22" TextColor="#214484" HorizontalOptions="Start"></Label>
+                        <Label FontAttributes="Italic" Text="Старые Гардали" FontSize="22" TextColor="#214484" Padding="15,0,0,10" HorizontalOptions="Start">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <Label FontAttributes="Italic" Text="," FontSize="22" TextColor="#214484" HorizontalOptions="Start"></Label>
+                        <Label FontAttributes="Italic" Text="Старые Ерыклы" FontSize="22" TextColor="#214484" Padding="15,0,0,10" HorizontalOptions="Start">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <Label FontAttributes="Italic" Text="," FontSize="22" TextColor="#214484" HorizontalOptions="Start"></Label>
+                        <Label FontAttributes="Italic" Text="Старый Байлар" FontSize="22" TextColor="#214484" Padding="15,0,0,10" HorizontalOptions="Start">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <Label FontAttributes="Italic" Text="," FontSize="22" TextColor="#214484" HorizontalOptions="Start"></Label>
+                        <Label FontAttributes="Italic" Text="Старый Дрюш" FontSize="22" TextColor="#214484" Padding="15,0,0,10" HorizontalOptions="Start">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <Label FontAttributes="Italic" Text="," FontSize="22" TextColor="#214484" HorizontalOptions="Start"></Label>
+                        <Label FontAttributes="Italic" Text="Суровка" FontSize="22" TextColor="#214484" Padding="15,0,0,0" HorizontalOptions="Start">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </FlexLayout>
+                </Grid>
+
+                <Grid Grid.Row="13" RowDefinitions="Auto, Auto, Auto">
+                    <BoxView Grid.Row="0" x:Name="AnchorT"
+                             HeightRequest="2" 
+                             Color="#214484"
+                             HorizontalOptions="Fill"
+                             VerticalOptions="Start"
+                             Margin="10,0,10,0"/>
+                    <!-- Т -->
+                    <Label Grid.Row="1" FontAttributes="Bold" Text="Т" FontSize="25" TextColor="#214484" Padding="0,0,5,0" HorizontalOptions="Center"></Label>
+                    <FlexLayout  Grid.Row="2" Direction="Row" Wrap="Wrap" JustifyContent="Start" AlignItems="Start" Padding="0,0,5,0">
+                        <Label FontAttributes="Italic" Text="Тавларово" FontSize="22" TextColor="#214484" Padding="15,0,0,10" HorizontalOptions="Start">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <Label FontAttributes="Italic" Text="," FontSize="22" TextColor="#214484" HorizontalOptions="Start"></Label>
+                        <Label FontAttributes="Italic" Text="Таулык" FontSize="22" TextColor="#214484" Padding="15,0,0,10" HorizontalOptions="Start">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <Label FontAttributes="Italic" Text="," FontSize="22" TextColor="#214484" HorizontalOptions="Start"></Label>
+                        <Label FontAttributes="Italic" Text="Таш-Кичу" FontSize="22" TextColor="#214484" Padding="15,0,0,10" HorizontalOptions="Start">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <Label FontAttributes="Italic" Text="," FontSize="22" TextColor="#214484" HorizontalOptions="Start"></Label>
+                        <Label FontAttributes="Italic" Text="Тлянче-Тамак" FontSize="22" TextColor="#214484" Padding="15,0,0,10" HorizontalOptions="Start">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <Label FontAttributes="Italic" Text="," FontSize="22" TextColor="#214484" HorizontalOptions="Start"></Label>
+                        <Label FontAttributes="Italic" Text="Тогаево" FontSize="22" TextColor="#214484" Padding="15,0,0,10" HorizontalOptions="Start">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <Label FontAttributes="Italic" Text="," FontSize="22" TextColor="#214484" HorizontalOptions="Start"></Label>
+                        <Label FontAttributes="Italic" Text="Торнаташ" FontSize="22" TextColor="#214484" Padding="15,0,0,10" HorizontalOptions="Start">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <Label FontAttributes="Italic" Text="," FontSize="22" TextColor="#214484" HorizontalOptions="Start"></Label>
+                        <Label FontAttributes="Italic" Text="Туирово" FontSize="22" TextColor="#214484" Padding="15,0,0,0" HorizontalOptions="Start">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </FlexLayout>
+                </Grid>
+                
+                <Grid Grid.Row="14" RowDefinitions="Auto, Auto, Auto">
+                    <BoxView Grid.Row="0" x:Name="AnchorY"
+                             HeightRequest="2" 
+                             Color="#214484"
+                             HorizontalOptions="Fill"
+                             VerticalOptions="Start"
+                             Margin="10,0,10,0"/> <!-- У -->
+                    <Label Grid.Row="1" FontAttributes="Bold" Text="У" FontSize="25" TextColor="#214484" Padding="0,0,5,0" HorizontalOptions="Center"></Label>
+                    <FlexLayout  Grid.Row="2" Direction="Row" Wrap="Wrap" JustifyContent="Start" AlignItems="Start" Padding="0,0,5,0">
+                        <Label FontAttributes="Italic" Text="Ургуда" FontSize="22" TextColor="#214484" Padding="15,0,0,0" HorizontalOptions="Start">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </FlexLayout>
+                </Grid>
+                
+                <Grid Grid.Row="15" RowDefinitions="Auto, Auto, Auto">
+                    <BoxView Grid.Row="0" x:Name="AnchorH"
+                             HeightRequest="2" 
+                             Color="#214484"
+                             HorizontalOptions="Fill"
+                             VerticalOptions="Start"
+                             Margin="10,0,10,0"/> <!-- Х -->
+                    <Label Grid.Row="1" FontAttributes="Bold" Text="Х" FontSize="25" TextColor="#214484" Padding="0,0,5,0" HorizontalOptions="Center"></Label>
+                    <FlexLayout  Grid.Row="2" Direction="Row" Wrap="Wrap" JustifyContent="Start" AlignItems="Start" Padding="0,0,5,0">
+                        <Label FontAttributes="Italic" Text="Хузеево" FontSize="22" TextColor="#214484" Padding="15,0,0,0" HorizontalOptions="Start">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </FlexLayout>
+                </Grid>
+                
+                <Grid Grid.Row="16" RowDefinitions="Auto, Auto, Auto">
+                    <BoxView Grid.Row="0" x:Name="AnchorCH"
+                             HeightRequest="2" 
+                             Color="#214484"
+                             HorizontalOptions="Fill"
+                             VerticalOptions="Start"
+                             Margin="10,0,10,0"/> <!-- Ч -->
+                    <Label Grid.Row="1" FontAttributes="Bold" Text="Ч" FontSize="25" TextColor="#214484" Padding="0,0,5,0" HorizontalOptions="Center"></Label>
+                    <FlexLayout  Grid.Row="2" Direction="Row" Wrap="Wrap" JustifyContent="Start" AlignItems="Start" Padding="0,0,5,0">
+                        <Label FontAttributes="Italic" Text="Чершелы" FontSize="22" TextColor="#214484" Padding="15,0,0,0" HorizontalOptions="Start">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </FlexLayout>
+                </Grid>
+                
+                <Grid Grid.Row="17" RowDefinitions="Auto, Auto, Auto">
+                    <BoxView Grid.Row="0" x:Name="AnchorSH"
+                             HeightRequest="2" 
+                             Color="#214484"
+                             HorizontalOptions="Fill"
+                             VerticalOptions="Start"
+                             Margin="10,0,10,0"/> <!-- Ш -->
+                    <Label Grid.Row="1" FontAttributes="Bold" Text="Ш" FontSize="25" TextColor="#214484" Padding="0,0,5,0" HorizontalOptions="Center"></Label>
+                    <FlexLayout  Grid.Row="2" Direction="Row" Wrap="Wrap" JustifyContent="Start" AlignItems="Start" Padding="0,0,5,0">
+                        <Label FontAttributes="Italic" Text="Шильнебаш" FontSize="22" TextColor="#214484" Padding="15,0,0,10" HorizontalOptions="Start">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <Label FontAttributes="Italic" Text="," FontSize="22" TextColor="#214484" HorizontalOptions="Start"></Label>
+                        <Label FontAttributes="Italic" Text="Шукрале" FontSize="22" TextColor="#214484" Padding="15,0,0,0" HorizontalOptions="Start">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </FlexLayout>
+                </Grid>
+                
+                <Grid Grid.Row="18" RowDefinitions="Auto, Auto, Auto">
+                    <BoxView Grid.Row="0" x:Name="AnchorYA"
+                             HeightRequest="2" 
+                             Color="#214484"
+                             HorizontalOptions="Fill"
+                             VerticalOptions="Start"
+                             Margin="10,0,10,0"/> <!-- Я -->
+                    <Label Grid.Row="1" FontAttributes="Bold" Text="Я" FontSize="25" TextColor="#214484" Padding="0,0,5,0" HorizontalOptions="Center"></Label>
+                    <FlexLayout  Grid.Row="2" Direction="Row" Wrap="Wrap" JustifyContent="Start" AlignItems="Start" Padding="0,0,5,0">
+                        <Label FontAttributes="Italic" Text="Яна-Буляк" FontSize="22" TextColor="#214484" Padding="15,0,0,0" HorizontalOptions="Start">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </FlexLayout>
+                </Grid>
+            </Grid>
+        </ScrollView>
+    </Grid>
+</ContentPage>

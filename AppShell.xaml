@@ -37,6 +37,10 @@
     <ShellContent ContentTemplate="{DataTemplate local:FellowTravelerPage}" Route="FellowTravelerPage"/>
     <ShellContent ContentTemplate="{DataTemplate local:CheckProfilePage}" Route="CheckProfilePage"/>
     <ShellContent ContentTemplate="{DataTemplate local:TripRatingPage}" Route="TripRatingPage"/>
+    <ShellContent ContentTemplate="{DataTemplate local:PlacePage}" Route="PlacePage"/>
+    <ShellContent ContentTemplate="{DataTemplate local:NaberezhnyeChelnyPage}" Route="NaberezhnyeChelnyPage"/>
+    <ShellContent ContentTemplate="{DataTemplate local:OtherCityPage}" Route="OtherCityPage"/>
+    <ShellContent ContentTemplate="{DataTemplate local:VillagePage}" Route="VillagePage"/>
 
 </Shell>
     

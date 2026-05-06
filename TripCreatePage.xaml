@@ -131,10 +131,30 @@
                                 HeightRequest="50"
                                 Margin="0,0,50,0"
                                 Padding="2">
-                            <Picker FontSize="16"
-                                    ItemsSource="{Binding Places}"
-                                    ItemDisplayBinding="{Binding Name}"
-                                    SelectedItem="{Binding SelectedDeparturePlace}"/>
+                            <Grid>
+                                <Label FontSize="16"
+                                       HorizontalOptions="Start"
+                                       TextColor="Black"
+                                       Text="{Binding DeparturePlace}" 
+                                       Margin="5,0,0,0"
+                                       Padding="0,10,0,0"
+                                       ZIndex="1">
+                                </Label>
+                            <BoxView HeightRequest="1" 
+                                     Color="Black"
+                                     HorizontalOptions="Fill"
+                                     VerticalOptions="End"
+                                     Margin="5,0,5,8"/>
+                                <BoxView HeightRequest="20" 
+                                     Color="White"
+                                     HorizontalOptions="Fill"
+                                     VerticalOptions="Fill"
+                                     ZIndex="0">
+                                    <BoxView.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding GoPlacePageCommand}" CommandParameter="Departure"/>
+                                    </BoxView.GestureRecognizers>
+                                </BoxView>
+                            </Grid>
                         </Border>
                     </Grid>
 
@@ -160,10 +180,30 @@
                                 HeightRequest="50"
                                 Margin="0,0,50,0"
                                 Padding="2">
-                            <Picker FontSize="16"
-                                    ItemsSource="{Binding Places}"
-                                    ItemDisplayBinding="{Binding Name}"
-                                    SelectedItem="{Binding SelectedArrivePlace}"/>
+                            <Grid>
+                                <Label FontSize="16"
+                                       HorizontalOptions="Start"
+                                       TextColor="Black"
+                                       Text="{Binding ArrivePlace}" 
+                                       Margin="5,0,0,0"
+                                       Padding="0,10,0,0"
+                                       ZIndex="1">
+                                </Label>
+                                <BoxView HeightRequest="1" 
+                                         Color="Black"
+                                         HorizontalOptions="Fill"
+                                         VerticalOptions="End"
+                                         Margin="5,0,5,8"/>
+                                <BoxView HeightRequest="20" 
+                                         Color="White"
+                                         HorizontalOptions="Fill"
+                                         VerticalOptions="Fill"
+                                         ZIndex="0">
+                                    <BoxView.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding GoPlacePageCommand}" CommandParameter="Arrive"/>
+                                    </BoxView.GestureRecognizers>
+                                </BoxView>
+                            </Grid>
                         </Border>
                     </Grid>
 
@@ -373,14 +413,14 @@
                                Padding="0,9,0,0"></Label>
                     </Grid>
 
-                    <!-- Описание -->
+                    <!-- Детали -->
                     <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8">
                         <Image Grid.Column="0" 
                                Source="aboutimage.png"
                                HeightRequest="30" WidthRequest="30"
                                VerticalOptions="Center"/>
                         <Label Grid.Column="1" 
-                               Text="Описание"
+                               Text="Детали"
                                FontSize="24" 
                                TextColor="#214484"
                                VerticalOptions="Center"/>

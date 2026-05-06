@@ -91,5 +91,7 @@ namespace PoputkaKGAMT.Services
                 Console.WriteLine("Error in BackgroundUpdateService: " + ex.Message);
             }
         }
+
+
     }
 }

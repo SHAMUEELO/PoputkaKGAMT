@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PoputkaKGAMT.OtherCityPage"
+                      Shell.NavBarIsVisible="False"
+         Background="White">
+    <Grid RowDefinitions="Auto, Auto, Auto, Auto" RowSpacing="10" Padding="0,5,0,0">
+        <Border Grid.Row="0"
+                Background="#214484"
+                HeightRequest="45"
+                Margin="10,0,10,0"
+                Stroke="#214484"
+                StrokeThickness="1"
+                StrokeShape="RoundRectangle 8"
+                VerticalOptions="Start"
+                ZIndex="1"> 
+            <Grid Grid.Row="0" ColumnDefinitions="Auto, Auto" ColumnSpacing="10">
+                <Image Grid.Column="0" Source="backicon.png" 
+                       HorizontalOptions="Center">
+                </Image>
+
+                <Label Grid.Column="1"
+                   Text="Назад"
+                   TextColor="White"
+                   FontSize="20" 
+                   FontAttributes="Bold"
+                   Margin="-15,2,0,0"
+                   Padding="0,5,15,0"/>
+            </Grid>
+            <Border.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding GoBackCommand}" />
+            </Border.GestureRecognizers>
+        </Border>
+
+        <Label Grid.Row="1" FontAttributes="Italic" Text="Елабуга" FontSize="30" TextColor="#214484" Padding="15,5,5,0" HorizontalOptions="Start">
+            <Label.GestureRecognizers>
+                <TapGestureRecognizer Tapped="OnPlaceTapped" />
+            </Label.GestureRecognizers>
+        </Label>
+        <Label Grid.Row="2" FontAttributes="Italic" Text="Менделеевск" FontSize="30" TextColor="#214484" Padding="15,5,5,0" HorizontalOptions="Start">
+            <Label.GestureRecognizers>
+                <TapGestureRecognizer Tapped="OnPlaceTapped" />
+            </Label.GestureRecognizers>
+        </Label>
+        <Label Grid.Row="3" FontAttributes="Italic" Text="Нижнекамск" FontSize="30" TextColor="#214484" Padding="15,5,5,0" HorizontalOptions="Start">
+            <Label.GestureRecognizers>
+                <TapGestureRecognizer Tapped="OnPlaceTapped" />
+            </Label.GestureRecognizers>
+        </Label>
+        
+    </Grid>
+</ContentPage>

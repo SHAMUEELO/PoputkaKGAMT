@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PoputkaKGAMT.NaberezhnyeChelnyPage"
+             Shell.NavBarIsVisible="False"
+             Background="White">
+    <Grid RowDefinitions="Auto, *" RowSpacing="5" Padding="0,5,0,0">
+        <Border Grid.Row="0"
+            Background="#214484"
+            HeightRequest="45"
+            Margin="10,0,10,0"
+            Stroke="#214484"
+            StrokeThickness="1"
+            StrokeShape="RoundRectangle 8"
+            VerticalOptions="Start"
+            ZIndex="1">
+            <Grid Grid.Row="0" ColumnDefinitions="Auto, Auto" ColumnSpacing="10">
+                <Image Grid.Column="0" Source="backicon.png" 
+                   HorizontalOptions="Center">
+                </Image>
+
+                <Label Grid.Column="1"
+                   Text="Назад"
+                   TextColor="White"
+                   FontSize="20" 
+                   FontAttributes="Bold"
+                   Margin="-15,2,0,0"
+                   Padding="0,5,15,0"/>
+            </Grid>
+            <Border.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding GoBackCommand}" />
+            </Border.GestureRecognizers>
+        </Border>
+
+        <ScrollView  Grid.Row="1" >
+            <Grid RowDefinitions="Auto, Auto, Auto, Auto, Auto">
+                <Grid Grid.Row="0" RowDefinitions="Auto, Auto, Auto, Auto, Auto">
+                    <BoxView Grid.Row="0" 
+                             HeightRequest="3" 
+                             Color="#214484"
+                             HorizontalOptions="Fill"
+                             VerticalOptions="Start"
+                             Margin="10,0,10,0"/>
+                    <Label Grid.Row="1" FontAttributes="Bold" Text="ГЭС" FontSize="25" TextColor="#214484" Padding="0,0,5,0" HorizontalOptions="Center"></Label>
+                    <Label Grid.Row="2" FontAttributes="Italic" Text="ост. Студенческая" FontSize="22" TextColor="#214484" Padding="15,0,5,0" HorizontalOptions="Start">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                        </Label.GestureRecognizers>
+                    </Label>
+                    <Label Grid.Row="3" FontAttributes="Italic" Text="ост. Универсам" FontSize="22" TextColor="#214484" Padding="15,5,5,0" HorizontalOptions="Start">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                        </Label.GestureRecognizers>
+                    </Label>
+                    <Label Grid.Row="4" FontAttributes="Italic" Text="ост. Центральная" FontSize="22" TextColor="#214484" Padding="15,5,5,10" HorizontalOptions="Start">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                        </Label.GestureRecognizers>
+                    </Label>
+                </Grid>
+                <Grid Grid.Row="1" RowDefinitions="Auto, Auto, Auto, Auto, Auto">
+                    <BoxView Grid.Row="0" 
+                             HeightRequest="3" 
+                             Color="#214484"
+                             HorizontalOptions="Fill"
+                             VerticalOptions="Start"
+                             Margin="10,0,10,0"/>
+                    <Label Grid.Row="1" FontAttributes="Bold" Text="Замелекесье" FontSize="25" TextColor="#214484" Padding="0,0,5,0" HorizontalOptions="Center"></Label>
+                    <Label Grid.Row="2" FontAttributes="Italic" Text="ост. Гостева" FontSize="22" TextColor="#214484" Padding="15,0,5,0" HorizontalOptions="Start">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                        </Label.GestureRecognizers>
+                    </Label>
+                    <Label Grid.Row="3" FontAttributes="Italic" Text="ост. Фоменко" FontSize="22" TextColor="#214484" Padding="15,5,5,0" HorizontalOptions="Start">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                        </Label.GestureRecognizers>
+                    </Label>
+                    <Label Grid.Row="4" FontAttributes="Italic" Text="ост. 20-й квартал" FontSize="22" TextColor="#214484" Padding="15,5,5,10" HorizontalOptions="Start">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                        </Label.GestureRecognizers>
+                    </Label>
+                </Grid>
+                <Grid Grid.Row="2" RowDefinitions="Auto, Auto, Auto, Auto, Auto">
+                    <BoxView Grid.Row="0" 
+                             HeightRequest="3" 
+                             Color="#214484"
+                             HorizontalOptions="Fill"
+                             VerticalOptions="Start"
+                             Margin="10,0,10,0"/>
+                    <Label Grid.Row="1" FontAttributes="Bold" Text="ЗЯБ" FontSize="25" TextColor="#214484" Padding="0,0,5,0" HorizontalOptions="Center"></Label>
+                    <Label Grid.Row="2" FontAttributes="Italic" Text="ост. Бумажников" FontSize="22" TextColor="#214484" Padding="15,0,5,0" HorizontalOptions="Start">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                        </Label.GestureRecognizers>
+                    </Label>
+                    <Label Grid.Row="3" FontAttributes="Italic" Text="ост. Пединститут" FontSize="22" TextColor="#214484" Padding="15,5,5,0" HorizontalOptions="Start">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                        </Label.GestureRecognizers>
+                    </Label>
+                    <Label Grid.Row="4" FontAttributes="Italic" Text="ост. 8-я школа" FontSize="22" TextColor="#214484" Padding="15,5,5,10" HorizontalOptions="Start">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                        </Label.GestureRecognizers>
+                    </Label>
+                </Grid>
+                <Grid Grid.Row="3" RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto, Auto">
+                    <BoxView Grid.Row="0" 
+                             HeightRequest="3" 
+                             Color="#214484"
+                             HorizontalOptions="Fill"
+                             VerticalOptions="Start"
+                             Margin="10,0,10,0"/>
+                    <Label Grid.Row="1" FontAttributes="Bold" Text="Новый Город" FontSize="25" TextColor="#214484" Padding="0,0,5,0" HorizontalOptions="Center"></Label>
+                    <Label Grid.Row="2" FontAttributes="Italic" Text="ост. Медгородок" FontSize="22" TextColor="#214484" Padding="15,0,5,0" HorizontalOptions="Start">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                        </Label.GestureRecognizers>
+                    </Label>
+                    <Label Grid.Row="3" FontAttributes="Italic" Text="ост. Рынок" FontSize="22" TextColor="#214484" Padding="15,5,5,0" HorizontalOptions="Start">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                        </Label.GestureRecognizers>
+                    </Label>
+                    <Label Grid.Row="4" FontAttributes="Italic" Text="ост. Кафе уют" FontSize="22" TextColor="#214484" Padding="15,5,5,0" HorizontalOptions="Start">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                        </Label.GestureRecognizers>
+                    </Label>
+                    <Label Grid.Row="5" FontAttributes="Italic" Text="ост. КамПи" FontSize="22" TextColor="#214484" Padding="15,5,5,0" HorizontalOptions="Start">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                        </Label.GestureRecognizers>
+                    </Label>
+                    <Label Grid.Row="6" FontAttributes="Italic" Text="ост. Проспект Чулман" FontSize="22" TextColor="#214484" Padding="15,5,5,10" HorizontalOptions="Start">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                        </Label.GestureRecognizers>
+                    </Label>
+                </Grid>
+            </Grid>
+        </ScrollView>
+    </Grid>
+</ContentPage>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PoputkaKGAMT.PlacePage"
+             Shell.NavBarIsVisible="False"
+             Background="White">
+    <Grid RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto" RowSpacing="10" Padding="0,5,0,0">
+        <Border Grid.Row="0"
+                Background="#214484"
+                HeightRequest="45"
+                Margin="10,0,10,0"
+                Stroke="#214484"
+                StrokeThickness="1"
+                StrokeShape="RoundRectangle 8"
+                VerticalOptions="Start"
+                ZIndex="1">
+            <Grid Grid.Row="0" ColumnDefinitions="Auto, Auto" ColumnSpacing="10">
+                <Image Grid.Column="0" Source="backicon.png" 
+                       HorizontalOptions="Center">
+                </Image>
+
+                <Label Grid.Column="1"
+                       Text="Назад"
+                       TextColor="White"
+                       FontSize="20" 
+                       FontAttributes="Bold"
+                       Margin="-15,2,0,0"
+                       Padding="0,5,15,0"/>
+            </Grid>
+            <Border.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding GoBackCommand}" />
+            </Border.GestureRecognizers>
+        </Border>
+
+
+        <Label Grid.Row="1" FontAttributes="Bold" Text="Набережные Челны >" FontSize="28" TextColor="#214484" Padding="15,5,10,0" HorizontalOptions="Start">
+            <Label.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding GoNaberezhnyeChelnyPageCommand}" />
+            </Label.GestureRecognizers>
+        </Label>
+
+        <Label Grid.Row="2" FontAttributes="Bold" Text="Ближайшие города >" FontSize="28" TextColor="#214484" Padding="15,5,10,0" HorizontalOptions="Start">
+            <Label.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding GoOtherCityPageCommand}" />
+            </Label.GestureRecognizers>
+        </Label>
+
+        <Label Grid.Row="3" FontAttributes="Bold" Text="Пригород >" FontSize="28" TextColor="#214484" Padding="15,5,10,0" HorizontalOptions="Start">
+            <Label.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding GoVillagePageCommand}" />
+            </Label.GestureRecognizers>
+        </Label>
+
+        <Grid Grid.Row="4" RowDefinitions="Auto, Auto, Auto">
+            <BoxView Grid.Row="0" 
+                     HeightRequest="3" 
+                     Color="#214484"
+                     HorizontalOptions="Fill"
+                     VerticalOptions="Start"
+                     Margin="10,0,10,0"/>
+            <FlexLayout  Grid.Row="2" Direction="Row" Wrap="Wrap" JustifyContent="Start" AlignItems="Start" Padding="5,0,5,0">
+                <Label FontAttributes="Italic" Text="КГАМТ" FontSize="25" TextColor="#214484" Padding="15,10,0,10" HorizontalOptions="Start">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                    </Label.GestureRecognizers>
+                </Label>
+                <Label FontAttributes="Italic" Text="," FontSize="25" Padding="0,10,0,0"  TextColor="#214484" HorizontalOptions="Start"></Label>
+                <Label FontAttributes="Italic" Text="ост. Автостанция" FontSize="25" TextColor="#214484" Padding="15,10,0,10" HorizontalOptions="Start">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnPlaceTapped" />
+                    </Label.GestureRecognizers>
+                </Label>
+            </FlexLayout>
+        </Grid>
+    </Grid>
+</ContentPage>

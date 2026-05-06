@@ -17,7 +17,7 @@ namespace PoputkaKGAMT.ViewModel
 {
    
 
-    partial class TripCreate_ViewModel : ObservableObject
+    public partial class TripCreate_ViewModel : ObservableObject
     {
         // Подключение к БД
         private FirebaseClient firebase = new FirebaseClient("https://poputka-datebase-default-rtdb.europe-west1.firebasedatabase.app/");
@@ -49,12 +49,15 @@ namespace PoputkaKGAMT.ViewModel
 
         [ObservableProperty]
         private bool isDriver;
-        
+
 
         // Форма заполнения //
         // 1. Откуда - Куда 
         [ObservableProperty]
-        private PlaceModel selectedDeparturePlace, selectedArrivePlace;
+        private string departurePlace;
+
+        [ObservableProperty]
+        private string arrivePlace;
 
         // 2. Время и дата
         [ObservableProperty]
@@ -96,13 +99,15 @@ namespace PoputkaKGAMT.ViewModel
         [ObservableProperty]
         private string description;
 
+        [ObservableProperty]
+        public bool navigateToPlacePage;
 
         [RelayCommand]
         private async Task GoPublish()
         {
             IsDriver = !App.IsPassenger;
 
-            if (SelectedDeparturePlace == null || SelectedArrivePlace == null ||
+            if (DeparturePlace == null || ArrivePlace == null ||
                 string.IsNullOrWhiteSpace(Price))
             {
                 await Shell.Current.DisplayAlertAsync("Внимание", "Заполните поля!", "OK");
@@ -120,19 +125,19 @@ namespace PoputkaKGAMT.ViewModel
                 Price = "0"; return;
             }
             // проверка корректности использования мест отьезда
-            if (SelectedDeparturePlace.Name == SelectedArrivePlace.Name)
+            if (DeparturePlace == ArrivePlace)
             {
                 await Shell.Current.DisplayAlertAsync("Внимание", "Место отъезда и прибытия не могут быть одинаковыми!", "OK");
                 return;
             }
-            else if ((SelectedDeparturePlace.Name == "КГАМТ" || SelectedDeparturePlace.Name == "Автостанция ост.") &&
-                    (SelectedArrivePlace.Name == "КГАМТ" || SelectedArrivePlace.Name == "Автостанция ост."))
+            else if ((DeparturePlace == "КГАМТ" || DeparturePlace == "ост. Автостанция") &&
+                    (ArrivePlace == "КГАМТ" || ArrivePlace == "ост. Автостанция"))
             {
                 await Shell.Current.DisplayAlertAsync("Внимание", "Нельзя ехать между КГАМТ и Автостанцией!", "OK");
                 return;
             }
-            else if ((SelectedArrivePlace.Name != "КГАМТ" && SelectedArrivePlace.Name != "Автостанция ост.") &&
-                    (SelectedDeparturePlace.Name != "КГАМТ" && SelectedDeparturePlace.Name != "Автостанция ост."))
+            else if ((ArrivePlace != "КГАМТ" && ArrivePlace != "ост. Автостанция") &&
+                    (DeparturePlace != "КГАМТ" && DeparturePlace != "ост. Автостанция"))
             {
                 await Shell.Current.DisplayAlertAsync("Внимание", "Выезд или приезд возможен только через КГАМТ или о.Автостанция", "OK");
                 return;
@@ -141,11 +146,6 @@ namespace PoputkaKGAMT.ViewModel
             else if (!Regex.IsMatch(CarDescription, @"^.+, \d{3}, .+$") && IsDriver == true)
             {
                 await Shell.Current.DisplayAlertAsync("Внимание", "Требуется формат: \"Лада Гранта, 123, белый\"", "OK");
-                return;
-            }
-            else if (string.IsNullOrWhiteSpace(Description))
-            {
-                await Shell.Current.DisplayAlertAsync("Внимание", "Обязательно заполните описание!\nУкажите точное место отъезда и/или прибытия", "Ок");
                 return;
             }
             else if (string.IsNullOrWhiteSpace(Price) || !int.TryParse(Price.Trim(), out _))
@@ -181,8 +181,8 @@ namespace PoputkaKGAMT.ViewModel
                     {
                         id = "",
                         user_id = UserId,
-                        departure_id = SelectedDeparturePlace.Id,
-                        arrive_id = SelectedArrivePlace.Id,
+                        departure = DeparturePlace, //departure_id
+                        arrive = ArrivePlace, // arrive_id
                         status_id = "3",
                         is_driver = IsDriver,
                         time = $"{SelectedTime.Hours:D2}:{SelectedTime.Minutes:D2}",  // "15:45"
@@ -208,10 +208,10 @@ namespace PoputkaKGAMT.ViewModel
                     await Shell.Current.DisplayAlertAsync("Успешно", "Поездка создана", "OK"); //добавить картинку с галочкой . Вопрос, как оформить такие DisplayAlertAsync
                     await Shell.Current.GoToAsync("//SearchResultPage");
 
+                    NavigateToPlacePage = false;
 
-
-                    SelectedDeparturePlace = null;
-                    SelectedArrivePlace = null;
+                    DeparturePlace = null;
+                    ArrivePlace = null;
                     Price = "";
                     CarDescription = "";
                     Description = "";
@@ -247,6 +247,16 @@ namespace PoputkaKGAMT.ViewModel
                 }
             }
             return true;
+        }
+
+        // Места
+        [RelayCommand]
+        private async Task GoPlacePage(string target)
+        {
+            NavigateToPlacePage = true;
+            Preferences.Set("PlaceTarget", target);
+            Preferences.Set("PreviousPage", "TripCreatePage");
+            await Shell.Current.GoToAsync("//PlacePage");
         }
 
         [RelayCommand]

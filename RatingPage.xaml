@@ -33,12 +33,12 @@
         </Border>
 
         <BoxView Grid.Row="1"
-                HeightRequest="125" 
+                HeightRequest="110" 
                 Color="WhiteSmoke"
                 HorizontalOptions="Fill"/>
         <Grid Grid.Row="1" ColumnDefinitions="*,*" ColumnSpacing="5" >
             <Label Grid.Column="0"  Text="0,00"
-                   FontSize="60"
+                   FontSize="50"
                    FontAttributes="Bold"
                    TextColor="#214484"
                    HorizontalOptions="Start"
@@ -48,8 +48,8 @@
 
             <Image Grid.Column="1" Grid.Row="0" Source="starrating.png"
                    VerticalOptions="Center"
-                   HeightRequest="110"
-                   WidthRequest="110"/>
+                   HeightRequest="90"
+                   WidthRequest="90"/>
         </Grid>
 
         <!-- Разделитель -->
@@ -68,7 +68,7 @@
 
 
 
-        <VerticalStackLayout Grid.Row="4" Padding="20,-5,0,5" Spacing="5">
+        <VerticalStackLayout Grid.Row="4" Padding="20,-5,0,0" Spacing="3">
             <Grid ColumnDefinitions="Auto, *" Padding="0,0,5,0">
                 <Label Grid.Column="0" 
                        Text="Отлично" 

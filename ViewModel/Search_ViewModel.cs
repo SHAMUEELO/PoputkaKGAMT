@@ -7,7 +7,7 @@ using PoputkaKGAMT.Services;
 
 namespace PoputkaKGAMT.ViewModel
 {
-    internal partial class Search_ViewModel : ObservableObject
+    public partial class Search_ViewModel : ObservableObject
     {
         // Подключение к БД
         private FirebaseClient firebase = new FirebaseClient("https://poputka-datebase-default-rtdb.europe-west1.firebasedatabase.app/");
@@ -37,10 +37,14 @@ namespace PoputkaKGAMT.ViewModel
             await Browser.OpenAsync("https://www.auto-meh.ru/", BrowserLaunchMode.SystemPreferred);
         }
 
+        // 1. Откуда - Куда 
         [ObservableProperty]
-        PlaceModel selectedDeparturePlace, selectedArrivePlace;
+        private string departurePlaceSearchPage;
 
-        // Время и дата
+        [ObservableProperty]
+        private string arrivePlaceSearchPage;
+
+        // 2. Время и дата
         [ObservableProperty]
         private DateTime selectedDate;
         public DateTime MinDate => DateTime.Today;
@@ -71,42 +75,45 @@ namespace PoputkaKGAMT.ViewModel
         {
             try
             {
-                if (SelectedDeparturePlace == null || SelectedArrivePlace == null)
+                if (DeparturePlaceSearchPage == null || ArrivePlaceSearchPage == null)
                 {
                     await Shell.Current.DisplayAlertAsync("Внимание", "Заполните поля!", "OK");
                     return;
                 }
 
-                if (SelectedDeparturePlace.Name == SelectedArrivePlace.Name)
+                if (DeparturePlaceSearchPage == ArrivePlaceSearchPage)
                 {
                     await Shell.Current.DisplayAlertAsync("Внимание", "Место отъезда и прибытия не могут быть одинаковыми!", "OK");
                     return;
                 }
-                else if ((SelectedDeparturePlace.Name == "КГАМТ" || SelectedDeparturePlace.Name == "Автостанция ост.") &&
-                        (SelectedArrivePlace.Name == "КГАМТ" || SelectedArrivePlace.Name == "Автостанция ост."))
+                else if ((DeparturePlaceSearchPage == "КГАМТ" || DeparturePlaceSearchPage == "ост. Автостанция") &&
+                        (ArrivePlaceSearchPage == "КГАМТ" || ArrivePlaceSearchPage == "ост. Автостанция"))
                 {
                     await Shell.Current.DisplayAlertAsync("Внимание", "Нельзя ехать между КГАМТ и Автостанцией!", "OK");
                     return;
                 }
-                else if ((SelectedArrivePlace.Name != "КГАМТ" && SelectedArrivePlace.Name != "Автостанция ост.") &&
-                        (SelectedDeparturePlace.Name != "КГАМТ" && SelectedDeparturePlace.Name != "Автостанция ост."))
+                else if ((ArrivePlaceSearchPage != "КГАМТ" && ArrivePlaceSearchPage != "ост. Автостанция") &&
+                        (DeparturePlaceSearchPage != "КГАМТ" && DeparturePlaceSearchPage != "ост. Автостанция"))
                 {
                     await Shell.Current.DisplayAlertAsync("Внимание", "Выезд или приезд возможен только через КГАМТ или о.Автостанция", "OK");
                     return;
                 }
                 else
                 {
-                    SearchDeparturePlace = SelectedDeparturePlace.Name;
-                    SearchArrivePlace = SelectedArrivePlace.Name;
+                    SearchDeparturePlace = DeparturePlaceSearchPage;
+                    SearchArrivePlace = ArrivePlaceSearchPage;
                     SearchDate = SelectedDate;
                     SearchPassengerCount = SelectedPessengerQuentity;
-                    Preferences.Set("SearchDeparturePlace", SelectedDeparturePlace.Name);
-                    Preferences.Set("SearchArrivePlace", SelectedArrivePlace.Name);
+                    Preferences.Set("SearchDeparturePlace", DeparturePlaceSearchPage);
+                    Preferences.Set("SearchArrivePlace", ArrivePlaceSearchPage);
                     Preferences.Set("SearchDate", SelectedDate.Ticks);
                     Preferences.Set("SearchPassengerCount", SelectedPessengerQuentity);
 
                     App.Parameters = true;
                     await Shell.Current.GoToAsync("//SearchResultPage");
+
+                    DeparturePlaceSearchPage = null;
+                    ArrivePlaceSearchPage = null;
                 }
             }
             catch (Exception ex)
@@ -130,6 +137,15 @@ namespace PoputkaKGAMT.ViewModel
             App.Parameters = false;
             await Shell.Current.GoToAsync("//SearchResultPage");
         }
-        
+
+        // Места
+        [RelayCommand]
+        private async Task GoPlacePage(string target)
+        {
+            Preferences.Set("PlaceTarget", target);
+            Preferences.Set("PreviousPage", "SearchPage");
+            await Shell.Current.GoToAsync("//PlacePage");
+        }
+
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System.Text.Json.Serialization;
 
 namespace PoputkaKGAMT.Models
 {
@@ -32,6 +33,30 @@ namespace PoputkaKGAMT.Models
         [JsonPropertyName("createdAt")]
         public string Registration { get; set; } = "";
 
+        [JsonPropertyName("one_star")]
+        public int OneStar { get; set; }
+        [JsonPropertyName("two_star")]
+        public int TwoStar { get; set; }
+        [JsonPropertyName("three_star")]
+        public int ThreeStar { get; set; }
+        [JsonPropertyName("four_star")]
+        public int FourStar { get; set; }
+        [JsonPropertyName("five_star")]
+        public int FiveStar { get; set; }
 
+        [JsonPropertyName("total_ratings")]
+        private int TotalRatings;
+
+        public double avgRating
+        {
+            get
+            {
+                int total = OneStar + TwoStar + ThreeStar + FourStar + FiveStar;
+                return total > 0
+                    ? Math.Round((1 * OneStar + 2 * TwoStar + 3 * ThreeStar + 4 * FourStar + 5 * FiveStar) / (double)total, 1)
+                    : 0;
+            }
+        }
     }
 }
+    
