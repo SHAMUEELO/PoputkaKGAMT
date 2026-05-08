@@ -23,10 +23,12 @@ namespace PoputkaKGAMT.ViewModel
         private FirebaseClient firebase = new FirebaseClient("https://poputka-datebase-default-rtdb.europe-west1.firebasedatabase.app/");
 
         private readonly PlaceService placeService;
+        private readonly UserService userService;
 
         public TripCreate_ViewModel()
         {
             placeService = new PlaceService();
+            userService = new UserService();
             LoadData();
 
             selectedTime = new TimeSpan(15, 45, 0);
@@ -39,17 +41,25 @@ namespace PoputkaKGAMT.ViewModel
         [ObservableProperty]
         private string userId;
 
+        [RelayCommand]
         public async void LoadData()
         {
             var allPlaces = await placeService.GetPlaces();
             Places = new ObservableCollection<PlaceModel>(allPlaces);
 
             UserId = Preferences.Get("CurrentUserKey", "");
+
+            var allUsers = await userService.GetUsers();
+            var userData = allUsers.FirstOrDefault(u => u.Id == UserId);
+
+            if (!string.IsNullOrWhiteSpace(userData?.ModelOfCar) && userData.ModelOfCar != "Не указано")
+            {
+                CarDescription = userData.ModelOfCar;
+            }
         }
 
         [ObservableProperty]
         private bool isDriver;
-
 
         // Форма заполнения //
         // 1. Откуда - Куда 
@@ -78,9 +88,45 @@ namespace PoputkaKGAMT.ViewModel
         [ObservableProperty]
         private string price;
 
-        // 5. Модель машины*
+        // 5. Модель машины
+        // Выбор из списков - 1. Модель
         [ObservableProperty]
-        private string carDescription = "";
+        private string[] carrModel = new[]
+        {
+            "Lada Granta",
+            "Vesta",
+            "Niva",
+            "Kia Rio",
+            "Hyundai Solaris",
+            "Volkswagen Polo",
+            "Renault Sandero",
+        };
+        [ObservableProperty]
+        private string selectedCarrModel;
+
+        // Выбор из списков - 2. Номер
+        [ObservableProperty]
+        private string carNumber;
+
+        // Выбор из списков - 3. Цвет
+        [ObservableProperty]
+        private string[] carrColor = new[]
+        {
+            "Белый",
+            "Черный",
+            "Серый",
+            "Синий",
+            "Коричневый",
+            "Красный",
+            "Жёлтый",
+        };
+        [ObservableProperty]
+        private string selectedCarrColor;
+
+        // Ручной ввод
+        [ObservableProperty]
+        private string carDescription;
+
 
         // 6. Дополнительное
         [ObservableProperty]
@@ -106,6 +152,7 @@ namespace PoputkaKGAMT.ViewModel
         private async Task GoPublish()
         {
             IsDriver = !App.IsPassenger;
+            CarNumber = CarNumber?.Trim();
 
             if (DeparturePlace == null || ArrivePlace == null ||
                 string.IsNullOrWhiteSpace(Price))
@@ -142,12 +189,6 @@ namespace PoputkaKGAMT.ViewModel
                 await Shell.Current.DisplayAlertAsync("Внимание", "Выезд или приезд возможен только через КГАМТ или о.Автостанция", "OK");
                 return;
             }
-            // Проверка корректности написания модели машиины
-            else if (!Regex.IsMatch(CarDescription, @"^.+, \d{3}, .+$") && IsDriver == true)
-            {
-                await Shell.Current.DisplayAlertAsync("Внимание", "Требуется формат: \"Лада Гранта, 123, белый\"", "OK");
-                return;
-            }
             else if (string.IsNullOrWhiteSpace(Price) || !int.TryParse(Price.Trim(), out _))
             {
                 await Shell.Current.DisplayAlertAsync("Внимание", "Укажите стоимость поездки или введите корректный формат", "Ок");
@@ -167,11 +208,114 @@ namespace PoputkaKGAMT.ViewModel
             {
                 // Меняем на нужный формат 
                 Description = Description?.Trim();
-                CarDescription = CarDescription?.Trim();
                 Price = Price?.Trim();
 
-                string normalizedCar = Regex.Replace(CarDescription.Trim(), @"\s*,\s*", ", ").Trim();
+                // ===== Проверка и выбор автомобиля =====
+                string manualCarDescription = CarDescription?.Trim() ?? "";
 
+                // Проверяем, заполнена ли каждая из 3 переменных из Picker:
+                bool modelFilled = !string.IsNullOrWhiteSpace(SelectedCarrModel);
+                bool numberFilled = !string.IsNullOrWhiteSpace(CarNumber);
+                bool colorFilled = !string.IsNullOrWhiteSpace(SelectedCarrColor);
+
+                // Считаем, сколько из трёх полей заполнено: 0, 1, 2 или 3
+                int filledCount = (modelFilled ? 1 : 0) + (numberFilled ? 1 : 0) + (colorFilled ? 1 : 0);
+                bool hasAnyPickerCar = filledCount > 0; // true, если заполнено хотя бы одно поле Picker
+                bool hasPickerCar = filledCount == 3; // true, если заполнены все 3 поля Picker
+                bool hasManualCar = !string.IsNullOrWhiteSpace(manualCarDescription); // true, если заполнен ручной ввод CarDescription.
+
+                if (hasAnyPickerCar)
+                {
+                    if (!Regex.IsMatch(CarNumber ?? "", @"^\d{3}$"))
+                    {
+                        await Shell.Current.DisplayAlertAsync("Внимание", "Номер автомобиля должен состоять ровно из 3 цифр!", "OK");
+                        CarNumber = "";
+                        return;
+                    }
+
+                    if (!int.TryParse(CarNumber, out int number) || number <= 0)
+                    {
+                        await Shell.Current.DisplayAlertAsync("Внимание", "Номер автомобиля должен быть положительным!", "OK");
+                        CarNumber = "";
+                        return;
+                    }
+                }
+
+                // 1) Если заполнено 1 или 2 поля picker, а CarDescription пустой
+                if (hasAnyPickerCar && !hasPickerCar && !hasManualCar)
+                {
+                    await Shell.Current.DisplayAlertAsync("Внимание","Если используете поля Модель, Номер и Цвет, заполните их все,\nлибо вручную напишите автомобиль","OK");
+                    return;
+                }
+
+                // 2) Если заполнено 1 или 2 поля picker, а CarDescription заполнен
+                if (hasAnyPickerCar && !hasPickerCar && hasManualCar)
+                {
+                    if (!Regex.IsMatch(manualCarDescription, @"^.+, \d{3}, .+$")) // Проверяем, что ручной ввод соответствует формату
+                    {
+                        await Shell.Current.DisplayAlertAsync("Внимание","Ручной ввод автомобиля должен быть строго в формате: Лада Гранта, 123, белый","OK");
+                        return;
+                    }
+
+                    // Спрашиваем пользователя: оставить ручной ввод или нет
+                    bool useManualCar = await Shell.Current.DisplayAlertAsync("Выбор автомобиля","Вы указали свой автомобиль, но поля Модель / Номер / Цвет заполнены не полностью.\n\nИспользовать ручной ввод?","Да","Нет");
+
+                    if (useManualCar == true)
+                    {
+                        CarDescription = manualCarDescription;
+                    }
+                    else
+                    {
+                        await Shell.Current.DisplayAlertAsync("Внимание", "Заполните все три поля: Модель, Номер и Цвет","OK");
+                        return;
+                    }
+                }
+
+                // 3) Если ничего не заполнено вообще
+                if (!hasAnyPickerCar && !hasManualCar)
+                {
+                    await Shell.Current.DisplayAlertAsync("Внимание","Укажите автомобиль: либо заполните Модель, Номер и Цвет, либо укажите вручную","OK");
+                    return;
+                }
+
+                // 4) Если CarDescription заполнен и picker заполнен полностью
+                string fullCarDescription = hasPickerCar ? $"{SelectedCarrModel}, {CarNumber}, {SelectedCarrColor}" : ""; // Собираем строку вида: "Модель, Номер, Цвет"
+
+                string carForTrip; // Итоговая строка автомобиля, которую будем отправлять дальше
+
+                // Если заполнены и Picker-поля, и CarDescription
+                if (hasPickerCar && hasManualCar)
+                {
+                    // Спрашиваем, какой вариант оставить: Picker или ручной ввод
+                    bool usePickerCar = await Shell.Current.DisplayAlertAsync("Выбор автомобиля","Заполнены и Модель/Номер/Цвет, и поле с ручным вводом\n\nИспользовать автомобиль составленный из списков?","Да","Нет");
+
+                    // Если выбрали Picker — берём fullCarDescription, а если нет — берём ручной ввод.
+                    carForTrip = usePickerCar ? fullCarDescription : manualCarDescription;
+
+                    // Если выбрали ручной ввод, но он не соответствует формату — ошибка
+                    if (!usePickerCar && !Regex.IsMatch(manualCarDescription, @"^.+, \d{3}, .+$"))
+                    {
+                        await Shell.Current.DisplayAlertAsync("Внимание", "Ручной ввод автомобиля должен быть строго в формате: Лада Гранта, 123, белый","OK");
+                        return;
+                    }
+                }
+                else if (hasPickerCar) // Если заполнены только 3 поля Picker
+                {
+                    carForTrip = fullCarDescription;
+                }
+                else // Иначе остаётся только ручной ввод
+                {
+                    if (!Regex.IsMatch(manualCarDescription, @"^.+, \d{3}, .+$"))
+                    {
+                        await Shell.Current.DisplayAlertAsync("Внимание","Ручной ввод автомобиля должен быть строго в формате: Лада Гранта, 123, белый","OK");
+                        return;
+                    }
+
+                    carForTrip = manualCarDescription;
+                }
+
+                // Убираем лишние пробелы вокруг запятых, а затем меняем формат для БД 
+                string normalizedCar = Regex.Replace(carForTrip.Trim(), @"\s*,\s*", ", ").Trim();
                 string newCarDescription = Regex.Replace(normalizedCar, ",", " -");
 
                 try
@@ -214,6 +358,9 @@ namespace PoputkaKGAMT.ViewModel
                     ArrivePlace = null;
                     Price = "";
                     CarDescription = "";
+                    SelectedCarrModel = "";
+                    CarNumber = "";
+                    SelectedCarrColor = "";
                     Description = "";
                     SelectedTime = new TimeSpan(15, 45, 0);
                     SelectedDate = DateTime.Today;

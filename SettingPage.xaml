@@ -51,20 +51,27 @@
             
             <Grid ColumnDefinitions="Auto, *" ColumnSpacing="15">
                 <Image Grid.Column="0" 
-                       Source="usernamesetting.png"
-                       HeightRequest="50"
-                       WidthRequest="50"
-                       Margin="15,0,0,0"
+                       Source="wheeliconresult.png"
+                       HeightRequest="45"
+                       WidthRequest="45"
+                       Margin="18,0,0,0"
                        HorizontalOptions="Start"/>
-                <Label Grid.Column="1" 
-                       Margin="0,5,0,0"
-                       Text="Изменить имя" 
-                       TextColor="#214484"
-                       FontSize="23">
-                    <Label.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding ChangeUserNameCommand}" />
-                    </Label.GestureRecognizers>
-                </Label>
+                <Grid Grid.Column="1" RowDefinitions="Auto, Auto">
+                    <Label Grid.Row="0"
+                           Text="Указать автомобиль" 
+                           TextColor="#214484"
+                           FontSize="23">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding ChangeCarCommand}" />
+                        </Label.GestureRecognizers>
+                    </Label>
+                    <Label Grid.Row="1" 
+                           Margin="0,-2,0,0"
+                           Text="{Binding CarModellText}" 
+                           TextColor="Gray"
+                           FontSize="15">
+                    </Label>
+                </Grid>
             </Grid>
         </VerticalStackLayout>
 

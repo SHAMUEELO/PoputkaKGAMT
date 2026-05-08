@@ -10,6 +10,14 @@ public partial class SettingPage : ContentPage
 		BindingContext = new Setting_ViewModel();
 
     }
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+        if (BindingContext is Setting_ViewModel vm)
+        {
+            vm.LoadData();
+        }
+    }
 
     protected override bool OnBackButtonPressed()
     {

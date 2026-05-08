@@ -102,7 +102,7 @@
                     Stroke="#214484"
                     StrokeThickness="2"
                     HeightRequest="110" 
-                    WidthRequest="115"
+                    WidthRequest="110"
                     StrokeShape="RoundRectangle 10"
                     Padding="15,10">
                 <VerticalStackLayout Spacing="4" VerticalOptions="Center" HorizontalOptions="Center">
@@ -116,8 +116,8 @@
                     BackgroundColor="#EFF4FF"
                     Stroke="#214484"
                     StrokeThickness="2"
-                    HeightRequest="120"  
-                    WidthRequest="120"
+                    HeightRequest="115"  
+                    WidthRequest="112"
                     HorizontalOptions="Center"
                     VerticalOptions="Center"
                     StrokeShape="RoundRectangle 10"
@@ -137,7 +137,7 @@
                 Stroke="#214484"
                 StrokeThickness="2"
                 HeightRequest="110"
-                WidthRequest="115"
+                WidthRequest="110"
                 StrokeShape="RoundRectangle 10"
                 Padding="15,10">
                 <VerticalStackLayout Spacing="4" VerticalOptions="Center" HorizontalOptions="Center">

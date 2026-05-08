@@ -29,8 +29,8 @@ namespace PoputkaKGAMT.ViewModel
 
         private async void LoadUserEmail() 
         { 
-            var emailList = await userService.GetEmailsOnly();
-            AllEmails = emailList.ToArray();
+            //var emailList = await userService.GetEmailsOnly();
+            //AllEmails = emailList.ToArray();
         }
 
         // Проверка корректной формы почты
@@ -67,11 +67,7 @@ namespace PoputkaKGAMT.ViewModel
                     return;
                 }
 
-                if (!AllEmails.Any())  // Если emails не загрузились 
-                {
-                    await Shell.Current.DisplayAlertAsync("Внимание", "Не удалось загрузить данные! Проверьте интернет соединение.", "OK");
-                    return;
-                }
+                
                 foreach (var emailOnDB in AllEmails)
                 { 
                     if (Email == emailOnDB)
@@ -104,6 +100,7 @@ namespace PoputkaKGAMT.ViewModel
                     isdriver = 0,    
                     ispassenger = 0,
                     rating_core = 0.00,
+                    user_car = "Не указано",
                     createdAt = DateTime.Now.ToString("dd.MM.yyyy")
                 };
 

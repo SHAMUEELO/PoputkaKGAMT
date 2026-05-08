@@ -1,36 +1,59 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Firebase.Auth;
 using Firebase.Database;
 using Firebase.Database.Query;
 using Microsoft.Maui.Media;
 using Microsoft.Maui.Storage;
 using PoputkaKGAMT.Models;
+using PoputkaKGAMT.Services;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Numerics;
+using System.Text.RegularExpressions;
 
 
 namespace PoputkaKGAMT.ViewModel
 {
 
-    internal partial class Setting_ViewModel : ObservableObject
+    public partial class Setting_ViewModel : ObservableObject
     {
         // Подключение к БД
         private FirebaseClient firebase = new FirebaseClient("https://poputka-datebase-default-rtdb.europe-west1.firebasedatabase.app/");
-
-
-        [RelayCommand]
-        public async Task GoBack()
+        private readonly UserService userService;
+        public Setting_ViewModel()
         {
-            await Shell.Current.GoToAsync("//ProfilePage");
+            userService = new UserService();
         }
 
+        [ObservableProperty]
+        private string carModellText;
+
+        [RelayCommand]
+        public async void LoadData()
+        {
+            try
+            {
+                string userKey = Preferences.Get("CurrentUserKey", "");
+
+                var allUsers = await userService.GetUsers();
+                var userData = allUsers.FirstOrDefault(u => u.Id == userKey);
+
+                CarModellText = string.IsNullOrWhiteSpace(userData?.ModelOfCar) ? "Не загружена с БД" : userData.ModelOfCar;
+            }
+            catch (Exception ex)
+            {
+                CarModellText = "Не загружена с БД";
+            }
+        }
 
 
         // Изменение аватара
         [RelayCommand]
-        private async Task ChangeAvatar() { 
-        
-            
+        private async Task ChangeAvatar() 
+        { 
             string userKey = Preferences.Get("CurrentUserKey", "");
-
             
             try
             {
@@ -61,31 +84,56 @@ namespace PoputkaKGAMT.ViewModel
         }
 
 
-        // Изменение имени
+        // Изменение Модели машины
         [RelayCommand]
-        private async Task ChangeUserName() {
+        private async Task ChangeCar() {
 
-            string newName = await Shell.Current.DisplayPromptAsync("Измение имени", "Введите новое имя", "Сохранить", "Отмена", "Имя пользователя", keyboard: Keyboard.Text);
+            string newCar = await Shell.Current.DisplayPromptAsync("Укажите детали автомобиля", "Введите детали строго по формату:\nмодель машины, три номера, цвет", "Сохранить", "Отмена", "Лада Гранта, 123, белый", keyboard: Keyboard.Text);
             string userKey = Preferences.Get("CurrentUserKey", "");
 
-            if (string.IsNullOrEmpty(newName)) return;
-
-            if (newName.Length > 48)
+            if (newCar == null)
             {
-                await Shell.Current.DisplayAlertAsync("Внимание", "Длина имени не должна превышать 50 символов", "OK");
+                if (CarModellText != "Не указано")
+                {
+                    bool deleteCar = await Shell.Current.DisplayAlertAsync("Удаление автомобиля","Хотите-ли удалить сохранённый автомобиль?","Да","Нет");
+
+                    if (deleteCar == true)
+                    {
+                        var updateCar = new Dictionary<string, object>
+                        {
+                            ["user_car"] = "Не указано"
+                        };
+
+                        await firebase.Child("users").Child(userKey).PatchAsync(updateCar);
+                        CarModellText = "Не указано";
+                    }
+                }
+
                 return;
             }
 
+            // Проверка корректности написания модели машиины
+            if (!Regex.IsMatch(newCar, @"^.+, \d{3}, .+$"))
+            {
+                await Shell.Current.DisplayAlertAsync("Внимание", "Требуется формат: \"Модель машины, три номера, цвет\"", "OK");
+                return;
+            }
+            
+            newCar = newCar?.Trim();
+
+            string normalizedCar = Regex.Replace(newCar.Trim(), @"\s*,\s*", ", ").Trim();
+
             try
             {
-                var updateName = new Dictionary<string, object>
+                var updateCar = new Dictionary<string, object>
                 {
-                    ["name"] = newName
+                    ["user_car"] = normalizedCar
                 }; 
-                await firebase.Child("users").Child(userKey).PatchAsync(updateName);
-                await Shell.Current.DisplayAlertAsync("Успешно!", $"Предыдущая имя изменена на {newName}", "OK");
+                await firebase.Child("users").Child(userKey).PatchAsync(updateCar);
+                await Shell.Current.DisplayAlertAsync("Успешно!", $"Автомобиль {normalizedCar}", "OK");
+                LoadData();
             }
-            catch (Exception ex) { await Shell.Current.DisplayAlertAsync("Ошибка", "Не удалось изменить имя\n" + ex.Message ,"Ок");  }
+            catch (Exception ex) { await Shell.Current.DisplayAlertAsync("Ошибка", "Не удалось изменить/указать автомобиль\n" + ex.Message ,"Ок");  }
             
         }
 
@@ -94,6 +142,7 @@ namespace PoputkaKGAMT.ViewModel
         {
             return System.Text.RegularExpressions.Regex.IsMatch(Email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$");
         }
+
         // Изменение почты
         [RelayCommand]
         private async Task ChangeEmail()
@@ -201,6 +250,12 @@ namespace PoputkaKGAMT.ViewModel
             }
             catch (Exception ex) { await Shell.Current.DisplayAlertAsync("Ошибка", ex.Message, "OK");  }
 
+        }
+
+        [RelayCommand]
+        public async Task GoBack()
+        {
+            await Shell.Current.GoToAsync("//ProfilePage");
         }
     }
 }

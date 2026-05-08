@@ -82,7 +82,7 @@
                         IsVisible="False" 
                         Padding="10" 
                         Margin="7">
-                <VerticalStackLayout Spacing="10">
+                <VerticalStackLayout Spacing="7">
                     <Grid ColumnDefinitions="Auto, Auto" ColumnSpacing="10">
                         <Border Grid.Column="0"
                                 Background="#214484"
@@ -320,6 +320,7 @@
                     </Grid>
 
 
+                    
                     <!-- Модель авто -->
                     <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8" x:Name="OnlyDriverForm" IsVisible="False">
                         <Image Grid.Column="0" 
@@ -334,6 +335,61 @@
                                TextColor="#214484"
                                VerticalOptions="Center"/>
                     </Grid>
+                    <!-- Выбор -->
+                    <!-- Модель -->
+                    <Label Text="Модель" FontSize="20" TextColor="#214484" FontAttributes="Italic" x:Name="OnlyDriverFormLabel1" IsVisible="False"></Label>
+                    <Grid ColumnDefinitions="Auto,225" ColumnSpacing="8" x:Name="OnlyDriverFormBorder1" IsVisible="False">
+                        <Label Grid.Column="0" Text="|" FontSize="30" TextColor="#214484"></Label>
+                        <Border Grid.Column="1"
+                                Stroke="#214484"
+                                StrokeThickness="1.5"
+                                StrokeShape="RoundRectangle 10"
+                                HeightRequest="50"
+                                Margin="0,0,50,0"
+                                Padding="2">
+                            <Picker FontSize="16"
+                                    BackgroundColor="White"
+                                    ItemsSource="{Binding CarrModel}"
+                                    SelectedItem="{Binding SelectedCarrModel, Mode=TwoWay}" />
+                        </Border>
+                    </Grid>
+                    <!-- Номер -->
+                    <Label Text="Номер" FontSize="20" TextColor="#214484" FontAttributes="Italic" x:Name="OnlyDriverFormLabel2" IsVisible="False"></Label>
+                    <Grid ColumnDefinitions="Auto,225" ColumnSpacing="8" x:Name="OnlyDriverFormBorder2" IsVisible="False">
+                        <Label Grid.Column="0" Text="|" FontSize="30" TextColor="#214484"></Label>
+                        <Border Grid.Column="1"
+                                Stroke="#214484"
+                                StrokeThickness="1.5"
+                                StrokeShape="RoundRectangle 10"
+                                HeightRequest="50"
+                                Margin="0,0,50,0"
+                                Padding="2">
+                            <Entry FontSize="16"
+                                   BackgroundColor="White"                
+                                   Keyboard="Numeric"
+                                   Text="{Binding CarNumber, Mode=TwoWay}"
+                                   Completed="Entry_CarNumberCompleted"/>
+                        </Border>
+                    </Grid>
+                    <!-- Цвет -->
+                    <Label Text="Цвет" FontSize="20" TextColor="#214484" FontAttributes="Italic" x:Name="OnlyDriverFormLabel3" IsVisible="False"></Label>
+                    <Grid ColumnDefinitions="Auto,225" ColumnSpacing="8" x:Name="OnlyDriverFormBorder3" IsVisible="False">
+                        <Label Grid.Column="0" Text="|" FontSize="30" TextColor="#214484"></Label>
+                        <Border Grid.Column="1"
+                                Stroke="#214484"
+                                StrokeThickness="1.5"
+                                StrokeShape="RoundRectangle 10"
+                                HeightRequest="50"
+                                Margin="0,0,50,0"
+                                Padding="2">
+                            <Picker FontSize="16"
+                                    BackgroundColor="White"
+                                    ItemsSource="{Binding CarrColor}"
+                                    SelectedItem="{Binding SelectedCarrColor, Mode=TwoWay}" />
+                        </Border>
+                    </Grid>
+                    <Label Text="Или ручной ввод" FontSize="20" TextColor="#214484" FontAttributes="Italic" x:Name="OnlyDriverFormLabel4" IsVisible="False"></Label>
+                    <!-- Ручной ввод -->
                     <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8" x:Name="OnlyDriverFormBorder" IsVisible="False">
                         <Label Grid.Column="0" Text="|" FontSize="30" TextColor="#214484"></Label>
                         <Border Grid.Column="1"
