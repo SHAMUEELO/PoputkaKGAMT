@@ -1,5 +1,6 @@
 ﻿
 using Firebase.Database;
+using Firebase.Database.Query;
 using PoputkaKGAMT.Models;
 using System.Diagnostics;
 
@@ -74,5 +75,39 @@ namespace PoputkaKGAMT.Services
             }
         }
 
+        // Обновление рейтинга
+        public async Task UpdateUserRating(string userId, int stars)
+        {
+            // 1. Читаем пользователя
+            var userRef = firebase.Child("users").Child(userId);
+            UserModel user = await userRef.OnceSingleAsync<UserModel>() ?? new UserModel();
+
+            user.Id = string.IsNullOrWhiteSpace(user.Id) ? userId : user.Id;
+
+
+            // 2. Обновляем счётчики звёзд
+            switch (stars)
+            {
+                case 1: user.OneStar++; break;
+                case 2: user.TwoStar++; break;
+                case 3: user.ThreeStar++; break;
+                case 4: user.FourStar++; break;
+                case 5: user.FiveStar++; break;
+            }
+
+            // 3. Считаем новый rating_core
+            int total = user.OneStar + user.TwoStar + user.ThreeStar + user.FourStar + user.FiveStar;
+            double rating = total > 0
+                ? Math.Round(
+                    (1 * user.OneStar + 2 * user.TwoStar + 3 * user.ThreeStar + 4 * user.FourStar + 5 * user.FiveStar) / (double)total,
+                    1
+                )
+                : 0;
+
+            user.Rating = rating;
+
+            // 4. Обновляем в Firebase
+            await userRef.PutAsync(user);
+        }
     }
 }

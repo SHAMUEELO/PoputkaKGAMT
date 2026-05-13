@@ -14,29 +14,15 @@ namespace PoputkaKGAMT.ViewModel
         // Подключение к БД
         private FirebaseClient firebase = new FirebaseClient("https://poputka-datebase-default-rtdb.europe-west1.firebasedatabase.app/");
 
-        private readonly IBackgroundUpdateService backgroundUpdateService;
         private readonly TripService tripService;
         private readonly UserService userService;
-        private readonly PlaceService placeService;
         private readonly FellowTravelerService fellowTravelerService;
 
-        public SearchResult_ViewModel(IBackgroundUpdateService backgroundUpdateService,TripService tripService,UserService userService, PlaceService placeService, FellowTravelerService fellowTravelerService)
+        public SearchResult_ViewModel()
         {
-            this.backgroundUpdateService = backgroundUpdateService;
-            this.tripService = tripService;
-            this.userService = userService;
-            this.placeService = placeService;
-            this.fellowTravelerService = fellowTravelerService;
-
-            // 
-            backgroundUpdateService.OnTripsUpdated += () =>
-            {
-                if (MainThread.IsMainThread)
-                    LoadData();
-                else
-                    MainThread.BeginInvokeOnMainThread(LoadData);
-            };
-
+            fellowTravelerService = new FellowTravelerService();
+            tripService = new TripService();
+            userService = new UserService();
         }
 
         [ObservableProperty]
@@ -59,34 +45,65 @@ namespace PoputkaKGAMT.ViewModel
         [ObservableProperty] 
         private bool isAllEmptyPassenger;
 
-        // Постоянное обновление актуального списка
-        public void OnNavigatedTo()
-        {
-            backgroundUpdateService.Start(10); 
-        }
+        [ObservableProperty] 
+        private bool isFirstSort = true;
 
-        public void OnNavigatedFrom()
-        {
-            backgroundUpdateService.Stop();
-        }
+        [ObservableProperty] 
+        private int sortCounter = 0;  // Счетчик
+
+        // Таймер для обновления списка
+        private System.Threading.Timer? _reloadTimer;
 
         [RelayCommand]
-        public async void LoadData()
+        public async Task LoadData()
         {
-            
-            var allTrips = await tripService.GetTrips();
-            var allUsers = await userService.GetUsers();
-            var allPlaces = await placeService.GetPlaces();
-            var allFellowTravelers = await fellowTravelerService.GetFellowTravelers();
-
-
-            var allDrivers = new List<TripModel>();
-            var allPassengers = new List<TripModel>();
-            var searchResults = new List<TripModel>();
-
-            try 
+            try
             {
-                foreach (var trip in allTrips)
+                // Изменяем статус, если реальное время соответсвует времени поездки
+                var allFellowTravelersCheck = await fellowTravelerService.GetFellowTravelers();
+                var allTripsCheck = await tripService.GetTrips();
+                var now = DateTime.Now;  //  Текущее время
+
+                foreach (var trip in allTripsCheck.Where(t => t.StatusId == "3").ToList())
+                {
+                    string dateTimeStr = $"{trip.Date} {trip.Time}";
+                    if (DateTime.TryParseExact(dateTimeStr, "dd.MM.yyyy HH:mm", null, DateTimeStyles.None, out DateTime tripDateTime))
+                    {
+                        if (now >= tripDateTime) 
+                        {
+                            // Удаляем ожидания status_id="5"
+                            var fellowsToDelete = allFellowTravelersCheck.Where(f => f.TripId == trip.Id && f.StatusId == "5").ToList();
+
+                            if (fellowsToDelete.Any())
+                            {
+                                await Task.WhenAll(fellowsToDelete.Select(fellow => firebase.Child("fellow_travelers").Child(fellow.Id).DeleteAsync()));
+                            }
+
+                            // Скрываем с поиска
+                            await firebase.Child("trips").Child(trip.Id).PatchAsync(new { is_visible_on_searchresult_page = false });
+
+                            if (trip.SeatsQuentity == trip.OriginalSeatsQuentity)
+                            {
+                                // Удаляем поездку
+                                await firebase.Child("trips").Child(trip.Id).DeleteAsync();
+                            }
+                            else await firebase.Child("trips").Child(trip.Id).PatchAsync(new { status_id = "2" });
+
+                        }
+                    }
+                }
+
+                var allTrips = await tripService.GetTrips();
+                var allUsers = await userService.GetUsers();
+                var allFellowTravelers = await fellowTravelerService.GetFellowTravelers();
+
+                var allDrivers = new List<TripModel>();
+                var allPassengers = new List<TripModel>();
+                var searchResults = new List<TripModel>();
+
+
+                // Удаляем завершенные поездки без попутчиков
+                foreach (var trip in allTrips.ToList())
                 {
                     // если StatusId == "2" или "1" и попутчиков нет, то удаляе  поещдку из БД
                     if ((trip.StatusId == "2" || trip.StatusId == "1") && trip.SeatsQuentity == trip.OriginalSeatsQuentity)
@@ -99,9 +116,10 @@ namespace PoputkaKGAMT.ViewModel
                         {
                             await firebase.Child("fellow_travelers").Child(ft.Id).DeleteAsync();
                         }
+                        continue;
                     }
                     // если StatusId == "2" или "1", то не показываем в SearchResult
-                    else if (trip.StatusId == "2" || trip.StatusId == "1")
+                    if (trip.StatusId == "2" || trip.StatusId == "1")
                         continue;
 
 
@@ -116,10 +134,8 @@ namespace PoputkaKGAMT.ViewModel
                     trip.UserRating = user?.Rating ?? 0.00;
 
                     // Места 
-                    var departurePlace = allPlaces.FirstOrDefault(p => p.Id == trip.DeparturePlaceId);
-                    var arrivePlace = allPlaces.FirstOrDefault(p => p.Id == trip.ArrivePlaceId);
-                    trip.DeparturePlaceName = departurePlace?.Name ?? "Неизвестно";
-                    trip.ArrivePlaceName = arrivePlace?.Name ?? "Неизвестно";
+                    trip.DeparturePlaceName = trip.DeparturePlaceId ?? "Ошибка загрузки";
+                    trip.ArrivePlaceName = trip.ArrivePlaceId ?? "Ошибка загрузки";
 
                     trip.Role = trip.IsDriver ? "Водитель" : "Пассажир";
                     if (trip.IsDriver)
@@ -134,60 +150,30 @@ namespace PoputkaKGAMT.ViewModel
                     }
                 }
 
-                // Сортровка поездок по реальной дате у DriverAllTrips
-                var nowForDriverAllTrips = DateTime.Now;
-                DriverAllTrips = new ObservableCollection<TripModel>(
-                    allDrivers
-                        .OrderBy(trip => {
-                            if (string.IsNullOrEmpty(trip.Date) || string.IsNullOrEmpty(trip.Time))
-                                return long.MaxValue;  // Пустые даты - в конец
+                // Обновление спсика при изменении
+                UpdateTripsCollection(DriverAllTrips, allDrivers);
+                UpdateTripsCollection(PassengerAllTrips, allPassengers);
+                UpdateTripsCollection(SearchTrips, searchResults);
 
-                            string dateTimeStr = $"{trip.Date} {trip.Time}";
-                            if (DateTime.TryParseExact(dateTimeStr, "dd.MM.yyyy HH:mm", null, DateTimeStyles.None, out DateTime tripDate))
-                                return Math.Abs((tripDate - nowForDriverAllTrips).Ticks);
+                if(IsFirstSort == true)
+                {
+                    DriverAllTrips = new ObservableCollection<TripModel>(SortTripsByDate(DriverAllTrips.ToList()));
+                    PassengerAllTrips = new ObservableCollection<TripModel>(SortTripsByDate(PassengerAllTrips.ToList()));
+                    SearchTrips = new ObservableCollection<TripModel>(SortTripsByDate(SearchTrips.ToList()));
+                    IsFirstSort = false;
+                }
 
-                            return long.MaxValue;  // Если не распарсилось - в конец
-                        })
-                        .ToList()
-                );
-
-                // Сортровка поездок по реальной дате у PassengerAllTrips
-                var nowForPassengerAllTrips = DateTime.Now;
-                PassengerAllTrips = new ObservableCollection<TripModel>(
-                    allPassengers
-                        .OrderBy(trip => {
-                            if (string.IsNullOrEmpty(trip.Date) || string.IsNullOrEmpty(trip.Time))
-                                return long.MaxValue;  // Пустые даты - в конец
-
-                            string dateTimeStr = $"{trip.Date} {trip.Time}";
-                            if (DateTime.TryParseExact(dateTimeStr, "dd.MM.yyyy HH:mm", null, DateTimeStyles.None, out DateTime tripDate))
-                                return Math.Abs((tripDate - nowForPassengerAllTrips).Ticks);
-
-                            return long.MaxValue;  // Если не распарсилось - в конец
-                        })
-                        .ToList()
-                );
-
+                // Каждые 10 сек сортирует список по дате
+                if (SortCounter >= 5)
+                {
+                    DriverAllTrips = new ObservableCollection<TripModel>(SortTripsByDate(DriverAllTrips.ToList()));
+                    PassengerAllTrips = new ObservableCollection<TripModel>(SortTripsByDate(PassengerAllTrips.ToList()));
+                    SearchTrips = new ObservableCollection<TripModel>(SortTripsByDate(SearchTrips.ToList()));
+                }
+                    
 
                 if (App.Parameters)
                 {
-                    // Сортровка поездок по реальной дате у SearchTrips(Список поездок соответсвуюущие поиску)
-                    var nowForSearchTrips = DateTime.Now;
-                    SearchTrips = new ObservableCollection<TripModel>(
-                        searchResults
-                            .OrderBy(trip => {
-                                if (string.IsNullOrEmpty(trip.Date) || string.IsNullOrEmpty(trip.Time))
-                                    return long.MaxValue;  // Пустые даты - в конец
-
-                                string dateTimeStr = $"{trip.Date} {trip.Time}";
-                                if (DateTime.TryParseExact(dateTimeStr, "dd.MM.yyyy HH:mm", null, DateTimeStyles.None, out DateTime tripDate))
-                                    return Math.Abs((tripDate - nowForSearchTrips).Ticks);
-
-                                return long.MaxValue;  // Если не распарсилось - в конец
-                            })
-                            .ToList()
-                    );
-
                     ShowSearchResults = true;
                     IsSearchEmpty = !searchResults.Any();
                 }
@@ -198,9 +184,89 @@ namespace PoputkaKGAMT.ViewModel
                 }
                 IsAllEmptyDriver = !allDrivers.Any();
                 IsAllEmptyPassenger = !allPassengers.Any();
+
+                // Запуск таймера
+                StartReloadTimer();
             }
-            catch(Exception ex) { await Shell.Current.DisplayAlertAsync("Ошибка", "Не загрузить данные\nВозможно проблемы с интернетом\nОшибка:\n" + ex.Message, "OK"); }
+            catch(Exception ex) {
+                await Shell.Current.GoToAsync("//SearchPage");
+                await Shell.Current.DisplayAlertAsync("Внимание", "Время ожидания истекло или возникли неполадки", "OK");
+            }
         }
+
+
+        private void StartReloadTimer()
+        {
+            _reloadTimer?.Dispose();
+
+            if (SortCounter == 5) SortCounter = 0;
+
+            _reloadTimer = new System.Threading.Timer(async _ =>
+            {
+                await MainThread.InvokeOnMainThreadAsync(async () =>
+                {
+                    SortCounter++;
+
+                    // Перезагружаем каждые 2 секунды
+                    await LoadDataCommand.ExecuteAsync(null);
+                });
+            }, null, TimeSpan.FromSeconds(2), TimeSpan.FromSeconds(2));
+
+        }
+
+        private void StopReloadTimer()
+        {
+            _reloadTimer?.Dispose();
+            _reloadTimer = null;
+        }
+
+
+        // Обновление спсиков через сарвнение
+        private void UpdateTripsCollection(ObservableCollection<TripModel> collection, List<TripModel> newTrips)
+        {
+            // 1. удаляем отсутствующие (удалена поездка из БД)
+            var toRemove = collection.Where(existing => !newTrips.Any(newTrip => newTrip.Id == existing.Id)).ToList();
+            foreach (var trip in toRemove)
+                collection.Remove(trip);
+
+            // 2. обновляем существующие (статус/места изменились)
+            foreach (var newTrip in newTrips)
+            {
+                var existing = collection.FirstOrDefault(t => t.Id == newTrip.Id);
+                if (existing != null)
+                {
+                    // Обновляем ключевые свойства
+                    existing.StatusId = newTrip.StatusId;
+                    existing.SeatsQuentity = newTrip.SeatsQuentity;
+                    existing.UserName = newTrip.UserName;
+                    existing.UserAvatar = newTrip.UserAvatar;
+                    existing.UserRating = newTrip.UserRating;
+                }
+            }
+
+            // 3. Добавляем новые (добавилась поездка)
+            var toAdd = newTrips.Where(newTrip => !collection.Any(t => t.Id == newTrip.Id)).ToList();
+            foreach (var trip in toAdd)
+                collection.Add(trip);
+        }
+
+        // Сортировка по вермени поездок
+        private List<TripModel> SortTripsByDate(List<TripModel> trips)
+        {
+            var now = DateTime.Now;
+            return trips.OrderBy(trip =>
+            {
+                if (string.IsNullOrEmpty(trip.Date) || string.IsNullOrEmpty(trip.Time))
+                    return long.MaxValue;
+
+                string dateTimeStr = $"{trip.Date} {trip.Time}";
+                if (DateTime.TryParseExact(dateTimeStr, "dd.MM.yyyy HH:mm", null, DateTimeStyles.None, out DateTime tripDate))
+                    return Math.Abs((tripDate - now).Ticks);
+
+                return long.MaxValue;
+            }).ToList();
+        }
+        
 
         private bool MatchesSearchCriteria(TripModel trip)
         {
@@ -237,18 +303,18 @@ namespace PoputkaKGAMT.ViewModel
         [RelayCommand]
         private async Task GoTripDetails(TripModel trip)
         {
+            StopReloadTimer();
             Preferences.Set("SelectedTripId", trip.Id);
             Preferences.Set("PreviousPage", "SearchResultPage");
             await Shell.Current.GoToAsync("//TripDetailsPage");
-            
         }
 
         // Назад
         [RelayCommand]
         public async Task GoSearch()
         {
+            StopReloadTimer();
             await Shell.Current.GoToAsync("//SearchPage");
-
         }
 
 

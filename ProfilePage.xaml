@@ -104,7 +104,7 @@
                     HeightRequest="110" 
                     WidthRequest="110"
                     StrokeShape="RoundRectangle 10"
-                    Padding="15,10">
+                    Padding="1,10">
                 <VerticalStackLayout Spacing="4" VerticalOptions="Center" HorizontalOptions="Center">
                     <Label Text="{Binding IsDriverProfile}" TextColor="#84216B" FontSize="25" FontAttributes="Bold" HorizontalOptions="Center" />
                     <Label Text="Водитель" TextColor="#214484" FontSize="15" HorizontalOptions="Center" FontAttributes="Bold"/>
@@ -121,7 +121,7 @@
                     HorizontalOptions="Center"
                     VerticalOptions="Center"
                     StrokeShape="RoundRectangle 10"
-                    Padding="15,10">
+                    Padding="13,10">
                 <VerticalStackLayout Spacing="4" VerticalOptions="Center" HorizontalOptions="Center">
                     <Label Grid.Column="0" Text="{Binding RatingCore}" TextColor="#847821" FontSize="25" FontAttributes="Bold" HorizontalOptions="Center"/>
                     <Label Text="Рейтинг" TextColor="#214484" FontSize="17" HorizontalOptions="Center" FontAttributes="Bold"/>
@@ -139,7 +139,7 @@
                 HeightRequest="110"
                 WidthRequest="110"
                 StrokeShape="RoundRectangle 10"
-                Padding="15,10">
+                Padding="10,10">
                 <VerticalStackLayout Spacing="4" VerticalOptions="Center" HorizontalOptions="Center">
                     <Label Text="{Binding IsPassengerProfile}" TextColor="#21842C" FontSize="25" FontAttributes="Bold" HorizontalOptions="Center" />
                     <Label Text="Пассажир" TextColor="#214484" FontSize="15" HorizontalOptions="Center" FontAttributes="Bold"/>

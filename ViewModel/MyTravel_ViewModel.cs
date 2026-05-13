@@ -16,14 +16,14 @@ namespace PoputkaKGAMT.ViewModel
 
         private readonly TripService tripService;
         private readonly UserService userService;
-        private readonly PlaceService placeService;
+        // private readonly PlaceService placeService;!!!!!!!!!!!!!!!!!!!!
         private readonly FellowTravelerService fellowTravelerService;
 
         public MyTravel_ViewModel()
         {
             tripService = new TripService();
             userService = new UserService();
-            placeService = new PlaceService();
+            //placeService = new PlaceService(); !!!!!!!!!!!!!!!!!!!!
             fellowTravelerService = new FellowTravelerService();
             LoadMyTripData();
         }
@@ -44,7 +44,7 @@ namespace PoputkaKGAMT.ViewModel
             {
                 var allTrips = await tripService.GetTrips();
                 var allUsers = await userService.GetUsers();
-                var allPlaces = await placeService.GetPlaces();
+                //var allPlaces = await placeService.GetPlaces(); !!!!!!!!!!!!!!!!!!!!
                 var allFellowTravelers = await fellowTravelerService.GetFellowTravelers();
 
                 var myTripsOnly = new List<TripModel>();
@@ -79,10 +79,10 @@ namespace PoputkaKGAMT.ViewModel
                     trip.UserRating = user?.Rating ?? 0.00;
 
                     // Места 
-                    var departurePlace = allPlaces.FirstOrDefault(p => p.Id == trip.DeparturePlaceId);
-                    var arrivePlace = allPlaces.FirstOrDefault(p => p.Id == trip.ArrivePlaceId);
-                    trip.DeparturePlaceName = departurePlace?.Name ?? "Неизвестно";
-                    trip.ArrivePlaceName = arrivePlace?.Name ?? "Неизвестно";
+                    //var departurePlace = allPlaces.FirstOrDefault(p => p.Id == trip.DeparturePlaceId); !!!!!!!!!!!!!!!!!!!!
+                    //var arrivePlace = allPlaces.FirstOrDefault(p => p.Id == trip.ArrivePlaceId); !!!!!!!!!!!!!!!!!!!!
+                    //trip.DeparturePlaceName = departurePlace?.Name ?? "Неизвестно"; !!!!!!!!!!!!!!!!!!!!
+                    //trip.ArrivePlaceName = arrivePlace?.Name ?? "Неизвестно"; !!!!!!!!!!!!!!!!!!!!
 
                     trip.Role = trip.IsDriver ? "Водитель" : "Пассажир";
 
@@ -114,6 +114,8 @@ namespace PoputkaKGAMT.ViewModel
             catch (Exception ex)
             {
                 await Shell.Current.DisplayAlertAsync("Ошибка", "Не удалось загрузить данные!\nВозможно проблемы с интернетом\nОшибка:\n" + ex.Message, "OK");
+                await Shell.Current.GoToAsync("//SearchPage");
+                await Shell.Current.DisplayAlertAsync("Внимание", "Время ожидания истекло или возникли неполадки", "OK");
             }
         }
 

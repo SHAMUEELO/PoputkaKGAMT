@@ -12,23 +12,11 @@ namespace PoputkaKGAMT.ViewModel
         // Подключение к БД
         private FirebaseClient firebase = new FirebaseClient("https://poputka-datebase-default-rtdb.europe-west1.firebasedatabase.app/");
 
-        private readonly PlaceService placeService;
         public Search_ViewModel()
         {
-            placeService = new PlaceService();
-            LoadPlace();
-
             SelectedDate = DateTime.Today;
         }
 
-        [ObservableProperty]
-        private ObservableCollection<PlaceModel> places = new();
-
-        public async void LoadPlace() // Загружаем списки мест при запуске экрана
-        {
-            var allPlaces = await placeService.GetPlaces();
-            Places = new ObservableCollection<PlaceModel>(allPlaces);
-        }
 
 
         [RelayCommand]

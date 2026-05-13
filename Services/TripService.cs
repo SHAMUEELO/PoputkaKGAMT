@@ -24,8 +24,8 @@ namespace PoputkaKGAMT.Services
                         {
                             Id = kvp.Key,
                             UserId = data["user_id"]?.ToString() ?? "",
-                            DeparturePlaceId = data["departure_id"]?.ToString() ?? "",
-                            ArrivePlaceId = data["arrive_id"]?.ToString() ?? "",
+                            DeparturePlaceId = data["departure"]?.ToString() ?? "",
+                            ArrivePlaceId = data["arrive"]?.ToString() ?? "",
                             StatusId = data["status_id"]?.ToString() ?? "",
                             IsDriver = bool.TryParse(data["is_driver"]?.ToString(), out bool d) ? d : false,
                             Time = data["time"]?.ToString() ?? "",

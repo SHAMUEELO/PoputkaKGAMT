@@ -17,7 +17,6 @@ public partial class TravelHistoryPage : ContentPage
     {
         base.OnAppearing();
 
-        TravelHistoryVM.OnNavigatedTo();
 
         if (BindingContext is TravelHistory_ViewModel vm)
         {
@@ -27,7 +26,6 @@ public partial class TravelHistoryPage : ContentPage
 
     protected override void OnDisappearing()
     {
-        TravelHistoryVM.OnNavigatedFrom();
     }
 
     protected override bool OnBackButtonPressed()

@@ -45,9 +45,9 @@
                 <!-- Данные -->
                 <Grid RowDefinitions="Auto, 300" RowSpacing="10" Padding="3" 
                             Margin="5,0,5,0">
-                    <Grid Grid.Row="0" Padding="10,10,15,5" ColumnDefinitions="Auto, Auto, *, Auto" ColumnSpacing="10" RowDefinitions="Auto, Auto">
-                        <Border Grid.Column="0" Grid.Row="0" HeightRequest="75"   
-                                WidthRequest="75"
+                    <Grid Grid.Row="0" Padding="5,10,15,0" ColumnDefinitions="Auto, Auto, *, Auto" ColumnSpacing="10" RowDefinitions="Auto, Auto">
+                        <Border Grid.Column="0" Grid.Row="0" HeightRequest="65"   
+                                WidthRequest="65"
                                 Stroke="#214484" 
                                 StrokeThickness="2"
                                 StrokeShape="RoundRectangle 70"
@@ -55,8 +55,8 @@
                                 ZIndex="1">
                             <Image Source="defoltavataricon.png" 
                                    Aspect="AspectFill"
-                                   HeightRequest="70"     
-                                   WidthRequest="70"
+                                   HeightRequest="60"     
+                                   WidthRequest="60"
                                    HorizontalOptions="Center"
                                    VerticalOptions="Center"/>
                             <Border.GestureRecognizers>
@@ -68,14 +68,14 @@
                                WidthRequest="27"
                                HorizontalOptions="Start"
                                VerticalOptions="End"
-                               Margin="50,0,0,0"
+                               Margin="42,0,0,0"
                                ZIndex="2"/>
 
-                        <VerticalStackLayout Grid.Column="0" Grid.Row="0" Padding="85,10,0,0" HorizontalOptions="Start"  >
-                            <Label Text="{Binding SelectedTrip.UserName}" FontSize="25" FontAttributes="Bold" TextColor="#214484" Padding="5,0,10,0" WidthRequest="225" LineBreakMode="TailTruncation"></Label>
+                        <VerticalStackLayout Grid.Column="0" Grid.Row="0" Padding="77,10,0,0" HorizontalOptions="Start"  >
+                            <Label Text="{Binding SelectedTrip.UserName}" FontSize="23" FontAttributes="Bold" TextColor="#214484" Padding="5,0,10,0" WidthRequest="225" LineBreakMode="TailTruncation"></Label>
                             <Grid ColumnDefinitions="Auto,Auto" ColumnSpacing="5" Padding="0,0,0,10">
-                                <Image Grid.Column="0" Source="starrating.png" HeightRequest="27" WidthRequest="27"></Image>
-                                <Label Grid.Column="1" Text="{Binding SelectedTrip.UserRating}" FontSize="23" TextColor="Black" ></Label>
+                                <Image Grid.Column="0" Source="starrating.png" HeightRequest="25" WidthRequest="25"></Image>
+                                <Label Grid.Column="1" Text="{Binding SelectedTrip.UserRating}" FontSize="20" TextColor="Black" ></Label>
                             </Grid>
                         </VerticalStackLayout>
                     </Grid>
@@ -84,37 +84,38 @@
                                 Orientation="Vertical"
                                 VerticalOptions="Fill">
                         <Grid RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto" RowSpacing="10" Padding="3">
-                            <Grid Grid.Row="0" ColumnDefinitions="Auto,Auto" ColumnSpacing="5" Padding="3,-5,0,0" IsVisible="{Binding IsDriverTrip}">
-                                <Image Grid.Column="0" Source="carimage.png" HeightRequest="35" WidthRequest="35" VerticalOptions="Center"></Image>
-                                <Label Grid.Column="1" Text="{Binding SelectedTrip.CarDescrtiption}" FontSize="18" TextColor="#214484" Padding="0,4,0,0" WidthRequest="230" LineBreakMode="WordWrap" FontAttributes="Italic"/>
+                            <Grid Grid.Row="0" ColumnDefinitions="Auto,Auto" ColumnSpacing="5" Padding="0,-5,0,0" IsVisible="{Binding IsDriverTrip}">
+                                <Image Grid.Column="0" Source="carimage.png" HeightRequest="30" WidthRequest="30" VerticalOptions="Center"></Image>
+                                <Label Grid.Column="1" Text="{Binding SelectedTrip.CarDescrtiption}" FontSize="17" TextColor="#214484" Padding="0,4,0,0" WidthRequest="225" LineBreakMode="WordWrap" FontAttributes="Italic"/>
                             </Grid>
-                            <Grid Grid.Row="1" ColumnDefinitions="Auto, Auto" ColumnSpacing="5" Padding="3,-10,0,0" IsVisible="{Binding IsDriverTrip}">
-                                <Label Grid.Column="1"  Text="{Binding SelectedTrip.SeatsQuentity}" IsVisible="{Binding SeatsLabelVisible}" FontSize="18" TextColor="#214484" FontAttributes="Italic"/>
-                                <Label Grid.Column="0"  Text="{Binding RoleText}" FontSize="18" TextColor="#214484" FontAttributes="Italic"/>
+                            <Grid Grid.Row="1" ColumnDefinitions="Auto, Auto" ColumnSpacing="5" Padding="0,-10,0,0" IsVisible="{Binding IsDriverTrip}">
+                                <Label Grid.Column="1"  Text="{Binding SelectedTrip.SeatsQuentity}" IsVisible="{Binding SeatsLabelVisible}" FontSize="16" TextColor="#214484" FontAttributes="Italic"/>
+                                <Label Grid.Column="0"  Text="{Binding RoleText}" FontSize="16" TextColor="#214484" FontAttributes="Italic"/>
                             </Grid>
 
-                            <Grid Grid.Row="0" ColumnDefinitions="Auto,Auto,Auto" ColumnSpacing="5" Padding="3,-5,0,0" IsVisible="{Binding IsPassengerTrip}">
-                                <Image Grid.Column="0" Grid.Row="0" Source="groupsetting.png" HeightRequest="35" WidthRequest="35"></Image>
+                            <Grid Grid.Row="0" ColumnDefinitions="Auto,Auto,Auto" ColumnSpacing="5" IsVisible="{Binding IsPassengerTrip}">
+                                <Image Grid.Column="0" Grid.Row="0" Source="groupsetting.png" HeightRequest="33" WidthRequest="33"></Image>
                                 <Label Grid.Column="1" Grid.Row="0" Text="{Binding RoleText}" FontSize="18" TextColor="#214484" Padding="0,4,0,0" FontAttributes="Italic"/>
                                 <Label Grid.Column="2"  Text="{Binding SelectedTrip.SeatsQuentity}" IsVisible="{Binding SeatsLabelVisible}" FontSize="18" TextColor="#214484" Padding="0,4,0,0" FontAttributes="Italic"/>
                             </Grid>
 
-                            <Label Grid.Row="2" Text="{Binding SelectedTrip.Description}" TextColor="Black" Padding="4,-5,5,0" FontSize="16" HorizontalTextAlignment="Start"></Label>
+                            <Label Grid.Row="2" Text="{Binding SelectedTrip.Description}" TextColor="Black" Padding="1,-5,5,0" FontSize="15" HorizontalTextAlignment="Start" IsVisible="{Binding IsDescriptionVisible}"></Label>
 
                             <BoxView Grid.Row="3"
                                      HeightRequest="2" 
                                      Color="#214484"
-                                     HorizontalOptions="Fill"/>
+                                     HorizontalOptions="Fill"
+                                     Margin="0,-7,0,0"/>
 
                             <Grid Grid.Row="4" ColumnDefinitions="Auto,Auto" ColumnSpacing="10" Padding="5,0,0,0">
-                                <Image Grid.Column="0" Source="pointicon.png" HeightRequest="22" WidthRequest="22"></Image>
+                                <Image Grid.Column="0" Source="buildimage.png" HeightRequest="23" WidthRequest="23"></Image>
                                 <Label Grid.Column="1"  Text="{Binding SelectedTrip.DeparturePlaceName}" FontSize="18" TextColor="#214484"/>
                             </Grid>
 
-                            <Label Grid.Row="5" Text="|" FontSize="30" TextColor="Gray" Padding="5,-10,0,-10"></Label>
+                            <Label Grid.Row="5" Text="|" FontSize="30" TextColor="Gray" Padding="8,-10,0,-10"></Label>
 
                             <Grid Grid.Row="6" ColumnDefinitions="Auto,Auto" ColumnSpacing="10" Padding="5,0,0,0">
-                                <Image Grid.Column="0" Source="pointicon.png" HeightRequest="22" WidthRequest="22" ></Image>
+                                <Image Grid.Column="0" Source="placeimage.png" HeightRequest="24" WidthRequest="24" ></Image>
                                 <Label Grid.Column="1"  Text="{Binding SelectedTrip.ArrivePlaceName}" FontSize="18" TextColor="#214484"/>
                             </Grid>
 
@@ -125,14 +126,14 @@
 
                             <Grid Grid.Row="8" ColumnDefinitions="*,Auto,*" ColumnSpacing="6">
                                 <Grid Grid.Column="0" RowDefinitions="Auto, Auto" RowSpacing="5">
-                                    <Label Grid.Row="0"  Text="{Binding SelectedTrip.Time}" FontSize="18" TextColor="#214484" HorizontalOptions="Center"/>
-                                    <Label Grid.Row="1"  Text="{Binding SelectedTrip.Date}" FontSize="18" TextColor="#214484" HorizontalOptions="Center"/>
+                                    <Label Grid.Row="0"  Text="{Binding SelectedTrip.Time}" FontSize="16" TextColor="#214484" HorizontalOptions="Center"/>
+                                    <Label Grid.Row="1"  Text="{Binding SelectedTrip.Date}" FontSize="16" TextColor="#214484" HorizontalOptions="Center"/>
                                 </Grid>
                                 <BoxView Grid.Column="1" WidthRequest="2" Color="#214484" VerticalOptions="Fill"/>
 
                                 <Grid Grid.Column="2" RowDefinitions="Auto, Auto" RowSpacing="5">
-                                    <Label Grid.Row="0"  Text="{Binding SelectedTrip.Price}" FontSize="18" TextColor="#214484" HorizontalOptions="Center"/>
-                                    <Label Grid.Row="1"  Text="За место" FontSize="18" TextColor="#214484" HorizontalOptions="Center"/>
+                                    <Label Grid.Row="0"  Text="{Binding SelectedTrip.Price}" FontSize="16" TextColor="#214484" HorizontalOptions="Center"/>
+                                    <Label Grid.Row="1"  Text="За место" FontSize="16" TextColor="#214484" HorizontalOptions="Center"/>
                                 </Grid>
                             </Grid>
 
@@ -143,20 +144,20 @@
 
                             <Grid Grid.Row="10" RowDefinitions="Auto,Auto,Auto,Auto" RowSpacing="6">
                                 <Grid Grid.Row="0" ColumnDefinitions="Auto, Auto" ColumnSpacing="10" IsVisible="{Binding IsOnlyTwo}">
-                                    <Image Grid.Column="0" Source="additiononlytwo.png" HeightRequest="30" WidthRequest="30" HorizontalOptions="Start"/>
-                                    <Label Grid.Column="1"  Text="Только двое сзади" FontSize="18" TextColor="#214484" HorizontalOptions="Center"/>
+                                    <Image Grid.Column="0" Source="additiononlytwo.png" HeightRequest="27" WidthRequest="27" HorizontalOptions="Start"/>
+                                    <Label Grid.Column="1"  Text="Только двое сзади" FontSize="16" TextColor="#214484" HorizontalOptions="Center"/>
                                 </Grid>
                                 <Grid Grid.Row="1" ColumnDefinitions="Auto, Auto" ColumnSpacing="10" IsVisible="{Binding IsNotLate}">
-                                    <Image Grid.Column="0" Source="additionnotlate.png" HeightRequest="26" WidthRequest="26" HorizontalOptions="Start"/>
-                                    <Label Grid.Column="1"  Text="Без задержек" FontSize="18" TextColor="#214484" HorizontalOptions="Center" Padding="3,0,0,0"/>
+                                    <Image Grid.Column="0" Source="additionnotlate.png" HeightRequest="23" WidthRequest="23" HorizontalOptions="Start"/>
+                                    <Label Grid.Column="1"  Text="Без задержек" FontSize="16" TextColor="#214484" HorizontalOptions="Center" Padding="3,0,0,0"/>
                                 </Grid>
                                 <Grid Grid.Row="2" ColumnDefinitions="Auto, Auto" ColumnSpacing="10" IsVisible="{Binding IsNotSmoking}">
-                                    <Image Grid.Column="0" Source="additionnotsmoke.png" HeightRequest="30" WidthRequest="30" HorizontalOptions="Start"/>
-                                    <Label Grid.Column="1"  Text="В машине не курят" FontSize="18" TextColor="#214484" HorizontalOptions="Center"/>
+                                    <Image Grid.Column="0" Source="additionnotsmoke.png" HeightRequest="27" WidthRequest="27" HorizontalOptions="Start"/>
+                                    <Label Grid.Column="1"  Text="В машине не курят" FontSize="16" TextColor="#214484" HorizontalOptions="Center"/>
                                 </Grid>
                                 <Grid Grid.Row="3" ColumnDefinitions="Auto, Auto" ColumnSpacing="10" IsVisible="{Binding IsConditioner}">
-                                    <Image Grid.Column="0" Source="additioncond.png" HeightRequest="30" WidthRequest="30" HorizontalOptions="Start"/>
-                                    <Label Grid.Column="1"  Text="Есть кондиционер" FontSize="18" TextColor="#214484" HorizontalOptions="Center"/>
+                                    <Image Grid.Column="0" Source="additioncond.png" HeightRequest="27" WidthRequest="27" HorizontalOptions="Start"/>
+                                    <Label Grid.Column="1"  Text="Есть кондиционер" FontSize="16" TextColor="#214484" HorizontalOptions="Center"/>
                                 </Grid>
 
                             </Grid>

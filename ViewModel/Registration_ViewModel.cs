@@ -101,6 +101,12 @@ namespace PoputkaKGAMT.ViewModel
                     ispassenger = 0,
                     rating_core = 0.00,
                     user_car = "Не указано",
+                    one_star = 0,
+                    two_star = 0,
+                    three_star = 0,
+                    four_star = 0,
+                    five_star = 0,
+                    total_ratings = 0.00,
                     createdAt = DateTime.Now.ToString("dd.MM.yyyy")
                 };
 

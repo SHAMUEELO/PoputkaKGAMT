@@ -36,7 +36,19 @@ namespace PoputkaKGAMT.Models
         [JsonPropertyName("createdAt")]
         public string Registration { get; set; } = "";
 
-        
+        [JsonPropertyName("one_star")]
+        public int OneStar { get; set; }
+        [JsonPropertyName("two_star")]
+        public int TwoStar { get; set; }
+        [JsonPropertyName("three_star")]
+        public int ThreeStar { get; set; }
+        [JsonPropertyName("four_star")]
+        public int FourStar { get; set; }
+        [JsonPropertyName("five_star")]
+        public int FiveStar { get; set; }
+
+        [JsonPropertyName("total_ratings")]
+        private int TotalRatings;
     }
 }
     

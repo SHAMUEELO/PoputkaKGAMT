@@ -46,7 +46,8 @@ namespace PoputkaKGAMT.ViewModel
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlertAsync("Ошибка", "Не удалось загрузить данные!\nВозможно проблемы с интернетом\nОшибка:\n" + ex.Message, "OK");
+                await Shell.Current.GoToAsync("//SearchPage");
+                await Shell.Current.DisplayAlertAsync("Внимание", "Время ожидания истекло или возникли неполадки", "OK");
             }
         }
 

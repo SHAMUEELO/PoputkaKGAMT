@@ -82,8 +82,6 @@ public partial class SearchResultPage : ContentPage
     {
         base.OnAppearing();
 
-        SearchResultVM.OnNavigatedTo();
-
         OpenDriverResult(null, null);
 
         bool parametersValue = App.Parameters;
@@ -96,8 +94,6 @@ public partial class SearchResultPage : ContentPage
 
     protected override void OnDisappearing()
     {
-
-        SearchResultVM.OnNavigatedFrom();
 
         App.Parameters = false;
     }

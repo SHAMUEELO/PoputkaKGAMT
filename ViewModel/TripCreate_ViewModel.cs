@@ -22,12 +22,10 @@ namespace PoputkaKGAMT.ViewModel
         // Подключение к БД
         private FirebaseClient firebase = new FirebaseClient("https://poputka-datebase-default-rtdb.europe-west1.firebasedatabase.app/");
 
-        private readonly PlaceService placeService;
         private readonly UserService userService;
 
         public TripCreate_ViewModel()
         {
-            placeService = new PlaceService();
             userService = new UserService();
             LoadData();
 
@@ -36,17 +34,11 @@ namespace PoputkaKGAMT.ViewModel
         }
 
         [ObservableProperty]
-        private ObservableCollection<PlaceModel> places = new();
-
-        [ObservableProperty]
         private string userId;
 
         [RelayCommand]
         public async void LoadData()
         {
-            var allPlaces = await placeService.GetPlaces();
-            Places = new ObservableCollection<PlaceModel>(allPlaces);
-
             UserId = Preferences.Get("CurrentUserKey", "");
 
             var allUsers = await userService.GetUsers();
@@ -318,6 +310,10 @@ namespace PoputkaKGAMT.ViewModel
                 string normalizedCar = Regex.Replace(carForTrip.Trim(), @"\s*,\s*", ", ").Trim();
                 string newCarDescription = Regex.Replace(normalizedCar, ",", " -");
 
+                if(Description == null || Description == "")
+                {
+                    Description = " ";
+                }
                 try
                 {
                     // сохранение пользователя в FirebaseЫ

@@ -16,27 +16,14 @@ namespace PoputkaKGAMT.ViewModel
         private FirebaseClient firebase = new FirebaseClient("https://poputka-datebase-default-rtdb.europe-west1.firebasedatabase.app/");
 
         private readonly FellowTravelerService fellowtravelerService;
-        private readonly IBackgroundUpdateService backgroundUpdateService;
         private readonly TripService tripService;
         private readonly UserService userService;
-        private readonly PlaceService placeService;
 
-        public TravelHistory_ViewModel(IBackgroundUpdateService backgroundUpdateService, TripService tripService, UserService userService, PlaceService placeService, FellowTravelerService fellowtravelerService)
+        public TravelHistory_ViewModel()
         {
-            this.backgroundUpdateService = backgroundUpdateService;
-            this.tripService = tripService;
-            this.userService = userService;
-            this.placeService = placeService;
-            this.fellowtravelerService = fellowtravelerService;
-
-            backgroundUpdateService.OnTripsUpdated += () =>
-            {
-                if (MainThread.IsMainThread)
-                    LoadTrip();
-                else
-                    MainThread.BeginInvokeOnMainThread(LoadTrip);
-            };
-
+            fellowtravelerService = new FellowTravelerService();
+            tripService = new TripService();
+            userService = new UserService();
         }
 
 
@@ -50,53 +37,77 @@ namespace PoputkaKGAMT.ViewModel
         private bool isTripsEmpty = true;
 
         [ObservableProperty]
-        private string driverNotCheckAndHaveMaxPassenger = "Ваша заявка на рассмотрении(см.поездку выше)";
+        private int sortCounter = 0;  // Счетчик
 
-        // Постоянное обновление актуального списка
-        public void OnNavigatedTo()
-        {
-            backgroundUpdateService.Start(10);
-        }
+        [ObservableProperty]
+        private bool isFirstSort = true;
 
-        public void OnNavigatedFrom()
-        {
-            backgroundUpdateService.Stop();
-        }
+        private System.Threading.Timer? _reloadTimer; // Таймер на 2 сек.
 
         [RelayCommand]
-        public async void LoadTrip()
+        public async Task LoadTrip()
         {
             try
             {
+                // Система изменения статуса
+                var allFellowTravelersCheck = await fellowtravelerService.GetFellowTravelers();
+                var allTripsCheck = await tripService.GetTrips();
+                var now = DateTime.Now;
+
+                foreach (var trip in allTripsCheck.Where(t => t.StatusId == "3").ToList())
+                {
+                    string dateTimeStr = $"{trip.Date} {trip.Time}";
+                    if (DateTime.TryParseExact(dateTimeStr, "dd.MM.yyyy HH:mm", null, DateTimeStyles.None, out DateTime tripDateTime))
+                    {
+                        if (now >= tripDateTime)
+                        {
+                            // Удаляем ожидания status_id="5"
+                            var fellowsToDelete = allFellowTravelersCheck.Where(f => f.TripId == trip.Id && f.StatusId == "5").ToList();
+
+                            if (fellowsToDelete.Any())
+                            {
+                                await Task.WhenAll(fellowsToDelete.Select(fellow => firebase.Child("fellow_travelers").Child(fellow.Id).DeleteAsync()));
+                            }
+
+                            if (trip.SeatsQuentity == trip.OriginalSeatsQuentity)
+                            {
+                                // Удаляем поездку
+                                await firebase.Child("trips").Child(trip.Id).DeleteAsync();
+                            }
+                            else await firebase.Child("trips").Child(trip.Id).PatchAsync(new { status_id = "2" });
+
+
+                        }
+                    }
+
+                }
+
+                // Если status="1" ИЛИ "2" + пустые, то удалить
+                foreach (var trip in allTripsCheck.Where(t => (t.StatusId == "1" || t.StatusId == "2") && t.SeatsQuentity == t.OriginalSeatsQuentity).ToList())
+                {
+                    // Удаляем поездку
+                    await firebase.Child("trips").Child(trip.Id).DeleteAsync();
+
+                    // Удаляем ВСЕХ попутчиков
+                    var allFellowsThisTrip = allFellowTravelersCheck.Where(f => f.TripId == trip.Id).ToList();
+                    if (allFellowsThisTrip.Any())
+                    {
+                        await Task.WhenAll(allFellowsThisTrip.Select(f => firebase.Child("fellow_travelers").Child(f.Id).DeleteAsync()));
+                    }
+                }
+
+
                 string myId = Preferences.Get("CurrentUserKey", "");
 
                 var allTrips = await tripService.GetTrips();
                 var allUsers = await userService.GetUsers();
-                var allPlaces = await placeService.GetPlaces();
                 var allFellows = await fellowtravelerService.GetFellowTravelers();
 
                 // Мои поездки
                 var historyTrips = new List<TripModel>();
-                
-                foreach (var trip in allTrips)
+
+                foreach (var trip in allTrips.Where(t => t.UserId.Equals(myId, StringComparison.OrdinalIgnoreCase)).ToList())
                 {
-                    // Только мои поездки
-                    if (!trip.UserId.Equals(myId, StringComparison.OrdinalIgnoreCase))
-                        continue;
-
-                    // если StatusId == "2" или "1" и попутчиков нет, то удаляе  поездку из БД
-                    if ((trip.StatusId == "2" || trip.StatusId == "1") && trip.SeatsQuentity == trip.OriginalSeatsQuentity)
-                    {
-                        // Используем логику удаления с очисткой попутчиков
-                        await firebase.Child("trips").Child(trip.Id).DeleteAsync();
-
-                        // Также нужно удалить связанные с поездкой попутчиков
-                        foreach (var ft in allFellows.Where(f => f.TripId == trip.Id))
-                        {
-                            await firebase.Child("fellow_travelers").Child(ft.Id).DeleteAsync();
-                        }
-                    }
-
                     // Берем только данные пользователя
                     var user = allUsers.FirstOrDefault(u => u.Id?.Equals(trip.UserId, StringComparison.OrdinalIgnoreCase) == true);
 
@@ -106,107 +117,204 @@ namespace PoputkaKGAMT.ViewModel
                     trip.UserRating = user?.Rating ?? 0.00;
 
                     // Места 
-                    var departurePlace = allPlaces.FirstOrDefault(p => p.Id == trip.DeparturePlaceId);
-                    var arrivePlace = allPlaces.FirstOrDefault(p => p.Id == trip.ArrivePlaceId);
-                    trip.DeparturePlaceName = departurePlace?.Name ?? "Неизвестно";
-                    trip.ArrivePlaceName = arrivePlace?.Name ?? "Неизвестно";
+                    trip.DeparturePlaceName = trip.DeparturePlaceId ?? "Ошибка загрузки";
+                    trip.ArrivePlaceName = trip.ArrivePlaceId ?? "Ошибка загрузки";
 
                     trip.Role = trip.IsDriver ? "Водитель" : "Пассажир";
 
                     historyTrips.Add(trip);
                 }
 
-               
-                // Все поездки, в которых у пользователя есть заявка 
-                var allMyBookings = allFellows?.Where(f => f.FellowUserId.Equals(myId, StringComparison.OrdinalIgnoreCase)).ToList() ?? new List<FellowTravelerModel>();
+                // Все поездки, в которых у пользователя есть заявка
+                var myFellowTrips = new List<TripModel>();
 
-                var myFellowTripIds = allMyBookings.Select(f => f.TripId).Distinct().ToList();
+                // Берем ВСЕ поездки статусов "1","2","3"
+                var relevantTrips = allTrips.Where(t => t.StatusId == "1" || t.StatusId == "2" || t.StatusId == "3").ToList();
 
-                foreach (var fellowTripId in myFellowTripIds)
+                foreach (var trip in relevantTrips)
                 {
-                    var fellowTrip = allTrips?.FirstOrDefault(t => t.Id == fellowTripId);
-                    if (fellowTrip == null) continue;
+                    // Проверяем, была ли у меня заявка (любого статуса)
+                    var myBooking = allFellows.FirstOrDefault(f => f.FellowUserId.Equals(myId, StringComparison.OrdinalIgnoreCase) && f.TripId == trip.Id);
 
-                    // Только проверяем что это НЕ моя поездка (дубль)
-                    if (fellowTrip.UserId.Equals(myId, StringComparison.OrdinalIgnoreCase))
-                        continue;
+                    if (myBooking == null) continue; // Нет моей брони -> пропускаем
+                    // Это моя собственная поездка -> пропускаем (дубль)
+                    if (trip.UserId.Equals(myId, StringComparison.OrdinalIgnoreCase)) continue;
 
                     // Берем только данные пользователя (ВОДИТЕЛЯ этой поездки)
-                    var user = allUsers.FirstOrDefault(u => u.Id?.Equals(fellowTrip.UserId, StringComparison.OrdinalIgnoreCase) == true);
+                    var user = allUsers.FirstOrDefault(u => u.Id?.Equals(trip.UserId, StringComparison.OrdinalIgnoreCase) == true);
 
                     // Данные пользователя 
-                    fellowTrip.UserName = user?.Name ?? "Неизвестный";
-                    fellowTrip.UserAvatar = user?.ProfilePhoto ?? "defoltavataricon.png";
-                    fellowTrip.UserRating = user?.Rating ?? 0.00;
+                    trip.UserName = user?.Name ?? "Неизвестный";
+                    trip.UserAvatar = user?.ProfilePhoto ?? "defoltavataricon.png";
+                    trip.UserRating = user?.Rating ?? 0.00;
 
                     // Места 
-                    var departurePlace = allPlaces.FirstOrDefault(p => p.Id?.Equals(fellowTrip.DeparturePlaceId, StringComparison.OrdinalIgnoreCase) == true);
-                    var arrivePlace = allPlaces.FirstOrDefault(p => p.Id?.Equals(fellowTrip.ArrivePlaceId, StringComparison.OrdinalIgnoreCase) == true);
-                    fellowTrip.DeparturePlaceName = departurePlace?.Name ?? "Неизвестно";
-                    fellowTrip.ArrivePlaceName = arrivePlace?.Name ?? "Неизвестно";
+                    trip.DeparturePlaceName = trip.DeparturePlaceId ?? "Ошибка загрузки"; // !!!!
+                    trip.ArrivePlaceName = trip.ArrivePlaceId ?? "Ошибка загрузки";
 
-                    fellowTrip.Role = fellowTrip.IsDriver ? "Водитель" : "Пассажир";
-
-                    // Другие поездки с моими заявками, которые еще не рассмотрели
-                    var myPendingBooking = allFellows.FirstOrDefault(f =>f.FellowUserId.Equals(myId, StringComparison.OrdinalIgnoreCase) && f.TripId.Equals(fellowTrip.Id, StringComparison.OrdinalIgnoreCase) && f.StatusId == "5");
-                    fellowTrip.UserStatus = myPendingBooking != null;
+                    trip.Role = trip.IsDriver ? "Водитель" : "Пассажир";
 
 
-                    if (fellowTrip.SeatsLabelVisible == false)
-                    {
-                        DriverNotCheckAndHaveMaxPassenger = "Все места заняты, ваша заявка еще не рассмотрена(см.поездку выше)";
-                    }
-                    else { DriverNotCheckAndHaveMaxPassenger = "Ваша заявка на рассмотрении(см.поездку выше)";  }
+                    // Определние статуса запроса
+                    SetPassengerStatusMessage(trip, myBooking);
 
-
-                    if (!historyTrips.Any(t => t.Id == fellowTrip.Id))  // Без дублей
-                    {
-                        historyTrips.Add(fellowTrip);
-                    }
+                    myFellowTrips.Add(trip);
                 }
 
-                // Сортровка поездок по реальной дате
-                var now = DateTime.Now;
-                AllHistoryTrips = new ObservableCollection<TripModel>(
-                    historyTrips
-                        .OrderBy(trip => {
-                            // Сначала статус "2"
-                            if (trip.StatusId == "2") return 0;
-                            // Потом всё, что не "1" и не "2"
-                            if (trip.StatusId != "1") return 1;
-                            // Последними — статус "1"
-                            return 2;
-                        })
-                        .ThenBy(trip =>
-                        {
-                            if (string.IsNullOrEmpty(trip.Date) || string.IsNullOrEmpty(trip.Time))
-                                return long.MaxValue;  // Пустые даты - в конец
+                historyTrips.AddRange(myFellowTrips);
 
-                            string dateTimeStr = $"{trip.Date} {trip.Time}";
-                            if (DateTime.TryParseExact(dateTimeStr, "dd.MM.yyyy HH:mm", null, DateTimeStyles.None, out DateTime tripDate))
-                                return Math.Abs((tripDate - now).Ticks);
-
-                            return long.MaxValue;  // Если не распарсилось - в конец
-                        })
-                        .ToList()
-                );
+                // Обновление списка
+                UpdateHistoryTrips(historyTrips);
 
                 AtLeastOneTrip = AllHistoryTrips.Any();
                 IsTripsEmpty = !AtLeastOneTrip;
-                OnPropertyChanged(nameof(AllHistoryTrips));
 
+                if (IsFirstSort == true)
+                {
+                    AllHistoryTrips = new ObservableCollection<TripModel>(SortHistoryTrips(AllHistoryTrips.ToList()));
+                    IsFirstSort = false;
+                }
+
+                // Каждые 10 сек сортирует список по дате
+                if (SortCounter >= 5)
+                {
+                    var sorted = SortHistoryTrips(AllHistoryTrips.ToList());
+                    AllHistoryTrips.Clear();
+                    foreach (var t in sorted) AllHistoryTrips.Add(t);
+                }
+
+                StartReloadTimer();  // Запуск таймеров
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlertAsync("Ошибка", "Не удалось загрузить данные!\nВозможно проблемы с интернетом\nОшибка:\n" + ex.Message, "OK");
+                await Shell.Current.GoToAsync("//SearchPage");
+                await Shell.Current.DisplayAlertAsync("Внимание", "Время ожидания истекло или возникли неполадки", "OK");
             }
         }
 
+        private void StartReloadTimer()
+        {
+            _reloadTimer?.Dispose();
+
+            if (SortCounter == 5) SortCounter = 0;
+
+            _reloadTimer = new System.Threading.Timer(async _ =>
+            {
+                await MainThread.InvokeOnMainThreadAsync(async () =>
+                {
+                    SortCounter++;
+
+                    // Перезагружаем каждые 2 секунды
+                    await LoadTripCommand.ExecuteAsync(null);
+                });
+            }, null, TimeSpan.FromSeconds(3), TimeSpan.FromSeconds(3));
+        }
+
+        private void StopReloadTimer()
+        {
+            _reloadTimer?.Dispose();
+            _reloadTimer = null;
+        }
+
+        private void UpdateHistoryTrips(List<TripModel> newTrips)
+        {
+            foreach (var newTrip in newTrips)
+            {
+                var existing = AllHistoryTrips.FirstOrDefault(t => t.Id == newTrip.Id);
+                if (existing != null)
+                {
+                    existing.StatusId = newTrip.StatusId;
+                    existing.SeatsQuentity = newTrip.SeatsQuentity;
+                    existing.UserName = newTrip.UserName;
+                    existing.UserAvatar = newTrip.UserAvatar;
+                    existing.UserRating = newTrip.UserRating;
+                    if (!string.IsNullOrEmpty(newTrip.StatusMessage))
+                        existing.StatusMessage = newTrip.StatusMessage;
+                    existing.UserStatus = newTrip.UserStatus;
+                    existing.DeparturePlaceName = newTrip.DeparturePlaceName;
+                    existing.ArrivePlaceName = newTrip.ArrivePlaceName;
+                    existing.Role = newTrip.Role;
+                }
+                else
+                {
+                    // Добавляем новые
+                    AllHistoryTrips.Add(newTrip);;
+                }
+
+                var currentIds = newTrips.Select(nt => nt.Id).ToHashSet();  // HashSet для скорости
+                var toRemove = AllHistoryTrips.Where(t => !currentIds.Contains(t.Id)).ToList();
+
+                foreach (var trip in toRemove)
+                    AllHistoryTrips.Remove(trip);
+            }
+        }
+
+        // сортировка по времени поездок
+        private List<TripModel> SortHistoryTrips(List<TripModel> trips)
+        {
+            var now = DateTime.Now;
+            return trips
+                .OrderBy(trip => trip.StatusId == "2" ? 0 : (trip.StatusId != "1" ? 1 : 2))
+                .ThenBy(trip =>
+                {
+                    if (string.IsNullOrEmpty(trip.Date) || string.IsNullOrEmpty(trip.Time)) return long.MaxValue;
+                    string dateTimeStr = $"{trip.Date} {trip.Time}";
+                    return DateTime.TryParseExact(dateTimeStr, "dd.MM.yyyy HH:mm", null, DateTimeStyles.None, out DateTime tripDate)
+                        ? Math.Abs((tripDate - now).Ticks)
+                        : long.MaxValue;
+                })
+                .ToList();
+
+        }
+
+        // Статус текста для определения
+        private void SetPassengerStatusMessage(TripModel trip, FellowTravelerModel myBooking)
+        {
+            bool myRequestAccepted = myBooking?.StatusId == "6"; // "6" = "Едет"
+            bool myRequestWaiting = myBooking?.StatusId == "5";  // "5" = Ожидает
+            bool hasSeats = trip.SeatsLabelVisible; // true = места есть
+
+            if (trip.StatusId == "3") // Запланирована
+            {
+                if (myRequestAccepted)
+                {
+                    trip.StatusMessage = "Ваш запрос одобрен. Ожидайте отправления(см.поездку выше)";
+                }
+                else if (myRequestWaiting)
+                {
+                    trip.StatusMessage = "Ваш запрос на рассмотрении. Ожидайте решение попутчика(см.поездку выше)";
+                }
+                else if (!hasSeats)
+                {
+                    trip.StatusMessage = "Места закончились, но ваш запрос всё ещё на рассмотрении(см.поездку выше)";
+                }
+                else
+                {
+                    trip.StatusMessage = ""; // fallback
+                }
+            }
+            else if (trip.StatusId == "2" && myRequestAccepted)
+            {
+                trip.StatusMessage = "Вы в пути! Приятной поездки!(см.поездку выше)";
+            }
+            else if (trip.StatusId == "1" && myRequestAccepted)
+            {
+                trip.StatusMessage = "Вы приехали!(см.поездку выше)";
+            }
+            else
+            {
+                trip.StatusMessage = "";
+            }
+
+            // Для совместимости
+            trip.UserStatus = myRequestAccepted;
+        }
 
         // К деталям поездки
         [RelayCommand]
         private async Task GoTripDetails(TripModel trip)
         {
+            StopReloadTimer();
             Preferences.Set("SelectedTripId", trip.Id);
             Preferences.Set("PreviousPage", "TravelHistoryPage");
             await Shell.Current.GoToAsync("//TripDetailsPage");
@@ -215,6 +323,7 @@ namespace PoputkaKGAMT.ViewModel
         [RelayCommand]
         public async Task OnMainPage()
         {
+            StopReloadTimer();
             await Shell.Current.GoToAsync("//SearchPage");
         }
     }

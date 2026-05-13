@@ -4,7 +4,6 @@ using Firebase.Database;
 using Firebase.Database.Query;
 using PoputkaKGAMT.Models;
 using PoputkaKGAMT.Services;
-using PoputkaKGAMT.ViewModel;
 using System.Collections.ObjectModel;
 
 namespace PoputkaKGAMT.ViewModel
@@ -70,7 +69,7 @@ namespace PoputkaKGAMT.ViewModel
                 var newUsersForEstimate = new List<TripRatingModel>();
 
                 // Создатель поездки
-                if (currentTrip?.UserId != currentUserId && currentTrip.UserId != excludeId)
+                if (currentTrip?.UserId != currentUserId && currentTrip.UserId != excludeId) // Исключение на reference отсутсиве при открытии профиля через rating trip и обратно выход через Rating trip
                 {
                     var driverUser = allUsers.FirstOrDefault(u => u.Id == currentTrip.UserId);
                     var driverReview = allRating.FirstOrDefault(r => r.TripId == tripId && r.AppraiserUserId == currentUserId && r.RecipientUserId == currentTrip.UserId);
@@ -141,6 +140,8 @@ namespace PoputkaKGAMT.ViewModel
             catch (Exception ex)
             {
                 await Shell.Current.DisplayAlertAsync("Ошибка", "Не удалось загрузить данные!\nВозможно проблемы с интернетом\nОшибка:\n" + ex.Message, "OK");
+                await Shell.Current.GoToAsync("//SearchPage");
+                await Shell.Current.DisplayAlertAsync("Внимание", "Время ожидания истекло или возникли неполадки", "OK");
             }
         }
 
@@ -199,7 +200,7 @@ namespace PoputkaKGAMT.ViewModel
                 string tripId = Preferences.Get("SelectedTripId", "");
                 string currentUserId = Preferences.Get("CurrentUserKey", "");
 
-                // сохранение пользователя в FirebaseЫ
+                // сохранение пользователя в Firebase
                 var review = new
                 {
                     id = "",
@@ -214,6 +215,8 @@ namespace PoputkaKGAMT.ViewModel
                 // Сохраняем в trips
                 var result = await firebase.Child("trip_reviews").PostAsync(review);
                 await firebase.Child("trip_reviews").Child(result.Key).PatchAsync(new { id = result.Key });
+
+                await userService.UpdateUserRating(SelectedUser.RecipientUserId, Estimate);
 
                 Estimate = 0;
                 Review = "";

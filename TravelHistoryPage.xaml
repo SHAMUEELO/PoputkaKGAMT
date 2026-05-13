@@ -63,43 +63,43 @@
                                     StrokeThickness="2" 
                                     StrokeShape="RoundRectangle 0,10,10,10">
                                 <Grid Padding="15,10,15,10" ColumnDefinitions="Auto, Auto, *, Auto" ColumnSpacing="10" RowDefinitions="Auto, Auto">
-                                    <Border Grid.Column="0" Grid.Row="0" HeightRequest="60"   
-                                            WidthRequest="60"
+                                    <Border Grid.Column="0" Grid.Row="0" HeightRequest="55"   
+                                            WidthRequest="55"
                                             Stroke="{Binding BorderStrokeForHistory}" 
                                             StrokeThickness="2"
                                             StrokeShape="RoundRectangle 70"
                                             HorizontalOptions="Start">
                                         <Image Source="defoltavataricon.png" 
                                                 Aspect="AspectFill"
-                                                HeightRequest="55"     
-                                                WidthRequest="55"
+                                                HeightRequest="50"     
+                                                WidthRequest="50"
                                                 HorizontalOptions="Center"
                                                 VerticalOptions="Center"/>
                                     </Border>
-                                    <VerticalStackLayout Grid.Column="0" Grid.Row="0" Padding="67,10,0,0" HorizontalOptions="Start"  >
-                                        <Label Text="{Binding UserName}" FontSize="22" FontAttributes="Bold" TextColor="{Binding BorderStroke}" Padding="5,0,0,0" WidthRequest="200" LineBreakMode="TailTruncation"></Label>
+                                    <VerticalStackLayout Grid.Column="0" Grid.Row="0" Padding="62,10,0,0" HorizontalOptions="Start"  >
+                                        <Label Text="{Binding UserName}" FontSize="20" FontAttributes="Bold" TextColor="{Binding BorderStroke}" Padding="5,0,0,0" WidthRequest="225" LineBreakMode="TailTruncation"></Label>
                                         <Grid ColumnDefinitions="Auto,Auto" ColumnSpacing="5" Padding="0,0,0,10">
-                                            <Image Grid.Column="0" Source="starrating.png" HeightRequest="25" WidthRequest="25"></Image>
-                                            <Label Grid.Column="1" Text="{Binding UserRating}" FontSize="21" TextColor="{Binding BorderStroke}" ></Label>
+                                            <Image Grid.Column="0" Source="starrating.png" HeightRequest="23" WidthRequest="23"></Image>
+                                            <Label Grid.Column="1" Text="{Binding UserRating}" FontSize="20" TextColor="{Binding BorderStroke}" ></Label>
                                         </Grid>
                                     </VerticalStackLayout>
-                                    <Label Grid.Column="3" Grid.Row="0" Text="{Binding Price}" FontSize="25" TextColor="{Binding BorderStroke}" HorizontalOptions="End" VerticalOptions="Center" Padding="0,0,32,0" Margin="0,30,0,0"></Label>
-                                    <Image Grid.Column="3" Grid.Row="0" Source="payimage.png" HeightRequest="26" WidthRequest="26" HorizontalOptions="End" VerticalOptions="Center"  Margin="0,30,0,0"></Image>
+                                    <Label Grid.Column="3" Grid.Row="0" Text="{Binding Price}" FontSize="20" TextColor="{Binding BorderStroke}" HorizontalOptions="End" VerticalOptions="Center" Padding="0,0,32,0" Margin="0,30,0,0"></Label>
+                                    <Image Grid.Column="3" Grid.Row="0" Source="payimage.png" HeightRequest="23" WidthRequest="23" HorizontalOptions="End" VerticalOptions="Center"  Margin="0,30,0,0"></Image>
 
                                     <VerticalStackLayout Grid.Column="0" Grid.Row="1" Padding="-5,0,0,0" Spacing="7">
-                                        <Grid ColumnDefinitions="Auto,Auto" ColumnSpacing="5" Padding="0,0,0,0">
+                                        <Grid ColumnDefinitions="Auto,Auto" ColumnSpacing="5">
                                             <Image Grid.Column="0" Source="carimage.png" HeightRequest="30" WidthRequest="30"></Image>
                                             <Label Grid.Column="1"  Text="{Binding Role}" FontSize="18" TextColor="{Binding BorderStroke}"/>
                                         </Grid>
                                         <Grid ColumnDefinitions="Auto,Auto,Auto,Auto" ColumnSpacing="10" Padding="1,0,0,0">
-                                            <Image Grid.Column="0" Source="placeimage.png" HeightRequest="26" WidthRequest="26"></Image>
+                                            <Image Grid.Column="0" Source="placeimage.png" HeightRequest="25" WidthRequest="25"></Image>
                                             <Label Grid.Column="1"  Text="{Binding DeparturePlaceName}" FontSize="18" TextColor="{Binding BorderStroke}"  LineBreakMode="TailTruncation"/>
                                             <Label Grid.Column="2"  Text="➣" FontSize="20" TextColor="{Binding BorderStroke}" Padding="0,-3,0,0"/>
-                                            <Label Grid.Column="3"  Text="{Binding ArrivePlaceName}" FontSize="18" TextColor="{Binding BorderStroke}" WidthRequest="159" LineBreakMode="TailTruncation"/>
                                         </Grid>
+                                        <Label Text="{Binding ArrivePlaceName}" FontSize="18" Padding="35,-5,0,0" TextColor="{Binding BorderStroke}"/>
                                         <Grid ColumnDefinitions="Auto,Auto,Auto,Auto" ColumnSpacing="10" Padding="2,0,0,0">
                                             <Image Grid.Column="0" Source="dateimage.png" HeightRequest="23" WidthRequest="23"></Image>
-                                            <Label Grid.Column="1"  Text="{Binding Date}" FontSize="18" TextColor="{Binding BorderStroke}"/>
+                                            <Label Grid.Column="1"  Text="{Binding Date}" FontSize="18" TextColor="{Binding BorderStroke}" Margin="-5,0,0,0"/>
                                             <Label Grid.Column="2"  Text="─" FontSize="18" TextColor="Black"/>
                                             <Label Grid.Column="3"  Text="{Binding Time}" FontSize="18" TextColor="{Binding BorderStroke}"/>
                                         </Grid>
@@ -117,8 +117,8 @@
                                 </Border.GestureRecognizers>
                             </Border>
 
-                            <Label Grid.Row="2" IsVisible="{Binding UserStatus}"
-                                   Text="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.DriverNotCheckAndHaveMaxPassenger}"
+                            <Label Grid.Row="2" IsVisible="{Binding HasStatusMessage}"
+                                   Text="{Binding StatusMessage}"
                                    TextColor="Black"
                                    FontSize="15"
                                    FontAttributes="Italic"

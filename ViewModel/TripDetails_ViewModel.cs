@@ -17,16 +17,12 @@ namespace PoputkaKGAMT.ViewModel
         private FirebaseClient firebase = new FirebaseClient("https://poputka-datebase-default-rtdb.europe-west1.firebasedatabase.app/");
         private readonly TripService tripService;
         private readonly UserService userService;
-        private readonly PlaceService placeService;
-        private readonly StatusService statusService;
         private readonly FellowTravelerService fellowTravelerService;
 
         public TripDetails_ViewModel()
         {
             tripService = new TripService();
             userService = new UserService();
-            placeService = new PlaceService();
-            statusService = new StatusService();
             fellowTravelerService = new FellowTravelerService();
         }
 
@@ -78,6 +74,9 @@ namespace PoputkaKGAMT.ViewModel
         [ObservableProperty]
         private string roleBooking = "Забронировать";
 
+        [ObservableProperty]
+        private bool isDescriptionVisible;
+
         // Таймер
         private System.Threading.Timer? reloadTimer;
         // Для таймера вся таблица поездок
@@ -96,8 +95,7 @@ namespace PoputkaKGAMT.ViewModel
 
                 var allTrips = await tripService.GetTrips();
                 var allUsers = await userService.GetUsers();
-                var allPlaces = await placeService.GetPlaces();
-                
+
                 var trip = allTrips.FirstOrDefault(t => t.Id == tripId);
 
                 var user = allUsers.FirstOrDefault(u => u.Id?.Equals(trip.UserId, StringComparison.OrdinalIgnoreCase) == true);
@@ -113,10 +111,9 @@ namespace PoputkaKGAMT.ViewModel
                 trip.UserRating = user?.Rating ?? 0.00;
 
                 // Места 
-                var departurePlace = allPlaces.FirstOrDefault(p => p.Id == trip.DeparturePlaceId);
-                var arrivePlace = allPlaces.FirstOrDefault(p => p.Id == trip.ArrivePlaceId);
-                trip.DeparturePlaceName = departurePlace?.Name ?? "Неизвестно";
-                trip.ArrivePlaceName = arrivePlace?.Name ?? "Неизвестно";
+                trip.DeparturePlaceName = trip.DeparturePlaceId ?? "Ошибка загрузки";
+                trip.ArrivePlaceName = trip.ArrivePlaceName = trip.ArrivePlaceId ?? "Ошибка загрузки";
+
 
                 RoleText = trip.RoleText;
                 CanBookTrip = trip.CanBookTrip;
@@ -205,13 +202,16 @@ namespace PoputkaKGAMT.ViewModel
                 SelectedTrip = trip;
                 currentTripp = trip;
 
+                IsDescriptionVisible = !string.IsNullOrWhiteSpace(trip.Description);
+
                 SeatsLabelVisible = SelectedTrip.SeatsQuentity > 0;
                 StartReloadTimer();
 
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlertAsync("Ошибка", "Не удалось загрузить данные!\nВозможно проблемы с интернетом\nОшибка:\n" + ex.Message, "OK");
+                await Shell.Current.GoToAsync("//SearchPage");
+                await Shell.Current.DisplayAlertAsync("Внимание", "Время ожидания истекло или возникли неполадки", "OK");
             }
         }
 

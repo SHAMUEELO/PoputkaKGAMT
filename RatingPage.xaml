@@ -78,6 +78,7 @@
                        HorizontalOptions="Start"/>
                 <Label Grid.Column="1" 
                        Text="0" 
+                       Padding="0,0,10,0"
                        TextColor="#214484"
                        FontSize="20"
                        FontAttributes="Bold"
@@ -95,6 +96,7 @@
                        Text="0" 
                        TextColor="#214484"
                        FontSize="20"
+                       Padding="0,0,10,0"
                        FontAttributes="Bold"
                        HorizontalOptions="End"/>
             </Grid>
@@ -109,6 +111,7 @@
                        Text="0" 
                        TextColor="#214484"
                        FontSize="20"
+                       Padding="0,0,10,0"
                        FontAttributes="Bold"
                        HorizontalOptions="End"/>
             </Grid>
@@ -122,6 +125,7 @@
                 <Label Grid.Column="1" 
                        Text="0" 
                        TextColor="#214484"
+                       Padding="0,0,10,0"
                        FontSize="20"
                        FontAttributes="Bold"
                        HorizontalOptions="End"/>
@@ -149,8 +153,8 @@
                     <Grid RowDefinitions="*,Auto" RowSpacing="25" VerticalOptions="Center" Padding="20">
                         <Image Grid.Row="0"
                                Source="notfind.png"
-                               HeightRequest="60"
-                               WidthRequest="60"
+                               HeightRequest="45"
+                               WidthRequest="45"
                                HorizontalOptions="Center"
                                VerticalOptions="Center">
                         </Image>

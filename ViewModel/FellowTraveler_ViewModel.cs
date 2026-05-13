@@ -32,6 +32,7 @@ namespace PoputkaKGAMT.ViewModel
 
         [ObservableProperty]
         private bool isTripOwner;
+
         [ObservableProperty]
         private bool atLeastOneFellowUser = false;
 
@@ -120,6 +121,13 @@ namespace PoputkaKGAMT.ViewModel
                     ft.IsCreatorVisible = IsTripOwner && TripStatusId == "3"; 
                 }
 
+                foreach (var ft in FellowUsers)
+                {
+                    ft.IsCurrentUserVisible = !IsTripOwner && ft.IsCurrentUser && TripStatusId == "3";
+
+                    ft.IsCreatorVisible = IsTripOwner && TripStatusId == "3";
+                }
+                OnPropertyChanged(nameof(FellowUsers));
 
                 AtLeastOneFellowUser = FellowUsers.Any();
                 IsFellowTravelerEmpty = !AtLeastOneFellowUser;
@@ -132,7 +140,8 @@ namespace PoputkaKGAMT.ViewModel
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlertAsync("Ошибка", "Не удалось загрузить данные!\nВозможно проблемы с интернетом\nОшибка:\n" + ex.Message, "OK");
+                await Shell.Current.GoToAsync("//SearchPage");
+                await Shell.Current.DisplayAlertAsync("Внимание", "Время ожидания истекло или возникли неполадки", "OK");
             }
         }
 
@@ -232,7 +241,11 @@ namespace PoputkaKGAMT.ViewModel
 
                 // Находим поездку и меняем необходимое количество мест
                 var tripService = new TripService();
+                var allTrips = await tripService.GetTrips();  // Загружаем ВСЕ поездки ОДИН раз
+
                 var trip = (await tripService.GetTrips()).FirstOrDefault(t => t.Id == tripId);
+
+                string currentTripDate = trip.Date;  // ДАТА принятой поездки!
 
                 if (!selectedPassenger.FellowUserIsDriver) // Если ПАССАЖИР
                 {
@@ -250,17 +263,13 @@ namespace PoputkaKGAMT.ViewModel
                     await firebase.Child("trips").Child(tripId).PatchAsync(new {seats_quentity = trip.SeatsQuentity});
                 }
 
-                    // Удаляем бронь пассажира из других поездок
-                    string passengerId = selectedPassenger.FellowUserId;
-                    var allFellowTravelers = await fellowTravelerService.GetFellowTravelers();
+                // Удаляем бронь пассажира из других поездок
+                string passengerId = selectedPassenger.FellowUserId;
+                var allFellowTravelers = await fellowTravelerService.GetFellowTravelers();
 
-                foreach (var otherBooking in allFellowTravelers)
+                foreach (var otherBooking in allFellowTravelers.Where(f => f.FellowUserId == passengerId && f.TripId != tripId && f.StatusId == "5" && allTrips.First(t => t.Id == f.TripId)?.Date == currentTripDate))  // Та же дата и статус 5(Ожидает)
                 {
-                    // Если другая бронь И НЕ текущая поездка И статус НЕ "6"
-                    if (otherBooking.FellowUserId == passengerId && otherBooking.TripId != tripId)
-                    {
-                        await firebase.Child("fellow_travelers").Child(otherBooking.Id).DeleteAsync();
-                    }
+                    await firebase.Child("fellow_travelers").Child(otherBooking.Id).DeleteAsync();
                 }
             }
             catch (Exception ex) { await Shell.Current.DisplayAlertAsync("Внимание", "Не удалось принять пользователя!\nВозможно проблемы с интернетом", "Ок"); }

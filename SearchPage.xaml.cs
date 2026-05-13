@@ -31,7 +31,6 @@ public partial class SearchPage : ContentPage
                 Preferences.Remove("PlaceTarget");
             }
 
-            vm.LoadPlace();
 
         }
     }

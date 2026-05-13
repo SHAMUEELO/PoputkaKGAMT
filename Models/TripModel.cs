@@ -6,7 +6,7 @@ using System.Text.Json.Serialization;
 
 namespace PoputkaKGAMT.Models
 {
-    public class TripModel
+    public class TripModel : ObservableObject
     {
         [JsonPropertyName("id")]
         public string Id { get; set; } = "";
@@ -14,10 +14,10 @@ namespace PoputkaKGAMT.Models
         [JsonPropertyName("user_id")]
         public string UserId { get; set; } = "";
 
-        [JsonPropertyName("departure_id")]  
+        [JsonPropertyName("departure")]  
         public string DeparturePlaceId { get; set; } = "";
 
-        [JsonPropertyName("arrive_id")] 
+        [JsonPropertyName("arrive")] 
         public string ArrivePlaceId { get; set; } = "";
 
         [JsonPropertyName("status_id")]
@@ -146,8 +146,32 @@ namespace PoputkaKGAMT.Models
 
         // Для TravelHistory
         [JsonIgnore]
-        public bool UserStatus { get; set; }
+        private bool _userStatus;
+        [JsonIgnore]
+        public bool UserStatus
+        {
+            get => _userStatus;
+            set => SetProperty(ref _userStatus, value);
+        }
 
-       
+        private string _statusMessage = "";
+        [JsonIgnore]
+        public string StatusMessage
+        {
+            get => _statusMessage;
+            set
+            {
+                if (SetProperty(ref _statusMessage, value))
+                    HasStatusMessage = !string.IsNullOrEmpty(_statusMessage);
+            }
+        }
+
+        private bool _hasStatusMessage;
+        [JsonIgnore]
+        public bool HasStatusMessage
+        {
+            get => _hasStatusMessage;
+            set => SetProperty(ref _hasStatusMessage, value);
+        }
     }
 }

@@ -35,10 +35,8 @@ namespace PoputkaKGAMT
             builder.Logging.AddDebug();
 #endif
             builder.Services
-                .AddSingleton<IBackgroundUpdateService, BackgroundUpdateService>()
                 .AddSingleton<TripService>()
                 .AddSingleton<UserService>()
-                .AddSingleton<PlaceService>()
                 .AddSingleton<FellowTravelerService>();
 
             builder.Services.AddTransient<SearchResult_ViewModel>();
